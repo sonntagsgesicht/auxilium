@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+rm auxilium/data/pkg.zip;
+cd pkg;
+zip -r ../auxilium/data/pkg.zip *;
+cd ..;
