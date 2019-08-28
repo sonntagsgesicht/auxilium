@@ -3,8 +3,8 @@
 Python library *auxilium*
 -------------------------
 
-.. image:: https://img.shields.io/codeship/d53da930-a81c-0137-b2d9-0692e6859f02/master.svg
-   :target: https://codeship.com//projects/361426
+.. image:: https://img.shields.io/codeship/5b8cc2e0-ac1d-0137-31a2-06d5e6117547/master.svg
+   :target: https://codeship.com//projects/362165
    :alt: Codeship
 
 .. image:: https://travis-ci.org/sonntagsgesicht/auxilium.svg?branch=master
