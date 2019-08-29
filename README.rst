@@ -55,7 +55,7 @@ Python library *auxilium*
    :target: https://pypi.org/project/auxilium/
    :alt: PyPI Downloads
 
-A Python project for an automated test and deploy toolkit which is 100% reusable.
+A Python project for an automated test and deploy toolkit - 100% reusable.
 
 
 Code, Documentation and Tests
@@ -165,7 +165,7 @@ Default Structure of a Project
 The top level of the directory structure consists of three sub-dirs for source, doc and test files
 and some more or less standard project files. Assume the project is called *auxilium*.
 
-.. code-block::
+.. code-block:: bash
 
    /unicorn (project root dir)
 
@@ -188,7 +188,7 @@ Your python source files can be structured as you like.
 Only few information on your project is required
 and has to be found in
 
-.. code-block::
+.. code-block:: bash
 
    /unicorn/unicorn/__init__.py
 
@@ -233,7 +233,7 @@ See here how :code:`unicorn/unicorn/__init__.py` looks like.
 
 On top level we have the following files
 
-.. code-block::
+.. code-block:: bash
 
    /auxilium (project root dir)
 
@@ -266,7 +266,7 @@ Which serve for
 
 The structure of
 
-.. code-block::
+.. code-block:: bash
 
    /auxilium (project root dir)
 
@@ -279,7 +279,7 @@ Automated Documentation Generation
 
 The documentation is located at
 
-.. code-block::
+.. code-block:: bash
 
    /auxilium (project root dir)
 
@@ -290,7 +290,7 @@ So usually no file under :code:`/doc/sphinx` requires to be edited.
 
 The site-map of a documentation will look like this
 
-.. code-block::
+.. code-block:: bash
 
    /index.rst
       /intro.rst     -> README.rst
@@ -322,7 +322,7 @@ Same for measuring the test coverage using *coverage.py*
 .. todo add more test frameworks like **nosetest**, **tox**, **py.test**, **regtest**
 
 
-.. code-block::
+.. code-block:: bash
 
    /auxilium (project root dir)
 

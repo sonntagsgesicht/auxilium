@@ -4,7 +4,7 @@
 # --------
 # A Python project for an automated test and deploy toolkit - 100%
 # reusable.
-# 
+#
 # Author:   sonntagsgesicht
 # Version:  0.1, copyright Thursday, 29 August 2019
 # Website:  https://github.com/sonntagsgesicht/auxilium
@@ -12,9 +12,12 @@
 
 
 import os
+import sys
 import unittest
 import logging
 import datetime
+
+sys.path.append('..')
 
 pkg = __import__(os.getcwd().split(os.sep)[-1])
 

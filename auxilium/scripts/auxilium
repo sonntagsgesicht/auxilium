@@ -76,6 +76,12 @@ cleanup()
     rm -f -v coverage.xml
     rm -f -r -v htmlcov;
 
+    # removed coverage data files from test/
+    rm -f -v test/.coverage;
+    rm -f -v test/coverage.xml
+    rm -f -r -v test/htmlcov;
+
+
     # remove bin files
     rm -f -r -v ./.bin/
 
@@ -223,7 +229,9 @@ codeclimate()
     echo '';
     coverage;
     echo '*** upload coverage report ***';
+    cd ${TEST_DIR};
     "${BIN}/cc-test-reporter" after-build -r ${CC_TEST_REPORTER_ID} -t coverage.py --exit-code $? --prefix $(pwd)
+    cd ..;
 
     echo '';
 }   # end of codeclimate
@@ -407,7 +415,7 @@ full()
 {
     echo "*** run full test pipeline ***"
     setup;
-    docmaintain;
+    # docmaintain;
     run;
     sphinx;
     analysis;

@@ -4,7 +4,7 @@
 # --------
 # A Python project for an automated test and deploy toolkit - 100%
 # reusable.
-# 
+#
 # Author:   sonntagsgesicht
 # Version:  0.1, copyright Thursday, 29 August 2019
 # Website:  https://github.com/sonntagsgesicht/auxilium
@@ -68,6 +68,11 @@ autodoc_default_options = {
 numpydoc_show_class_members=True
 autoclass_content = 'both'
 #autosummary_generate = True
+
+# needed for version 1.8.5 (python 2.7)
+autodoc_default_flags = [ 'members', 'show-inheritance']
+autodoc_member_order = 'bysource' #'groupwise'
+autodoc_inherit_docstrings = True
 
 #source_suffix = ['.rst', '.md']
 source_suffix = '.rst'
