@@ -240,11 +240,10 @@ codeclimate()
     echo '';
 }   # end of codeclimate
 
-codecov()
+codecoverage()
 {
-    echo '*** install codecov scripts ***';
+    echo '*** run coverage scripts for codecov ***';
     coverage;
-    echo '*** run coverage scripts for codeclimate ***';
     codecov --token=${CODECOV_TOKEN};
     echo '';
 }
@@ -435,7 +434,7 @@ full()
     setup;
     sphinx;
     analysis;
-    codecov;
+    codecoverage;
     build;
     echo '';
     echo "*** run full test pipeline finished ***"
