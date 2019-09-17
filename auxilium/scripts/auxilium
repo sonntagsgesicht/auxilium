@@ -198,7 +198,7 @@ coverage()
     echo '*** run coverage scripts ***';
 
     cd ${TEST_DIR};
-    python -m coverage run --include="*${NAME}*" --module unittest discover -v -p "*.py";
+    python -m coverage run --include="*${NAME}*" --omit="*test*.py" --module unittest discover -v -p "*.py";
     python -m coverage xml;
     python -m coverage report;
     python -m coverage html;
