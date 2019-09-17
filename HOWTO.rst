@@ -73,7 +73,7 @@ test and analysis functions
 
 .. code-block:: bash
 
-    $ auxilium run
+    $ auxilium test
     echo '*** run test scripts (opt. TEST_DIR=test)***';
 
 runs unittests found in :code:`test`
@@ -153,7 +153,7 @@ other functions
 
 .. code-block:: bash
 
-    $ auxilium setuptools
+    $ auxilium build
     echo '*** run setuptools scripts ***';
 
 
@@ -206,9 +206,7 @@ test bundles
     $ auxilium full
     echo "*** run full test pipeline ***"
     setup;
-    docmaintain;
-    run;
     sphinx;
     analysis;
-    coverage;
-    setuptools;
+    codecoverage;
+    build;
