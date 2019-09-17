@@ -4,15 +4,16 @@
 # --------
 # A Python project for an automated test and deploy toolkit - 100%
 # reusable.
-#
+# 
 # Author:   sonntagsgesicht
-# Version:  0.1, copyright Thursday, 29 August 2019
+# Version:  0.1.1, copyright Tuesday, 17 September 2019
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
 
 import os
 import sys
+from auxilium import replacements_from_pkg, replacements, replacements_str
 
 sys.path.insert(0, os.path.abspath('../../'))  #  needed to import pkg
 sys.path.insert(0, os.path.abspath('.'))  #  needed to import pkg
@@ -23,12 +24,6 @@ else:
     pkg = __import__(os.getcwd().split(os.sep)[-5])
 
 sys.path.insert(0, os.path.abspath('../../' + pkg.__name__))  #  needed to import pkg
-
-from auxilium import replacements_from_pkg, replacements, replacements_str
-
-_replacements = replacements_from_pkg(replacements, pkg)
-rst_prolog = replacements_str(_replacements)
-# print(rst_prolog)
 
 # -- General configuration ------------------------------------------------
 
@@ -116,6 +111,29 @@ todo_include_todos = False
 
 # A boolean that decides whether module names are prepended to all object names.
 add_module_names = True
+
+# Read rst_prolog and rst_epilog from file
+rst_prolog, rst_epilog = '', ''
+
+rst_prolog_file = '_static' + os.sep + 'rst_prolog.rst'
+if os.path.exists(rst_prolog_file):
+    f = open(rst_prolog_file, 'r')
+    rst_prolog += os.linesep + f.read()
+    f.close()
+
+rst_epilog_file = '_static' + os.sep + 'rst_epilog.rst'
+if os.path.exists(rst_epilog_file):
+    f = open(rst_epilog_file, 'r')
+    rst_epilog += os.linesep + f.read()
+    f.close()
+
+# extend rst_prolog with pkg items
+_replacements = replacements_from_pkg(replacements, pkg)
+rst_prolog += os.linesep + replacements_str(_replacements)
+
+# print(rst_prolog)
+# print(rst_epilog)
+
 
 # -- Options for HTML output ----------------------------------------------
 

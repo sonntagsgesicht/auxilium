@@ -52,7 +52,7 @@ setup()
     # 1. setup the environment
     echo '*** setup environment requirements ***';
     echo "pip freeze:"
-    python -m pip freeze;
+    # python -m pip freeze;
     python -m pip freeze > freeze_requirements.txt;
     if [[ -s requirements.txt ]]; then
         python -m pip install -r requirements.txt;
@@ -156,6 +156,10 @@ run()
     echo '';
 }   # end of run
 
+test()
+{
+    run;
+}
 
 profile()
 {
@@ -194,9 +198,9 @@ coverage()
     echo '*** run coverage scripts ***';
 
     cd ${TEST_DIR};
-    python -m coverage run -m unittest discover -v -p "*.py";
+    python -m coverage run --include="*${NAME}*" --module unittest discover -v -p "*.py";
     python -m coverage xml;
-    python -m coverage report -m --include="*${NAME}*";
+    python -m coverage report;
     python -m coverage html;
     cd ..;
 
@@ -235,6 +239,15 @@ codeclimate()
 
     echo '';
 }   # end of codeclimate
+
+codecov()
+{
+    echo '*** install codecov scripts ***';
+    coverage;
+    echo '*** run coverage scripts for codeclimate ***';
+    codecov --token=${CODECOV_TOKEN};
+    echo '';
+}
 
 api()
 {
@@ -304,6 +317,11 @@ setuptools()
 
     echo '';
 }   # end of setuptools
+
+build ()
+{
+    setuptools;
+}
 
 docmaintain()
 {
@@ -415,12 +433,10 @@ full()
 {
     echo "*** run full test pipeline ***"
     setup;
-    # docmaintain;
-    run;
     sphinx;
     analysis;
-    coverage;
-    setuptools;
+    codecov;
+    build;
     echo '';
     echo "*** run full test pipeline finished ***"
 }

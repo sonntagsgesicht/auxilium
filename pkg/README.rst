@@ -1,6 +1,6 @@
 
 
-Python Project **<name>**
+Python Project *<name>*
 -----------------------------------------------------------------------
 
 .. image:: https://img.shields.io/readthedocs/<name>
