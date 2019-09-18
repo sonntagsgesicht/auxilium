@@ -302,7 +302,7 @@ sphinx()
     echo '*** run sphinx scripts ***';
     echo '';
 
-    api;
+    # api;
     html;
     doctest;
 
