@@ -315,6 +315,7 @@ setuptools()
 
     python setup.py build
     python setup.py sdist bdist_wheel
+    twine check dist/*
 
     echo '';
 }   # end of setuptools
@@ -410,6 +411,7 @@ deploy()
 
     # run setuptools build
     python setup.py sdist bdist_wheel
+    python -m twine check dist/*
 
     # push to PyPi.org
     python -m twine upload -u ${PYPI_USR} -p ${PYPI_PWD} dist/* #--repository-url https://test.pypi.org/legacy/ dist/*;

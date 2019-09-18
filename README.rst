@@ -300,7 +300,7 @@ The site-map of a documentation will look like this
 Sphinx has a configuration (*conf.py*) to build *html* and *latex* resp. *pdf* documentation.
 The later requires a latex installation to work.
 
-And it can run *doctests* of code examples of your documentation.
+And it can run *code-blocks* of code examples of your documentation.
 
 Since only **doc.rst** will not refer to a top level doc file of the project it is generated from the source code.
 So here the work starts to write good python doc strings.
