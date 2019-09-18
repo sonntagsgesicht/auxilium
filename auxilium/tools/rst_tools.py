@@ -64,17 +64,21 @@ def replacements_from_pkg(replacements_in, pkg):
 def replacements_from_cls(replacements_in, cls):
     n = cls.__module__ + '.' + cls.__name__ + '.'
     c = cls.__name__ + '.'
+    i = cls.__name__ + '().'
     for k, v in inspect.getmembers(cls):
         if not k.startswith('_'):
             if isinstance(v, types.MethodType) or isinstance(v, types.FunctionType) or inspect.ismethoddescriptor(v):
-                # meth -> 'today()', 'date.today() <datetime.date.today>'
+                # meth -> 'date().today()', 'date.today() <datetime.date.today>'
                 replacements_in['meth'][c + k + '()'] = '%s() <%s>' % (c + k, n + k)
+                replacements_in['meth'][i + k + '()'] = '%s() <%s>' % (i + k, n + k)
             elif inspect.isfunction(v):
-                # meth -> 'today()', 'date.today() <datetime.date.today>'
+                # meth -> 'date().today()', 'date.today() <datetime.date.today>'
                 replacements_in['meth'][c + k + '()'] = '%s() <%s>' % (c + k, n + k)
+                replacements_in['meth'][i + k + '()'] = '%s() <%s>' % (i + k, n + k)
             else:
-                # attr -> 'year', 'date.year <datetime.date.year>'
+                # attr -> 'date().year', 'date.year <datetime.date.year>'
                 replacements_in['attr'][c + k] = '%s <%s>' % (c + k, n[:-1])
+                replacements_in['attr'][i + k] = '%s <%s>' % (i + k, n[:-1])
     return replacements_in
 
 
