@@ -4,7 +4,7 @@
 # --------
 # A Python project for an automated test and deploy toolkit - 100%
 # reusable.
-# 
+#
 # Author:   sonntagsgesicht
 # Version:  0.1.1, copyright Wednesday, 18 September 2019
 # Website:  https://github.com/sonntagsgesicht/auxilium
@@ -22,7 +22,7 @@ __license__ = 'Apache License 2.0'
 __dependencies__ = 'pylint', 'coverage', 'bandit', 'twine', 'sphinx', 'sphinx_rtd_theme', 'flake8', 'codecov'
 __dependency_links__ = ()
 __data__ = ('data/pkg.zip',)
-__scripts__ = ('auxilium/scripts/auxilium', 'auxilium/scripts/auxilia')
+__scripts__ = ('auxilium/scripts/auxilium', 'auxilium/scripts/multum-auxilium')
 
 import logging
 

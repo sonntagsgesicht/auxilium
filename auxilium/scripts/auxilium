@@ -480,8 +480,8 @@ if [[ -n $1 ]] ; then
     # invoke test function
     # --------------------
 
-    echo "${FUNC} $@";
-    $("${FUNC} $@");
+    # echo "${FUNC} $@";
+    ${FUNC} $@;
 
 else
     echo "please provide command for the auxilium script, e.g. 'setup', 'run', 'deploy', 'cleanup'";
