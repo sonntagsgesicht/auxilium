@@ -6,7 +6,7 @@
 # reusable.
 # 
 # Author:   sonntagsgesicht
-# Version:  0.1.1, copyright Wednesday, 18 September 2019
+# Version:  0.1.3, copyright Wednesday, 18 September 2019
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 

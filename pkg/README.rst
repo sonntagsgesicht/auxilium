@@ -34,7 +34,7 @@ Introduction
 
 To import the project simply type
 
-.. doctest::
+.. code-block:: python
 
     >>> import <name>
 
