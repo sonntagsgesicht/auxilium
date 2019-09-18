@@ -255,6 +255,8 @@ api()
     rm -f -r -v doc/sphinx/api;
     sphinx-apidoc -o doc/sphinx/api -f -E ${NAME};
 
+    echo 'INFO: Do not forgett to add file under doc/sphinx/api to git (or your favourite scv).';
+
     echo '';
 }   # end of api
 

@@ -10,7 +10,6 @@ dist/
 .cache/
 
 doc/sphinx/_build/
-doc/sphinx/api/
 */__pycache__/
 
 test/test_create_repo/
