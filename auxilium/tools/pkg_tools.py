@@ -4,7 +4,7 @@
 # --------
 # A Python project for an automated test and deploy toolkit - 100%
 # reusable.
-# 
+#
 # Author:   sonntagsgesicht
 # Version:  0.1.1, copyright Wednesday, 18 September 2019
 # Website:  https://github.com/sonntagsgesicht/auxilium
@@ -72,6 +72,7 @@ def create_project(name=None, slogan=None, author=None, email=None):
     rp(root_path + os.sep + 'README.rst')
     rp(root_path + os.sep + 'HOWTO.rst')
     rp(root_path + os.sep + 'CHANGES.rst')
+    rp(root_path + os.sep + 'doc' + os.sep + 'sphinx' + os.sep + 'doc.rst')
 
     print('')
     print('Created project %s with these files:' % name)

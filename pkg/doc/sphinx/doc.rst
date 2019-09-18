@@ -1,4 +1,6 @@
 
+.. module:: <name>
+
 -----------------
 API Documentation
 -----------------
