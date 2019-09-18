@@ -25,12 +25,17 @@ if [[ -n $1 ]] ; then
       cd ${line};
         if [[ -d "${line}" ]];
         then
-          echo "cd ${line}; auxilium ${FUNC} $@; cd ..;";
-          auxilium ${FUNC} $@;
+          if [[ "${FUNC}" == "list" ]];
+          then
+            echo -n "${line} ";
+          else
+            echo "cd ${line}; auxilium ${FUNC} $@; cd ..;";
+            auxilium ${FUNC} $@;
+          fi;
         fi;
       cd ..;
     done;
-
+    echo '';
 
 else
     echo "please provide command for the auxilium script, e.g. 'setup', 'run', 'deploy', 'cleanup'";

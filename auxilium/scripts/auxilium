@@ -95,17 +95,17 @@ cleanup()
     rm -f -r -v .eggs
 
     # 3. clean up afterwards
-    if [[ -s requirements.txt ]]; then
-        python -m pip uninstall -y -r requirements.txt;
-    fi;
+    # if [[ -s requirements.txt ]]; then
+    #     python -m pip uninstall -y -r requirements.txt;
+    # fi;
     # if [[ -s upgrade_requirements.txt ]]; then
     #     python -m pip uninstall -y -r upgrade_requirements.txt;
     # fi;
     # sed -i 's/==/>=/g' freeze_requirements.txt
-    if [[ -s freeze_requirements.txt ]]; then
-        python -m pip install --upgrade -r freeze_requirements.txt;
-        rm freeze_requirements.txt
-    fi;
+    # if [[ -s freeze_requirements.txt ]]; then
+    #     python -m pip install --upgrade -r freeze_requirements.txt;
+    #     rm freeze_requirements.txt
+    # fi;
     echo '';
 }   # end of cleanup
 
@@ -480,8 +480,8 @@ if [[ -n $1 ]] ; then
     # invoke test function
     # --------------------
 
-    # echo "${FUNC} $@";
-    ${FUNC} $@;
+    echo "${FUNC} $@";
+    $("${FUNC} $@");
 
 else
     echo "please provide command for the auxilium script, e.g. 'setup', 'run', 'deploy', 'cleanup'";
