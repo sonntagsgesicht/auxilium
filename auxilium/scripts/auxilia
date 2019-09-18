@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+if [[ -n $1 ]] ; then
+
+    set -e
+    # read auxilium function
+    FUNC=$1
+    shift;
+
+    # todo prompt help if FUNC=='-h'|'--help' or FUNC==None
+
+    # -------------------------------------------
+    # read potential auxilium compatible sub dirs
+    # -------------------------------------------
+
+    subdirs=ls;
+
+    # ----------------------------
+    # loop to invoke test function
+    # ----------------------------
+
+    for line in */;
+    do
+      #echo "process line ${line}";
+      cd ${line};
+        if [[ -d "${line}" ]];
+        then
+          echo "cd ${line}; auxilium ${FUNC} $@; cd ..;";
+          auxilium ${FUNC} $@;
+        fi;
+      cd ..;
+    done;
+
+
+else
+    echo "please provide command for the auxilium script, e.g. 'setup', 'run', 'deploy', 'cleanup'";
+fi;
