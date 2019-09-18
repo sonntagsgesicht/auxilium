@@ -4,7 +4,7 @@
 # --------
 # A Python project for an automated test and deploy toolkit - 100%
 # reusable.
-# 
+#
 # Author:   sonntagsgesicht
 # Version:  0.1.1, copyright Wednesday, 18 September 2019
 # Website:  https://github.com/sonntagsgesicht/auxilium
@@ -32,54 +32,49 @@ replacements['class']['datetime.timedelta'] = 'datetime.timedelta <datetime.time
 replacements['class']['datetime.date'] = 'datetime.date <datetime.date>'
 replacements['meth']['datetime.date.today()'] = 'datetime.date.today() <datetime.date.today>'
 
-def replacements_from_pkg(replacements_in, pkg, spr=None):
-    if spr is None:
-        replacements_in['mod'][pkg.__name__] = None
-        n = pkg.__name__ + '.'
-    else:
-        n = spr.__name__ + '.'
+def replacements_from_pkg(replacements_in, pkg):
     for k, v in inspect.getmembers(pkg):
-    #for k, v in [(name, getattr(auxilium, name)) for name in sorted(dir(auxilium))]:
         if not k.startswith('_') and inspect.getmodule(v) and inspect.getmodule(v).__name__.startswith(pkg.__name__):
             if inspect.ismodule(v):
-                # mod -> 'datetime, datetime <datetime
-                replacements_in['mod'][n + k] = '%s <%s>' % (n + k, n + k)
-                replacements_in = replacements_from_pkg(replacements_in, v, pkg)
-            elif inspect.isclass(v) and issubclass(v, Exception):
-                # exc  -> 'ValueError', 'ValueError <ValueError>'
-                replacements_in['exc'][k] = '%s <%s>' % (k, n + k)
+                # mod -> 'datetime, datetime <datetime.datetime>
+                replacements_in['mod'][k] = '%s <%s>' % (v.__name__, v.__name__)
+                replacements_in = replacements_from_pkg(replacements_in, v)
             elif inspect.isclass(v):
-                # cls  -> 'date', 'date <datetime.date>'        # isclass(x)
-                replacements_in['class'][k] = '%s <%s>' % (k, n + k)
-                # init -> 'date()', 'date() <datetime.date>'    # isclass(x)
-                replacements_in['class'][k + '()'] = '%s() <%s>' % (k, n + k)
-                if spr is None:
-                    replacements_in = replacements_from_cls(replacements_in, v, pkg)
+                n = v.__module__ + '.' + v.__name__
+                if issubclass(v, Exception):
+                    # exc  -> 'ValueError', 'ValueError <ValueError>'
+                    replacements_in['exc'][k] = '%s <%s>' % (k, n)
                 else:
-                    replacements_in = replacements_from_cls(replacements_in, v, spr)
+                    # cls  -> 'date', 'date <datetime.date>'        # isclass(x)
+                    replacements_in['class'][k] = '%s <%s>' % (k, n)
+                    # init -> 'date()', 'date() <datetime.date>'    # isclass(x)
+                    replacements_in['class'][k + '()'] = '%s() <%s>' % (k, n)
+                    replacements_in = replacements_from_cls(replacements_in, v)
             elif inspect.isfunction(v):
                 # func -> 'foo()', 'auxilium.foo() <foo()>'
-                replacements_in['func'][k + '()'] = '%s() <%s>' % (k, n + k)
+                n = v.__module__ + '.' + v.__name__
+                replacements_in['func'][k + '()'] = '%s() <%s>' % (k, n)
             else:
                 # attr -> 'DO', 'date.year <datetime.date.year>'
-                replacements_in['attr'][k] = '%s <%s>' % (k, n + k)
+                n = v.__module__ + '.' + v.__name__
+                replacements_in['attr'][k] = '%s <%s>' % (k, n)
     return replacements_in
 
 
-def replacements_from_cls(replacements_in, cls, pkg=None):
-    n = cls.__name__ + '.'
-    p = (pkg.__name__ + '.') if pkg else ''
+def replacements_from_cls(replacements_in, cls):
+    n = cls.__module__ + '.' + cls.__name__ + '.'
+    c = cls.__name__ + '.'
     for k, v in inspect.getmembers(cls):
         if not k.startswith('_'):
             if isinstance(v, types.MethodType) or isinstance(v, types.FunctionType) or inspect.ismethoddescriptor(v):
                 # meth -> 'today()', 'date.today() <datetime.date.today>'
-                replacements_in['meth'][n + k + '()'] = '%s() <%s>' % (n + k, p + n + k)
+                replacements_in['meth'][c + k + '()'] = '%s() <%s>' % (c + k, n + k)
             elif inspect.isfunction(v):
                 # meth -> 'today()', 'date.today() <datetime.date.today>'
-                replacements_in['meth'][n + k + '()'] = '%s() <%s>' % (n + k, p + n + k)
+                replacements_in['meth'][c + k + '()'] = '%s() <%s>' % (c + k, n + k)
             else:
                 # attr -> 'year', 'date.year <datetime.date.year>'
-                replacements_in['attr'][n + k] = '%s <%s>' % (n + k, p + n[:-1])
+                replacements_in['attr'][c + k] = '%s <%s>' % (c + k, n[:-1])
     return replacements_in
 
 
