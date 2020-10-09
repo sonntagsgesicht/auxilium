@@ -27,6 +27,9 @@ Python Project *<name>*
    :target: https://pypi.org/project/<name>/
    :alt: PyPI downloads
 
+.. image:: https://pepy.tech/badge/<name>
+   :target: https://pypi.org/project/<name>/
+   :alt: PyPI Downloads
 
 
 Introduction

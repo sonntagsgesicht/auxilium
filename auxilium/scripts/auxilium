@@ -32,7 +32,7 @@ create()
 {
     echo '*** create new project ***';
 
-    python -c "import auxilium; auxilium.create_project()"
+    python3 -c "import auxilium; auxilium.create_project()"
 
     echo ''
 }   # end of create
@@ -52,13 +52,13 @@ setup()
     # 1. setup the environment
     echo '*** setup environment requirements ***';
     # echo "pip freeze:"
-    # python -m pip freeze;
-    python -m pip freeze > freeze_requirements.txt;
+    # python3 -m pip freeze;
+    python3 -m pip freeze > freeze_requirements.txt;
     if [[ -s requirements.txt ]]; then
-        python -m pip install -r requirements.txt;
+        python3 -m pip install -r requirements.txt;
     fi;
     if [[ -s upgrade_requirements.txt ]]; then
-        python -m pip install --upgrade -r upgrade_requirements.txt;
+        python3 -m pip install --upgrade -r upgrade_requirements.txt;
     fi;
     if [[ ! $? ]]; then exit 1; fi;
     echo '';
@@ -96,14 +96,14 @@ cleanup()
 
     # 3. clean up afterwards
     # if [[ -s requirements.txt ]]; then
-    #     python -m pip uninstall -y -r requirements.txt;
+    #     python3 -m pip uninstall -y -r requirements.txt;
     # fi;
     # if [[ -s upgrade_requirements.txt ]]; then
-    #     python -m pip uninstall -y -r upgrade_requirements.txt;
+    #     python3 -m pip uninstall -y -r upgrade_requirements.txt;
     # fi;
     # sed -i 's/==/>=/g' freeze_requirements.txt
     # if [[ -s freeze_requirements.txt ]]; then
-    #     python -m pip install --upgrade -r freeze_requirements.txt;
+    #     python3 -m pip install --upgrade -r freeze_requirements.txt;
     #     rm freeze_requirements.txt
     # fi;
     echo '';
@@ -114,7 +114,7 @@ install()
     echo '*** install project via pip install -e ***';
 
     cd ..;
-    python -m pip install -e ${NAME};
+    python3 -m pip install -e ${NAME};
     cd ${NAME};
 
     echo '';
@@ -125,7 +125,7 @@ upgrade()
     echo '*** install project via pip install -e ***';
 
     cd ..;
-    python -m pip install --upgrade -e ${NAME};
+    python3 -m pip install --upgrade -e ${NAME};
     cd ${NAME};
 
     echo '';
@@ -135,7 +135,7 @@ uninstall()
 {
     echo '*** install project via pip uninstall ***';
 
-    python -m pip uninstall -y ${NAME};
+    python3 -m pip uninstall -y ${NAME};
 
     echo '';
 }   # end of uninstall
@@ -150,8 +150,8 @@ run()
     echo '*** run test scripts ***';
 
     cd ${TEST_DIR};
-    #python -m unittest discover -v -s ${TEST_DIR} -p "*.py"
-    python -m unittest discover -v -p "*.py"
+    #python3 -m unittest discover -v -s ${TEST_DIR} -p "*.py"
+    python3 -m unittest discover -v -p "*.py"
     cd ..;
     echo '';
 }   # end of run
@@ -165,10 +165,10 @@ profile()
 {
     echo '*** run test profiling ***'
 
-    python -m cProfile -s tottime ${PROFILE_FILE}
+    python3 -m cProfile -s tottime ${PROFILE_FILE}
 
-    # python -m cProfile -o .cprofile ${PROFILE_FILE}
-    # python -m pstats .cprofile stat
+    # python3 -m cProfile -o .cprofile ${PROFILE_FILE}
+    # python3 -m pstats .cprofile stat
     # snakeviz .cprofile
 
     echo '';
@@ -198,10 +198,10 @@ coverage()
     echo '*** run coverage scripts ***';
 
     cd ${TEST_DIR};
-    python -m coverage run --include="*${NAME}*" --omit="*test?.py" --module unittest discover -v -p "*.py";
-    python -m coverage xml;
-    python -m coverage report;
-    python -m coverage html;
+    python3 -m coverage run --include="*${NAME}*" --omit="*test?.py" --module unittest discover -v -p "*.py";
+    python3 -m coverage xml;
+    python3 -m coverage report;
+    python3 -m coverage html;
     cd ..;
 
     echo '';
@@ -313,8 +313,8 @@ setuptools()
     echo '*** run setuptools scripts ***';
     echo '';
 
-    python setup.py build
-    python setup.py sdist bdist_wheel
+    python3 setup.py build
+    python3 setup.py sdist bdist_wheel
     twine check dist/*
 
     echo '';
@@ -330,8 +330,8 @@ docmaintain()
     echo '*** run docmaintain scripts ***';
     echo '';
 
-    python -c "import auxilium; auxilium.set_timestamp('${NAME}')";
-    python -c "import auxilium; auxilium.replace_headers('${NAME}')";
+    python3 -c "import auxilium; auxilium.set_timestamp('${NAME}')";
+    python3 -c "import auxilium; auxilium.replace_headers('${NAME}')";
 
     echo '';
 }   # end of doc_tools
@@ -379,7 +379,7 @@ release()
     echo '';
 
     NAME=$(pwd | awk -F/ '{print $NF}');
-    VERSION=$(python -c "import ${NAME} as pkg; print('v' + pkg.__version__)");
+    VERSION=$(python3 -c "import ${NAME} as pkg; print('v' + pkg.__version__)");
     MSG="update for release ${VERSION}";
 
     # draft new GitHub release;
@@ -410,11 +410,11 @@ deploy()
     echo '';
 
     # run setuptools build
-    python setup.py sdist bdist_wheel
-    python -m twine check dist/*
+    python3 setup.py sdist bdist_wheel
+    python3 -m twine check dist/*
 
     # push to PyPi.org
-    python -m twine upload -u ${PYPI_USR} -p ${PYPI_PWD} dist/* #--repository-url https://test.pypi.org/legacy/ dist/*;
+    python3 -m twine upload -u ${PYPI_USR} -p ${PYPI_PWD} dist/* #--repository-url https://test.pypi.org/legacy/ dist/*;
 
     echo '';
 }   # end of deploy
@@ -457,7 +457,7 @@ if [[ -n $1 ]] ; then
     # todo prompt help if FUNC=='-h'|'--help' or FUNC==None
 
     # ---------------------------------------------
-    # setup test python environment using arguments
+    # setup test python3 environment using arguments
     # ---------------------------------------------
 
     for i in "$@"

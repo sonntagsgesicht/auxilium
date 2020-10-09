@@ -54,6 +54,10 @@ Python library *auxilium*
    :target: https://pypi.org/project/auxilium/
    :alt: PyPI Downloads
 
+.. image:: https://pepy.tech/badge/auxilium
+   :target: https://pypi.org/project/auxilium/
+   :alt: PyPI Downloads
+
 A Python project for an automated test and deploy toolkit - 100% reusable.
 
 
