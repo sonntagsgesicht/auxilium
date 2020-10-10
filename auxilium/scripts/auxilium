@@ -151,7 +151,7 @@ run()
 
     cd ${TEST_DIR};
     #python3 -m unittest discover -v -s ${TEST_DIR} -p "*.py"
-    python3 -m unittest discover -v -p "*.py"
+    python3 -m unittest discover test -v -p "*.py"
     cd ..;
     echo '';
 }   # end of run

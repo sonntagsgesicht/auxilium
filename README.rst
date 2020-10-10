@@ -305,6 +305,8 @@ Sphinx has a configuration (*conf.py*) to build *html* and *latex* resp. *pdf* d
 The later requires a latex installation to work.
 
 And it can run *code-blocks* of code examples of your documentation.
+(But avoid :code:`.. doctest::` *rst*-directive and :code:`|something|` links in README.rst.
+This would fail with `setuptools` to serve as `long_description` for `pypi.org <https://pypi.org>`_.
 
 Since only **doc.rst** will not refer to a top level doc file of the project it is generated from the source code.
 So here the work starts to write good python doc strings.
