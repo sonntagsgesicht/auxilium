@@ -4,7 +4,7 @@
 # --------
 # A Python project for an automated test and deploy toolkit - 100%
 # reusable.
-# 
+#
 # Author:   sonntagsgesicht
 # Version:  0.1.3, copyright Saturday, 10 October 2020
 # Website:  https://github.com/sonntagsgesicht/auxilium
@@ -40,7 +40,7 @@ class CreateRepoUnitTests(unittest.TestCase):
         inputs = self.name, self.doc, self.author, self.email
         with open('%s_details' % self.name, "w") as f:
             f.write(os.linesep.join(inputs))
-        if os.system("auxilium create < %s_details" %self.name):
+        if os.system("auxilium create < %s_details" % self.name):
             raise Exception()
 
         os.chdir(self.name)
