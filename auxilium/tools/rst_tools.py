@@ -4,7 +4,7 @@
 # --------
 # A Python project for an automated test and deploy toolkit - 100%
 # reusable.
-# 
+#
 # Author:   sonntagsgesicht
 # Version:  0.1.3, copyright Wednesday, 18 September 2019
 # Website:  https://github.com/sonntagsgesicht/auxilium
@@ -31,6 +31,7 @@ replacements['class']['datetime.datetime'] = 'datetime.datetime <datetime.dateti
 replacements['class']['datetime.timedelta'] = 'datetime.timedelta <datetime.timedelta>'
 replacements['class']['datetime.date'] = 'datetime.date <datetime.date>'
 replacements['meth']['datetime.date.today()'] = 'datetime.date.today() <datetime.date.today>'
+
 
 def replacements_from_pkg(replacements_in, pkg):
     for k, v in inspect.getmembers(pkg):

@@ -4,7 +4,7 @@
 # --------
 # A Python project for an automated test and deploy toolkit - 100%
 # reusable.
-# 
+#
 # Author:   sonntagsgesicht
 # Version:  0.1.3, copyright Wednesday, 18 September 2019
 # Website:  https://github.com/sonntagsgesicht/auxilium
@@ -28,6 +28,6 @@ import logging
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
-from .tools.doc_tools import set_timestamp, replace_headers
+from .tools.deployment_tools import set_timestamp, replace_headers
 from .tools.rst_tools import replacements_str, replacements_from_pkg, replacements_from_cls, replacements
-from .tools.pkg_tools import create_project
+from .tools.setup_tools import create_project
