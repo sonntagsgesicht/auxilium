@@ -4,7 +4,7 @@
 # --------
 # A Python project for an automated test and deploy toolkit - 100%
 # reusable.
-# 
+#
 # Author:   sonntagsgesicht
 # Version:  0.1.3, copyright Saturday, 10 October 2020
 # Website:  https://github.com/sonntagsgesicht/auxilium
@@ -21,11 +21,11 @@ CODECOV_TOKEN = ''
 def run(test_dir=TEST_DIR):
     # 2. running actual test scripts
     print('*** run test scripts ***')
-    home = getcwd()
-    chdir(test_dir)
+    # home = getcwd()
+    # chdir(test_dir)
     # python3 -m unittest discover -v -s ${TEST_DIR} -p "*.py"
-    system('python3 -m unittest discover -v -p "*.py"')
-    chdir(home)
+    system('python3 -m unittest discover %s -v -p "*.py"' % test_dir)
+    # chdir(home)
     print('')
 
 
