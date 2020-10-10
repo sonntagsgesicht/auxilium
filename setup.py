@@ -4,20 +4,15 @@
 # --------
 # A Python project for an automated test and deploy toolkit - 100%
 # reusable.
-#
+# 
 # Author:   sonntagsgesicht
-# Version:  0.1.3, copyright Wednesday, 18 September 2019
+# Version:  0.1.3, copyright Saturday, 10 October 2020
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-import codecs
-import os
-
-try:
-    from setuptools import setup, find_packages
-except ImportError:
-    from distutils.core import setup
+from codecs import open
+from setuptools import setup, find_packages
 
 pkg = __import__('auxilium')
 
@@ -34,7 +29,7 @@ setup(
     scripts=pkg.__scripts__,
     install_requires=pkg.__dependencies__,
     dependency_links=pkg.__dependency_links__,
-    long_description='\n'+codecs.open('README.rst', encoding='utf-8').read(),
+    long_description='\n' + open('README.rst', encoding='utf-8').read(),
     long_description_content_type='text/x-rst',
     platforms='any',
     classifiers=[
@@ -44,14 +39,12 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Topic :: Education',
         'Topic :: Software Development',
     ],
 )
-

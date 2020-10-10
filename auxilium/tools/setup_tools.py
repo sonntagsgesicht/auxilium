@@ -1,16 +1,17 @@
-#!/usr/bin/env bash
-#
-# functions to run automated test framework on POSIX systems
-#
-# 1. setting up the environment
-# 2. running actual test scripts
-# 3. clean up afterwards
-#
-# All steps can be run in a single task or be invoked individually
-#
-# required variables are TEST_FILE, PYPI_USR, PYPI_PWD and CC_TEST_REPORTER_ID
+# -*- coding: utf-8 -*-
 
-from os import system, path
+# auxilium
+# --------
+# A Python project for an automated test and deploy toolkit - 100%
+# reusable.
+# 
+# Author:   sonntagsgesicht
+# Version:  0.1.3, copyright Saturday, 10 October 2020
+# Website:  https://github.com/sonntagsgesicht/auxilium
+# License:  Apache License 2.0 (see LICENSE file)
+
+
+from os import system, path, getcwd
 
 import datetime
 import os
@@ -113,9 +114,9 @@ def upgrade():
     print('')
 
 
-def uninstall(pkg_name):
+def uninstall():
     print('*** install project via pip uninstall ***')
-    system("python3 -m pip uninstall -y %s" % pkg_name)
+    system("python3 -m pip uninstall -y %s" % path.basename(getcwd()))
     print('')
 
 

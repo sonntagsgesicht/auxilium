@@ -1,11 +1,22 @@
+# -*- coding: utf-8 -*-
+
+# auxilium
+# --------
+# A Python project for an automated test and deploy toolkit - 100%
+# reusable.
+# 
+# Author:   sonntagsgesicht
+# Version:  0.1.3, copyright Saturday, 10 October 2020
+# Website:  https://github.com/sonntagsgesicht/auxilium
+# License:  Apache License 2.0 (see LICENSE file)
+
+
+from os import path, getcwd
 
 from .tools.setup_tools import setup, create_project
 from .tools.test_tools import run, analysis, coverage, profile
 from .tools.documentation_tools import sphinx
 from .tools.deployment_tools import build, set_timestamp, replace_headers, release, pypideploy
-
-PROFILE_FILE = "dev.py"
-TEST_DIR = "test"
 
 
 def create():
@@ -14,29 +25,31 @@ def create():
     print('')
 
 
-def simple(test_dir=TEST_DIR):
+def simple():
     print("*** run simple test pipeline ***")
     setup()
-    run(test_dir)
+    run()
     print('')
     print("*** run simple test pipeline finished ***")
 
 
-def full(pkg_name, test_dir=TEST_DIR, profile_file=PROFILE_FILE):
+def full():
     print("*** run full test pipeline ***")
+    pkg_name = path.basename(getcwd())
     setup()
     sphinx()
-    profile(profile_file)
+    profile()
     analysis(pkg_name)
-    coverage(pkg_name, test_dir)
+    coverage(pkg_name)
     # codecoverage(CODECOV_TOKEN)
     build()
     print('')
     print("*** run full test pipeline finished ***")
 
 
-def deploy(pkg_name, github=None, pypi=None):
+def deploy(github=None, pypi=None):
     print("*** run deployment pipeline ***")
+    pkg_name = path.basename(getcwd())
     set_timestamp(pkg_name)
     replace_headers(pkg_name)
     build()

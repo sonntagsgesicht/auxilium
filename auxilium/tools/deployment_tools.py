@@ -1,20 +1,30 @@
+# -*- coding: utf-8 -*-
+
+# auxilium
+# --------
+# A Python project for an automated test and deploy toolkit - 100%
+# reusable.
+# 
+# Author:   sonntagsgesicht
+# Version:  0.1.3, copyright Saturday, 10 October 2020
+# Website:  https://github.com/sonntagsgesicht/auxilium
+# License:  Apache License 2.0 (see LICENSE file)
+
 
 from datetime import date
 from textwrap import wrap
-from os import system, walk, sep, getcwd, linesep
-from os.path import join
+from os import system, walk, sep, getcwd, linesep, path
 
 from requests import post
 
 
 def set_timestamp(pkg, rootdir=getcwd()):
-
     pkg = __import__(pkg) if isinstance(pkg, str) else pkg
 
     for subdir, dirs, files in walk(rootdir):
         for file in files:
             if file.endswith('py'):
-                file = join(subdir, file)
+                file = path.join(subdir, file)
 
                 # read file lines into list
                 f = open(file, 'r')
@@ -25,7 +35,7 @@ def set_timestamp(pkg, rootdir=getcwd()):
                 if file == rootdir + sep + pkg.__name__ + sep + '__init__.py':
                     for i, line in enumerate(lines):
                         if line.startswith('__date__ = '):
-                            print("set %s.__date__ = %s" %( pkg.__name__, date.today().strftime('%A, %d %B %Y')))
+                            print("set %s.__date__ = %s" % (pkg.__name__, date.today().strftime('%A, %d %B %Y')))
                             lines[i] = "__date__ = '" + date.today().strftime('%A, %d %B %Y') + "'"
                             break
 
@@ -51,7 +61,7 @@ def replace_headers(pkg, rootdir=getcwd(), test=False):
     for subdir, dirs, files in walk(rootdir):
         for file in files:
             if file.endswith('py'):
-                file = join(subdir, file)
+                file = path.join(subdir, file)
                 print('\n*** process %s ***\n' % file)
 
                 # read file lines into list
@@ -79,11 +89,12 @@ def replace_headers(pkg, rootdir=getcwd(), test=False):
                     f.close()
 
 
-def docmaintain(pkg):
+def docmaintain():
+    pkg_name = path.basename(getcwd())
     print('*** run docmaintain scripts ***')
     print('')
-    set_timestamp(pkg)
-    replace_headers(pkg)
+    set_timestamp(pkg_name)
+    replace_headers(pkg_name)
     print('')
 
 
@@ -132,10 +143,10 @@ def repo():
     # print('')
 
 
-def release(pkg, github_user='', github_pwd=''):
+def release(github_user, github_pwd):
     print('*** draft release on github.com ***')
     print('')
-
+    pkg = path.basename(getcwd())
     pkg = __import__(pkg) if isinstance(pkg, str) else pkg
     name = pkg.__name__
     version = 'v' + pkg.__version__
@@ -171,8 +182,7 @@ def pypideploy(pypi_usr, pypi_pwd):
 
 
 if __name__ == '__main__':
-
     # replace automated the header in source files
-    pkg = __import__(getcwd().split(sep)[-1])
+    pkg = path.basename(getcwd())
     set_timestamp(pkg)
     replace_headers(pkg)

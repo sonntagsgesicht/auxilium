@@ -6,15 +6,14 @@
 # reusable.
 # 
 # Author:   sonntagsgesicht
-# Version:  0.1.3, copyright Wednesday, 18 September 2019
+# Version:  0.1.3, copyright Saturday, 10 October 2020
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-import codecs
-
+from codecs import open
 try:
-    from setuptools import setup, find_packages
+    from setuptools import setup
 except ImportError:
     from distutils.core import setup
 
@@ -33,7 +32,7 @@ setup(
     scripts=pkg.__scripts__,
     install_requires=pkg.__dependencies__,
     dependency_links=pkg.__dependency_links__,
-    long_description='\n'+codecs.open('README.rst', encoding='utf-8').read(),
+    long_description='\n' + open('README.rst', encoding='utf-8').read(),
     long_description_content_type='text/x-rst',
     platforms='any',
     classifiers=[
@@ -53,4 +52,3 @@ setup(
         'Topic :: Software Development',
     ],
 )
-

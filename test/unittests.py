@@ -6,7 +6,7 @@
 # reusable.
 # 
 # Author:   sonntagsgesicht
-# Version:  0.1.3, copyright Wednesday, 18 September 2019
+# Version:  0.1.3, copyright Saturday, 10 October 2020
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -46,7 +46,7 @@ class CreateRepoUnitTests(unittest.TestCase):
         os.chdir(self.name)
         self.assertEqual(os.getcwd().split(os.sep)[-1], self.name)
 
-        if sys.version.startswith('3.7'):
+        if sys.version.startswith('3.8'):
             cmd = 'auxilium full'
         else:
             cmd = 'auxilium simple'

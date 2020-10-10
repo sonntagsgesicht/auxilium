@@ -4,20 +4,20 @@
 # --------
 # A Python project for an automated test and deploy toolkit - 100%
 # reusable.
-#
+# 
 # Author:   sonntagsgesicht
-# Version:  0.1.3, copyright Wednesday, 18 September 2019
+# Version:  0.1.3, copyright Saturday, 10 October 2020
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from os import system
+from os import system, path, getcwd
 
 
-def api(pkg_name):
+def api():
     print('*** run sphinx apidoc scripts ***')
     system("rm -f -r -v doc/sphinx/api")
-    system("sphinx-apidoc -o doc/sphinx/api -f -E %s" % pkg_name)
+    system("sphinx-apidoc -o doc/sphinx/api -f -E %s" % path.basename(getcwd()))
     print('INFO: Do not forget to add file under doc/sphinx/api to git (or your favourite scv).')
     print('')
 
