@@ -4,7 +4,7 @@
 # --------
 # A Python project for an automated test and deploy toolkit - 100%
 # reusable.
-# 
+#
 # Author:   sonntagsgesicht
 # Version:  0.1.3, copyright Saturday, 10 October 2020
 # Website:  https://github.com/sonntagsgesicht/auxilium
@@ -15,7 +15,7 @@ from datetime import date
 from textwrap import wrap
 from os import system, walk, sep, getcwd, linesep, path
 
-from requests import post
+# from requests import post
 
 
 def set_timestamp(pkg, rootdir=getcwd()):
@@ -146,6 +146,7 @@ def repo():
 def release(github_user, github_pwd):
     print('*** draft release on github.com ***')
     print('')
+    raise NotImplementedError()
     pkg = path.basename(getcwd())
     pkg = __import__(pkg) if isinstance(pkg, str) else pkg
     name = pkg.__name__
@@ -162,7 +163,7 @@ def release(github_user, github_pwd):
         "prerelease": False
     }
     url = "https://api.github.com/repos/%s/%s/releases" % (github_user, name)
-    response = post(url, data=data, auth=(github_user, github_pwd))
+    # response = post(url, data=data, auth=(github_user, github_pwd))
     print(response)
     print('')
 
