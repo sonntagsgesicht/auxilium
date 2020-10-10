@@ -149,10 +149,10 @@ run()
     # 2. running actual test scripts
     echo '*** run test scripts ***';
 
-    cd ${TEST_DIR};
+    #cd ${TEST_DIR};
     #python3 -m unittest discover -v -s ${TEST_DIR} -p "*.py"
     python3 -m unittest discover test -v -p "*.py"
-    cd ..;
+    #cd ..;
     echo '';
 }   # end of run
 
