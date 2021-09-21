@@ -3,34 +3,6 @@
 Python Project *<name>*
 -----------------------------------------------------------------------
 
-.. image:: https://img.shields.io/readthedocs/<name>
-   :target: http://<name>.readthedocs.io
-   :alt: Read the Docs
-
-.. image:: https://img.shields.io/github/license/<author>/<name>
-   :target: https://github.com/<author>/<name>/raw/master/LICENSE
-   :alt: GitHub license
-
-.. image:: https://img.shields.io/github/release/<author>/<name>?label=github
-   :target: https://github.com/<author>/<name>/releases
-   :alt: GitHub release
-
-.. image:: https://img.shields.io/pypi/v/<name>
-   :target: https://pypi.org/project/<name>/
-   :alt: PyPI version
-
-.. image:: https://img.shields.io/pypi/pyversions/<name>
-   :target: https://pypi.org/project/<name>/
-   :alt: PyPI python version
-
-.. image:: https://img.shields.io/pypi/dm/<name>
-   :target: https://pypi.org/project/<name>/
-   :alt: PyPI downloads
-
-.. image:: https://pepy.tech/badge/<name>
-   :target: https://pypi.org/project/<name>/
-   :alt: PyPI Downloads
-
 
 Introduction
 ------------

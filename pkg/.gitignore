@@ -1,5 +1,7 @@
 .DS_Store
+.vs/
 .idea/
+.aux/
 
 build/
 dist/
@@ -12,10 +14,9 @@ dist/
 doc/sphinx/_build/
 */__pycache__/
 
-
-htmlcov/
 .coverage
 coverage.xml
+htmlcov/
 
 /freeze_requirements.txt
 /env

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python3
 #
 # functions to run automated test framework on POSIX systems
 #
@@ -10,483 +10,427 @@
 #
 # required variables are TEST_FILE, PYPI_USR, PYPI_PWD and CC_TEST_REPORTER_ID
 
-set -e
-BIN="$(pwd)/.bin"
-NAME=$(pwd | awk -F/ '{print $NF}');
-
-PROFILE_FILE="dev.py"
-TEST_DIR="test"
-
-# ----------------------------------------------------------------------------
-# define environment maintenance functions
-# ----------------------------------------------------------------------------
-
-_pre()
-{
-    echo "*** load environment from file $1 ***"
-    . $1;
-    echo '';
-}   # end of _pre
-
-create()
-{
-    echo '*** create new project ***';
-
-    python3 -c "import auxilium; auxilium.create_project()"
-
-    echo ''
-}   # end of create
-
-update()
-{
-    echo '*** update project to latest auxilium version ***'
-
-    # cp ??/setup.py ./setup.py
-    # cp ??/doc/sphinx/conf.py ./doc/sphinx/conf.py
-
-    echo ''
-}   # end of update
-
-setup()
-{
-    # 1. setup the environment
-    echo '*** setup environment requirements ***';
-    # echo "pip freeze:"
-    # python3 -m pip freeze;
-    python3 -m pip freeze > freeze_requirements.txt;
-    if [[ -s requirements.txt ]]; then
-        python3 -m pip install -r requirements.txt;
-    fi;
-    if [[ -s upgrade_requirements.txt ]]; then
-        python3 -m pip install --upgrade -r upgrade_requirements.txt;
-    fi;
-    if [[ ! $? ]]; then exit 1; fi;
-    echo '';
-}   # end of setup
-
-cleanup()
-{
-    echo '*** clean environment ***';
-
-    # removed profiling data files
-    rm -f -v .cprofile
-
-    # removed coverage data files
-    rm -f -v .coverage;
-    rm -f -v coverage.xml
-    rm -f -r -v htmlcov;
-
-    # removed coverage data files from test/
-    rm -f -v test/.coverage;
-    rm -f -v test/coverage.xml
-    rm -f -r -v test/htmlcov;
-
-
-    # remove bin files
-    rm -f -r -v ./.bin/
-
-    # remove doc build files
-    rm -f -r -v ./doc/sphinx/_build/
-
-    # remove setuptools release files
-    rm -f -r -v ./build/
-    rm -f -r -v ./dist/
-    rm -f -r -v *.egg-info
-    rm -f -r -v .eggs
-
-    # 3. clean up afterwards
-    # if [[ -s requirements.txt ]]; then
-    #     python3 -m pip uninstall -y -r requirements.txt;
-    # fi;
-    # if [[ -s upgrade_requirements.txt ]]; then
-    #     python3 -m pip uninstall -y -r upgrade_requirements.txt;
-    # fi;
-    # sed -i 's/==/>=/g' freeze_requirements.txt
-    # if [[ -s freeze_requirements.txt ]]; then
-    #     python3 -m pip install --upgrade -r freeze_requirements.txt;
-    #     rm freeze_requirements.txt
-    # fi;
-    echo '';
-}   # end of cleanup
-
-install()
-{
-    echo '*** install project via pip install -e ***';
-
-    cd ..;
-    python3 -m pip install -e ${NAME};
-    cd ${NAME};
-
-    echo '';
-}   # end of install
-
-upgrade()
-{
-    echo '*** install project via pip install -e ***';
-
-    cd ..;
-    python3 -m pip install --upgrade -e ${NAME};
-    cd ${NAME};
-
-    echo '';
-}   # end of install
-
-uninstall()
-{
-    echo '*** install project via pip uninstall ***';
-
-    python3 -m pip uninstall -y ${NAME};
-
-    echo '';
-}   # end of uninstall
-
-# ----------------------------------------------------------------------------
-# define test functions
-# ----------------------------------------------------------------------------
-
-run()
-{
-    # 2. running actual test scripts
-    echo '*** run test scripts ***';
-
-    #cd ${TEST_DIR};
-    #python3 -m unittest discover -v -s ${TEST_DIR} -p "*.py"
-    python3 -m unittest discover test -v -p "*.py"
-    #cd ..;
-    echo '';
-}   # end of run
-
-test()
-{
-    run;
-}
-
-profile()
-{
-    echo '*** run test profiling ***'
-
-    python3 -m cProfile -s tottime ${PROFILE_FILE}
-
-    # python3 -m cProfile -o .cprofile ${PROFILE_FILE}
-    # python3 -m pstats .cprofile stat
-    # snakeviz .cprofile
-
-    echo '';
-}   # end of profile
-
-analysis()
-{
-    echo '*** run code analysis scripts ***';
-
-    echo '*** run pylint ***';
-    pylint --exit-zero "${NAME}";
-
-    # echo '*** run flake8 ***';
-    # flake8 --exit-zero "${NAME}";
-
-    # echo '*** run pycodestyle (aka pep8) ***';
-    # pycodestyle "${NAME}";
-
-    echo '*** run bandit ***';
-    bandit -r "${NAME}";
-
-    echo '':
-}   # end of analysis
-
-coverage()
-{
-    echo '*** run coverage scripts ***';
-
-    cd ${TEST_DIR};
-    python3 -m coverage run --include="*${NAME}*" --omit="*test?.py" --module unittest discover -v -p "*.py";
-    python3 -m coverage xml;
-    python3 -m coverage report;
-    python3 -m coverage html;
-    cd ..;
-
-    echo '';
-}   # end of coverage
-
-codeclimate()
-{
-    echo '*** install codeclimate scripts ***';
-
-    mkdir -p ${BIN};
-    if [[ -e "${BIN}/cc-test-reporter" ]]; then
-        echo '*** codeclimate coverage reporter found ***'
-    else
-        case $(uname) in
-            "Darwin" )
-                echo '*** download codeclimate coverage reporter for macOS ***';
-                curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 > "${BIN}/cc-test-reporter";
-                ;;
-            "Linux" )
-                echo '*** download codeclimate coverage reporter for Linux ***';
-                curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > "${BIN}/cc-test-reporter";
-                ;;
-        esac;
-        chmod +x "${BIN}/cc-test-reporter";
-    fi;
-
-    echo '*** run coverage scripts for codeclimate ***';
-    "${BIN}/cc-test-reporter" before-build;
-    echo '';
-    coverage;
-    echo '*** upload coverage report ***';
-    cd ${TEST_DIR};
-    "${BIN}/cc-test-reporter" after-build -r ${CC_TEST_REPORTER_ID} -t coverage.py --exit-code $? --prefix $(pwd)
-    cd ..;
-
-    echo '';
-}   # end of codeclimate
-
-codecoverage()
-{
-    echo '*** run coverage scripts for codecov ***';
-    coverage;
-    codecov --token=${CODECOV_TOKEN};
-    echo '';
-}
-
-api()
-{
-    echo '*** run sphinx apidoc scripts ***';
-
-    rm -f -r -v doc/sphinx/api;
-    sphinx-apidoc -o doc/sphinx/api -f -E ${NAME};
-
-    echo 'INFO: Do not forgett to add file under doc/sphinx/api to git (or your favourite scv).';
-
-    echo '';
-}   # end of api
-
-html()
-{
-    echo '*** run sphinx html scripts ***';
-    echo '';
-
-    sphinx-build -M clean ./doc/sphinx/ ./doc/sphinx/_build;
-    sphinx-build -M html ./doc/sphinx/ ./doc/sphinx/_build;
-
-    echo '';
-}   # end of html
-
-latexpdf()
-{
-    echo '*** run sphinx latexpdf scripts ***';
-    echo '';
-
-    sphinx-build -M latexpdf ./doc/sphinx/ ./doc/sphinx/_build;
-
-    echo '';
-}   # end of html
-
-doctest()
-{
-    echo '*** run sphinx doctest scripts ***';
-    echo '';
-
-    sphinx-build -M doctest ./doc/sphinx/ ./doc/sphinx/_build;
-
-    echo '';
-}   # end of sphinx
-
-show()
-{
-    html;
-    open doc/sphinx/_build/html/index.html;
-}
-
-sphinx()
-{
-    echo '*** run sphinx scripts ***';
-    echo '';
-
-    # api;
-    html;
-    doctest;
-
-    echo '';
-}
-setuptools()
-{
-    echo '*** run setuptools scripts ***';
-    echo '';
-
-    python3 setup.py build
-    python3 setup.py sdist bdist_wheel
-    twine check dist/*
-
-    echo '';
-}   # end of setuptools
-
-build ()
-{
-    setuptools;
-}
-
-docmaintain()
-{
-    echo '*** run docmaintain scripts ***';
-    echo '';
-
-    python3 -c "import auxilium; auxilium.set_timestamp('${NAME}')";
-    python3 -c "import auxilium; auxilium.replace_headers('${NAME}')";
-
-    echo '';
-}   # end of doc_tools
-
-repo()
-{
-    echo '*** init a repository locally and on github.com ***';
-    echo '';
-    echo '-> command still under development <-';
-    exit 1;
-
-    git init ${NAME};
-    cd ${NAME};
-    git add -all;
-    git commit -m "Initial commit (via auxilium)";
-
-    JSON='
-    {
-      "name": "'"${NAME}"'",
-      "description": "'"${SLOGAN}"'",
-      "homepage": "https://github.com/"'"${GITHUB_USR}"'"/"'"${NAME}"'",
-      "private": false,
-      "has_issues": true,
-      "has_projects": true,
-      "has_wiki": true
-    }';
-    URL="https://api.github.com/${GITHUB_USR}/repos";
-    REMOTE="https://github.com/${GITHUB_USR}/${NAME}";
-
-    echo '';
-    echo "curl -X POST ${URL}";
-    echo ${JSON} >> repo.json
-    curl -u ${GITHUB_USR}:${GITHUB_PWD} -d "@repo.json" -X POST ${URL};
-    rm -f repo.json
-
-    git fetch ${REMOTE};
-    git push;
-
-    echo '';
-}
-
-release()
-{
-    echo '*** draft release on github.com ***';
-    echo '';
-
-    NAME=$(pwd | awk -F/ '{print $NF}');
-    VERSION=$(python3 -c "import ${NAME} as pkg; print('v' + pkg.__version__)");
-    MSG="update for release ${VERSION}";
-
-    # draft new GitHub release;
-    JSON='
-    {
-       "tag_name": "'"${VERSION}"'",
-       "target_commitish": "master",
-       "name": "'"${VERSION}"'",
-       "body": "'"${MSG}"'",
-       "draft": false,
-       "prerelease": false
-    }';
-    URL="https://api.github.com/repos/${GITHUB_USR}/${NAME}/releases";
-
-    # POST http://api.github.com/repos/${GITHUB_USR}/${NAME}/releases
-    echo '';
-    echo "curl -X POST ${URL}";
-    echo ${JSON} >> release.json
-    curl -u ${GITHUB_USR}:${GITHUB_PWD} -d "@release.json" -X POST ${URL};
-    rm -f release.json
-
-    echo '';
-}   # end of release
-
-deploy()
-{
-    echo '*** deploy release on pypi.org ***';
-    echo '';
-
-    # run setuptools build
-    python3 setup.py sdist bdist_wheel
-    python3 -m twine check dist/*
-
-    # push to PyPi.org
-    python3 -m twine upload -u ${PYPI_USR} -p ${PYPI_PWD} dist/* #--repository-url https://test.pypi.org/legacy/ dist/*;
-
-    echo '';
-}   # end of deploy
-
-# ----------------------------------------------------------------------------
-# define test bundles
-# ----------------------------------------------------------------------------
-
-simple()
-{
-    echo "*** run simple test pipeline ***"
-    setup;
-    run;
-    echo '';
-    echo "*** run simple test pipeline finished ***"
-}
-
-full()
-{
-    echo "*** run full test pipeline ***"
-    setup;
-    sphinx;
-    analysis;
-    codecoverage;
-    build;
-    echo '';
-    echo "*** run full test pipeline finished ***"
-}
-
-# ----------------------------------------------------------------------------
-# invoke command by arguments
-# ----------------------------------------------------------------------------
-
-if [[ -n $1 ]] ; then
-
-    echo '';
-    FUNC=$1
-    shift;
-
-    # todo prompt help if FUNC=='-h'|'--help' or FUNC==None
-
-    # ---------------------------------------------
-    # setup test python3 environment using arguments
-    # ---------------------------------------------
-
-    for i in "$@"
-    do
-    case ${i} in
-
-        -p=*|--pre=*)
-        PRE_FILE="${i#*=}"
-        shift 1 # past argument=value
-        _pre ${PRE_FILE};
-        ;;
-
-        ---*=*)
-        VAL="${i#*---}"
-        shift 1 # past argument=value
-        echo "export $VAL";
-        export ${VAL};
-        ;;
-
-    esac;
-    done;
-
-    # --------------------
-    # invoke test function
-    # --------------------
-
-    # echo "${FUNC} $@";
-    ${FUNC} $@;
-
-else
-    echo "please provide command for the auxilium script, e.g. 'setup', 'run', 'deploy', 'cleanup'";
-fi;
+import logging
+import pathlib
+import sys
+import os
+
+from argparse import ArgumentParser, \
+    ArgumentDefaultsHelpFormatter, SUPPRESS, OPTIONAL, ZERO_OR_MORE
+from configparser import ConfigParser
+
+from auxilium.setup_tools import create_project, create_venv, create_git, \
+    commit_git, requirements, install, uninstall, cleanup as cleanup_setup
+
+from auxilium.test_tools import unittests, doctests, quality, security, \
+    coverage, profile, cleanup as cleanup_test
+
+from auxilium.documentation_tools import api, html, doctest, latexpdf, \
+    show, cleanup as cleanup_doc, quality as docquality
+
+from auxilium.deployment_tools import docmaintain, build, deploy, \
+    cleanup as cleanup_deploy
+
+config = ConfigParser(allow_no_value=True)
+config.read(pathlib.Path.home().joinpath('../../.aux/config'))
+config.read('.aux/config')
+
+
+class ArgumentDefaultsAndConstsHelpFormatter(ArgumentDefaultsHelpFormatter):
+
+    def _get_help_string(self, action):
+        action_help = action.help
+        defaulting_nargs = [OPTIONAL, ZERO_OR_MORE]
+        if action.default is not None and action.default is not SUPPRESS:
+            if '%(default)' not in action.help:
+                if action.option_strings or action.nargs in defaulting_nargs:
+                    if 'pwd' in action.dest:
+                        ast = '*' * len(action.default)
+                        action_help += ' (default: %s)' % ast
+                    else:
+                        action_help += ' (default: %(default)s)'
+        elif action.const is not None and action.const is not SUPPRESS:
+            if '%(const)' not in action.help:
+                action_help += ' (default value if flagged: %(const)s)'
+        return action_help
+
+
+epilog = \
+    "if (default: True) a given flag turns its value to False. " + \
+    "set default behavior in `~/.aux/config` and `./.aux/config`"
+
+parser = ArgumentParser(epilog=epilog,
+                        formatter_class=ArgumentDefaultsAndConstsHelpFormatter)
+
+parser.add_argument(
+    '-p', '--python',
+    nargs='?',
+    const=config.get('DEFAULT', 'python', fallback='.aux/venv/bin/python3'),
+    default=config.get('DEFAULT', 'python', fallback='.aux/venv/bin/python3'),
+    help='set path to python executable or virtual environment')
+
+sub_parser = parser.add_subparsers(dest='command')
+
+# === create ===
+# incl. create virtenv
+
+create = sub_parser.add_parser(
+    'create',
+    epilog=epilog,
+    formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
+    help=create_project.__doc__)
+create.add_argument(
+    '-v', '--verbosity',
+    default=config.getint('create', 'verbosity', fallback=logging.INFO),
+    help='set logging level')
+create.add_argument(
+    '--name',
+    default=config.get('create', 'author', fallback=None),
+    help='project name')
+create.add_argument(
+    '--slogan',
+    default=config.get('create', 'slogan', fallback=None),
+    help='project slogan')
+create.add_argument(
+    '--author',
+    default=config.get('create', 'author', fallback=None),
+    help='project author')
+create.add_argument(
+    '--email',
+    default=config.get('create', 'email', fallback=None),
+    help='project email')
+create.add_argument(
+    '--git',
+    action='store_const',
+    const=not config.getboolean('create', 'git', fallback=True),
+    default=config.getboolean('create', 'git', fallback=True),
+    help=create_git.__doc__)
+create.add_argument(
+    '--venv',
+    nargs='?',
+    const=config.get('create', 'venv', fallback='.aux/venv/'),
+    default=config.get('create', 'venv', fallback='.aux/venv/'),
+    help=create_venv.__doc__)
+
+# === update ===
+# incl. install . and install requirements
+
+update = sub_parser.add_parser(
+    'update',
+    epilog=epilog,
+    formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
+    help="keep project, repo and dependencies up-to-date")
+update.add_argument(
+    '-v', '--verbosity',
+    default=config.getint('update', 'verbosity', fallback=logging.INFO),
+    help='set logging level')
+update.add_argument(
+    '--commit',
+    nargs='?',
+    const=config.get('update', 'commit', fallback='commit (by auxilium)'),
+    help=commit_git.__doc__)
+update.add_argument(
+    '--auto-add',
+    action='store_const',
+    const=not config.get('update', 'auto-add', fallback=False),
+    default=config.get('update', 'auto-add', fallback=False),
+    help='add all new files to `git` repo')
+update.add_argument(
+    '--requirements',
+    action='store_const',
+    const=not config.getboolean('update', 'requirements', fallback=False),
+    default=config.getboolean('update', 'requirements', fallback=False),
+    help=requirements.__doc__)
+update.add_argument(
+    '--install',
+    action='store_const',
+    const=not config.getboolean('update', 'install', fallback=False),
+    default=config.getboolean('update', 'install', fallback=False),
+    help=install.__doc__)
+update.add_argument(
+    '--uninstall',
+    action='store_const',
+    const=not config.getboolean('update', 'uninstall', fallback=False),
+    default=config.getboolean('update', 'uninstall', fallback=False),
+    help=uninstall.__doc__)
+update.add_argument(
+    '--cleanup',
+    action='store_const',
+    const=not config.getboolean('update', 'cleanup', fallback=False),
+    default=config.getboolean('update', 'cleanup', fallback=False),
+    help=cleanup_setup.__doc__)
+
+# === test ==
+
+testing = sub_parser.add_parser(
+    'test',
+    epilog=epilog,
+    formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
+    help="check project integrity by testing")
+testing.add_argument(
+    'path',
+    nargs='?',
+    default=config.get('test', 'path', fallback='test/'),
+    help='path to directory where test are found')
+testing.add_argument(
+    '-v', '--verbosity',
+    default=config.getint('test', 'verbosity', fallback=logging.INFO),
+    help='set logging level')
+testing.add_argument(
+    '--commit',
+    nargs='?',
+    const=config.get('test', 'commit', fallback='commit (by auxilium)'),
+    help='auto commit on successful test run')
+testing.add_argument(
+    '--unittests',
+    action='store_const',
+    const=not config.getboolean('test', 'unittests', fallback=True),
+    default=config.getboolean('test', 'unittests', fallback=True),
+    help=unittests.__doc__)
+testing.add_argument(
+    '--regtests',
+    action='store_const',
+    const=not config.getboolean('test', 'regtests', fallback=True),
+    default=config.getboolean('test', 'regtests', fallback=True),
+    help="run regression tests")
+testing.add_argument(
+    '--doctests',
+    action='store_const',
+    const=not config.getboolean('test', 'doctests', fallback=True),
+    default=config.getboolean('test', 'doctests', fallback=True),
+    help=doctests.__doc__)
+testing.add_argument(
+    '--coverage',
+    action='store_const',
+    const=not config.getboolean('test', 'coverage', fallback=False),
+    default=config.getboolean('test', 'coverage', fallback=False),
+    help=coverage.__doc__)
+testing.add_argument(
+    '--quality',
+    action='store_const',
+    const=not config.getboolean('test', 'quality', fallback=True),
+    default=config.getboolean('test', 'quality', fallback=True),
+    help=quality.__doc__)
+testing.add_argument(
+    '--security',
+    action='store_const',
+    const=not config.getboolean('test', 'security', fallback=True),
+    default=config.getboolean('test', 'security', fallback=True),
+    help=security.__doc__)
+testing.add_argument(
+    '--profile',
+    nargs='?',
+    const=config.get('test', 'profile', fallback='test/unittests.py'),
+    help=profile.__doc__)
+testing.add_argument(
+    '--cleanup',
+    action='store_const',
+    const=not config.getboolean('test', 'cleanup', fallback=False),
+    default=config.getboolean('test', 'cleanup', fallback=False),
+    help=cleanup_test.__doc__)
+testing.add_argument(
+    '--reset',
+    action='store_const',
+    const=not config.getboolean('test', 'reset', fallback=False),
+    default=config.getboolean('test', 'reset', fallback=False),
+    help="clear regression data (WARNING: data could not be restored!)")
+
+# === documentation ==
+
+doc = sub_parser.add_parser(
+    'doc',
+    epilog=epilog,
+    formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
+    help="update project documentation using `sphinx`")
+doc.add_argument(
+    '-v', '--verbosity',
+    default=config.getint('doc', 'verbosity', fallback=logging.INFO),
+    help='set logging level')
+doc.add_argument(
+    '--api',
+    action='store_const',
+    const=not config.getboolean('doc', 'api', fallback=False),
+    default=config.getboolean('doc', 'api', fallback=False),
+    help=api.__doc__)
+doc.add_argument(
+    '--quality',
+    action='store_const',
+    const=not config.getboolean('doc', 'quality', fallback=True),
+    default=config.getboolean('doc', 'quality', fallback=True),
+    help=docquality.__doc__)
+doc.add_argument(
+    '--doctest',
+    action='store_const',
+    const=not config.getboolean('doc', 'doctest', fallback=True),
+    default=config.getboolean('doc', 'doctest', fallback=True),
+    help=doctest.__doc__)
+doc.add_argument(
+    '--html',
+    action='store_const',
+    const=not config.getboolean('doc', 'doctest', fallback=True),
+    default=config.getboolean('doc', 'doctest', fallback=True),
+    help=html.__doc__)
+doc.add_argument(
+    '--latexpdf',
+    action='store_const',
+    const=not config.getboolean('doc', 'latexpdf', fallback=False),
+    default=config.getboolean('doc', 'latexpdf', fallback=False),
+    help=latexpdf.__doc__)
+doc.add_argument(
+    '--show',
+    action='store_const',
+    const=not config.getboolean('doc', 'show', fallback=False),
+    default=config.getboolean('doc', 'show', fallback=False),
+    help=show.__doc__)
+doc.add_argument(
+    '--cleanup',
+    action='store_const',
+    const=not config.getboolean('doc', 'cleanup', fallback=False),
+    default=config.getboolean('doc', 'cleanup', fallback=False),
+    help=cleanup_doc.__doc__)
+
+# === deploy ==
+
+deployment = sub_parser.add_parser(
+    'deploy',
+    epilog=epilog,
+    formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
+    help="manage project deployment")
+deployment.add_argument(
+    '-v', '--verbosity',
+    default=config.getint('deploy', 'verbosity', fallback=logging.INFO),
+    help='set logging level')
+deployment.add_argument(
+    '--docmaintain',
+    action='store_const',
+    const=not config.getboolean('deploy', 'docmaintain', fallback=True),
+    default=config.getboolean('deploy', 'docmaintain', fallback=True),
+    help=docmaintain.__doc__)
+deployment.add_argument(
+    '--build',
+    action='store_const',
+    const=not config.getboolean('deploy', 'build', fallback=True),
+    default=config.getboolean('deploy', 'build', fallback=True),
+    help=build.__doc__)
+deployment.add_argument(
+    '--deploy',
+    action='store_const',
+    const=not config.getboolean('deploy', 'deploy', fallback=False),
+    default=config.getboolean('deploy', 'deploy', fallback=False),
+    help=deploy.__doc__ + '. requires pypi_usr and pypi_pwd')
+deployment.add_argument(
+    '--pypi_usr',
+    default=config.get('deploy', 'pypi_usr', fallback=None),
+    help='user on pypi.org')
+deployment.add_argument(
+    '--pypi_pwd',
+    default=config.get('deploy', 'pypi_pwd', fallback=None),
+    help='password/token on pypi.org')
+deployment.add_argument(
+    '--cleanup',
+    action='store_const',
+    const=not config.getboolean('deploy', 'cleanup', fallback=False),
+    default=config.getboolean('deploy', 'cleanup', fallback=False),
+    help=cleanup_deploy.__doc__)
+
+full = sub_parser.add_parser(
+    'full',
+    epilog=epilog,
+    formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
+    help='make full update, test, doc and deploy run')
+
+pkg = os.path.basename(os.getcwd())
+args = parser.parse_args()
+# todo verbosity
+if args.command == 'create':
+    print(args)
+    create_project(args.name, args.slogan, args.author, args.email)
+    os.chdir(args.name)
+    if args.git:
+        create_git(args.name)
+    if args.venv:
+        create_venv(args.venv)
+    sys.exit()
+
+if args.command == 'update':
+    print(args)
+    if args.commit:
+        commit_git(args.commit, args.auto_add)
+    if args.requirements:
+        requirements(args.python)
+    if args.install:
+        install(args.python)
+    if args.uninstall:
+        uninstall(pkg, args.python)
+    if args.cleanup:
+        cleanup_setup(args.python)
+    sys.exit()
+
+if args.command == 'test':
+    print(args)
+    res = list()
+    if args.unittests:
+        r = unittests(args.path, args.python)
+        res.append(r)
+    if args.regtests:
+        raise NotImplementedError('there are no regtests.')
+    if args.doctets:
+        r = doctests(pkg, args.python)
+        res.append(r)
+    if args.quality:
+        r = quality(pkg, args.python)
+        res.append(r)
+    if args.security:
+        r = security(pkg, args.python)
+        res.append(r)
+    if args.profile:
+        r = profile(args.profile, args.python)
+        res.append(r)
+
+    if args.commit:
+        if all(res):
+            commit_git(args.commit)
+        else:
+            logging.log(args.verbosity,
+                        "Test missing or failed. Did not commit.")
+
+    if args.cleanup:
+        cleanup_test(args.path)
+    if args.reset:
+        raise NotImplementedError('there are no regtests.')
+    sys.exit()
+
+if args.command == 'doc':
+    print(args)
+    if args.api:
+        api(pkg)
+    if args.quality:
+        docquality(pkg, args.python)
+    if args.doctest:
+        doctest()
+    if args.html:
+        html()
+    if args.latexpdf:
+        latexpdf()
+    if args.latexpdf:
+        latexpdf()
+    if args.show:
+        show()
+    if args.cleanup:
+        cleanup_doc()
+    sys.exit()
+
+if args.command == 'deploy':
+    print(args)
+    if args.docmaintain:
+        docmaintain(pkg, os.getcwd())
+    if args.build:
+        build()
+    if args.deplay:
+        deploy(args.pypi_usr, args.pypi_pwd)
+    if args.cleanup:
+        cleanup_deploy()
+    sys.exit()
+
+if args.command == 'full':
+    raise NotImplementedError()

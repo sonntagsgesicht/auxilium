@@ -1,0 +1,8 @@
+[DEFAULT]
+
+[doc]
+verbosity=41
+
+[deploy]
+pypi_usr=Papa
+pypi_pwd=Papaiougjhb
