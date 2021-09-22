@@ -12,11 +12,13 @@
 
 
 from datetime import date
-from logging import log, INFO
+from logging import log, INFO, basicConfig
 from os import remove, system, path, getcwd, sep, walk, makedirs, \
     name as os_name
 from shutil import move
 from zipfile import ZipFile
+
+basicConfig()
 
 PYTHON = 'python3'
 VENV_PATH = '.aux/venv'
@@ -86,10 +88,10 @@ def create_project(name=None, slogan=None, author=None, email=None):
     log(INFO, '')
 
 
-def create_venv(venv_path=VENV_PATH, python=PYTHON):
+def create_venv(pkg=path.basename(getcwd()), venv_path=VENV_PATH, python=PYTHON):
     """create virtual python environment"""
     log(INFO, "create virtual environment at %s" % venv_path)
-    system(python + " -m venv --prompt '*' %s" % venv_path)
+    system(python + " -m venv --prompt %s %s" % (pkg, venv_path))
 
 
 def create_git(pkg=path.basename(getcwd())):

@@ -31,6 +31,8 @@ from auxilium.documentation_tools import api, html, doctest, latexpdf, \
 from auxilium.deployment_tools import docmaintain, build, deploy, \
     cleanup as cleanup_deploy
 
+logging.basicConfig()
+
 config = ConfigParser(allow_no_value=True)
 config.read(pathlib.Path.home().joinpath('../../.aux/config'))
 config.read('.aux/config')
@@ -63,7 +65,7 @@ parser = ArgumentParser(epilog=epilog,
                         formatter_class=ArgumentDefaultsAndConstsHelpFormatter)
 
 parser.add_argument(
-    '-p', '--python',
+    '-e', '--env',
     nargs='?',
     const=config.get('DEFAULT', 'python', fallback='.aux/venv/bin/python3'),
     default=config.get('DEFAULT', 'python', fallback='.aux/venv/bin/python3'),
@@ -99,12 +101,12 @@ create.add_argument(
     '--email',
     default=config.get('create', 'email', fallback=None),
     help='project email')
-create.add_argument(
-    '--git',
-    action='store_const',
-    const=not config.getboolean('create', 'git', fallback=True),
-    default=config.getboolean('create', 'git', fallback=True),
-    help=create_git.__doc__)
+# create.add_argument(
+#     '--git',
+#     action='store_const',
+#     const=not config.getboolean('create', 'git', fallback=True),
+#     default=config.getboolean('create', 'git', fallback=True),
+#     help=create_git.__doc__)
 create.add_argument(
     '--venv',
     nargs='?',
@@ -147,12 +149,12 @@ update.add_argument(
     const=not config.getboolean('update', 'install', fallback=False),
     default=config.getboolean('update', 'install', fallback=False),
     help=install.__doc__)
-update.add_argument(
-    '--uninstall',
-    action='store_const',
-    const=not config.getboolean('update', 'uninstall', fallback=False),
-    default=config.getboolean('update', 'uninstall', fallback=False),
-    help=uninstall.__doc__)
+# update.add_argument(
+#     '--uninstall',
+#     action='store_const',
+#     const=not config.getboolean('update', 'uninstall', fallback=False),
+#     default=config.getboolean('update', 'uninstall', fallback=False),
+#     help=uninstall.__doc__)
 update.add_argument(
     '--cleanup',
     action='store_const',
@@ -181,29 +183,29 @@ testing.add_argument(
     nargs='?',
     const=config.get('test', 'commit', fallback='commit (by auxilium)'),
     help='auto commit on successful test run')
-testing.add_argument(
-    '--unittests',
-    action='store_const',
-    const=not config.getboolean('test', 'unittests', fallback=True),
-    default=config.getboolean('test', 'unittests', fallback=True),
-    help=unittests.__doc__)
-testing.add_argument(
-    '--regtests',
-    action='store_const',
-    const=not config.getboolean('test', 'regtests', fallback=True),
-    default=config.getboolean('test', 'regtests', fallback=True),
-    help="run regression tests")
-testing.add_argument(
-    '--doctests',
-    action='store_const',
-    const=not config.getboolean('test', 'doctests', fallback=True),
-    default=config.getboolean('test', 'doctests', fallback=True),
-    help=doctests.__doc__)
+# testing.add_argument(
+#     '--unittests',
+#     action='store_const',
+#     const=not config.getboolean('test', 'unittests', fallback=True),
+#     default=config.getboolean('test', 'unittests', fallback=True),
+#     help=unittests.__doc__)
+# testing.add_argument(
+#     '--regtests',
+#     action='store_const',
+#     const=not config.getboolean('test', 'regtests', fallback=True),
+#     default=config.getboolean('test', 'regtests', fallback=True),
+#     help="run regression tests")
+# testing.add_argument(
+#     '--doctests',
+#     action='store_const',
+#     const=not config.getboolean('test', 'doctests', fallback=True),
+#     default=config.getboolean('test', 'doctests', fallback=True),
+#     help=doctests.__doc__)
 testing.add_argument(
     '--coverage',
     action='store_const',
-    const=not config.getboolean('test', 'coverage', fallback=False),
-    default=config.getboolean('test', 'coverage', fallback=False),
+    const=not config.getboolean('test', 'coverage', fallback=True),
+    default=config.getboolean('test', 'coverage', fallback=True),
     help=coverage.__doc__)
 testing.add_argument(
     '--quality',
@@ -217,11 +219,11 @@ testing.add_argument(
     const=not config.getboolean('test', 'security', fallback=True),
     default=config.getboolean('test', 'security', fallback=True),
     help=security.__doc__)
-testing.add_argument(
-    '--profile',
-    nargs='?',
-    const=config.get('test', 'profile', fallback='test/unittests.py'),
-    help=profile.__doc__)
+# testing.add_argument(
+#     '--profile',
+#     nargs='?',
+#     const=config.get('test', 'profile', fallback='test/unittests.py'),
+#     help=profile.__doc__)
 testing.add_argument(
     '--cleanup',
     action='store_const',
@@ -252,12 +254,12 @@ doc.add_argument(
     const=not config.getboolean('doc', 'api', fallback=False),
     default=config.getboolean('doc', 'api', fallback=False),
     help=api.__doc__)
-doc.add_argument(
-    '--quality',
-    action='store_const',
-    const=not config.getboolean('doc', 'quality', fallback=True),
-    default=config.getboolean('doc', 'quality', fallback=True),
-    help=docquality.__doc__)
+# doc.add_argument(
+#     '--quality',
+#     action='store_const',
+#     const=not config.getboolean('doc', 'quality', fallback=True),
+#     default=config.getboolean('doc', 'quality', fallback=True),
+#     help=docquality.__doc__)
 doc.add_argument(
     '--doctest',
     action='store_const',
@@ -270,12 +272,12 @@ doc.add_argument(
     const=not config.getboolean('doc', 'doctest', fallback=True),
     default=config.getboolean('doc', 'doctest', fallback=True),
     help=html.__doc__)
-doc.add_argument(
-    '--latexpdf',
-    action='store_const',
-    const=not config.getboolean('doc', 'latexpdf', fallback=False),
-    default=config.getboolean('doc', 'latexpdf', fallback=False),
-    help=latexpdf.__doc__)
+# doc.add_argument(
+#     '--latexpdf',
+#     action='store_const',
+#     const=not config.getboolean('doc', 'latexpdf', fallback=False),
+#     default=config.getboolean('doc', 'latexpdf', fallback=False),
+#     help=latexpdf.__doc__)
 doc.add_argument(
     '--show',
     action='store_const',
@@ -338,54 +340,64 @@ full = sub_parser.add_parser(
     epilog=epilog,
     formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
     help='make full update, test, doc and deploy run')
+for k in sub_parser.choices:
+    if not k in ('create', 'full'):
+        full._actions.extend(a for a in sub_parser.choices[k]._actions if not a.dest=='help')
 
 pkg = os.path.basename(os.getcwd())
 args = parser.parse_args()
 # todo verbosity
+
+if args.command in ('full',):
+    print(args)
 if args.command == 'create':
     print(args)
     create_project(args.name, args.slogan, args.author, args.email)
     os.chdir(args.name)
-    if args.git:
+    if os.system("git --version") == 0:
         create_git(args.name)
-    if args.venv:
-        create_venv(args.venv)
+    create_venv(args.name, args.venv)
     sys.exit()
 
-if args.command == 'update':
+if args.command in ('update','full'):
     print(args)
     if args.commit:
         commit_git(args.commit, args.auto_add)
     if args.requirements:
-        requirements(args.python)
+        requirements(args.env)
     if args.install:
-        install(args.python)
-    if args.uninstall:
-        uninstall(pkg, args.python)
+        install(args.env)
     if args.cleanup:
-        cleanup_setup(args.python)
+        uninstall(pkg, args.env)
+        cleanup_setup(args.env)
     sys.exit()
 
-if args.command == 'test':
+if args.command in ('test', 'full'):
     print(args)
     res = list()
-    if args.unittests:
-        r = unittests(args.path, args.python)
+    if args.path:
+        if args.coverage:
+            r = coverage(pkg, args.path, args.env)
+        else:
+            r = unittests(args.path, args.env)
         res.append(r)
-    if args.regtests:
-        raise NotImplementedError('there are no regtests.')
-    if args.doctets:
-        r = doctests(pkg, args.python)
-        res.append(r)
+    # if args.unittests:
+    #     r = unittests(args.path, args.env)
+    #     res.append(r)
+    # if args.regtests:
+    #     raise NotImplementedError('there are no regtests.')
+    # if args.doctets:
+    #     r = doctests(pkg, args.env)
+    #     res.append(r)
     if args.quality:
-        r = quality(pkg, args.python)
+        r = quality(pkg, args.env)
         res.append(r)
     if args.security:
-        r = security(pkg, args.python)
+        r = security(pkg, args.env)
         res.append(r)
-    if args.profile:
-        r = profile(args.profile, args.python)
-        res.append(r)
+    # if args.profile:
+    #     r = profile(args.profile, args.env)
+    #     res.append(r)
 
     if args.commit:
         if all(res):
@@ -396,31 +408,30 @@ if args.command == 'test':
 
     if args.cleanup:
         cleanup_test(args.path)
-    if args.reset:
-        raise NotImplementedError('there are no regtests.')
+    # if args.reset:
+    #     raise NotImplementedError('there are no regtests.')
     sys.exit()
 
-if args.command == 'doc':
+
+if args.command in ('doc', 'full'):
     print(args)
     if args.api:
         api(pkg)
-    if args.quality:
-        docquality(pkg, args.python)
+    # if args.quality:
+    #     docquality(pkg, args.env)
     if args.doctest:
         doctest()
     if args.html:
         html()
-    if args.latexpdf:
-        latexpdf()
-    if args.latexpdf:
-        latexpdf()
+    # if args.latexpdf:
+    #     latexpdf()
     if args.show:
         show()
     if args.cleanup:
         cleanup_doc()
     sys.exit()
 
-if args.command == 'deploy':
+if args.command in ('deploy','full'):
     print(args)
     if args.docmaintain:
         docmaintain(pkg, os.getcwd())
@@ -431,6 +442,3 @@ if args.command == 'deploy':
     if args.cleanup:
         cleanup_deploy()
     sys.exit()
-
-if args.command == 'full':
-    raise NotImplementedError()
