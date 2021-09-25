@@ -18,6 +18,8 @@ htmlcov/
 .coverage
 coverage.xml
 
+.aux
+.freeze
 /freeze_requirements.txt
 /env
 /setenv
