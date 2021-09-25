@@ -1,7 +1,7 @@
 [DEFAULT]
+verbosity=10
 
 [doc]
-verbosity=41
 
 [deploy]
 pypi_usr=Papa

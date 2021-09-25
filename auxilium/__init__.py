@@ -33,6 +33,7 @@ from .rst_tools import replacements_str, replacements_from_pkg, \
     replacements_from_cls, replacements
 
 from .setup_tools import *
+from .pip_tools import *
 from .test_tools import *
-from .documentation_tools import *
+from .sphinx_tools import *
 from .deployment_tools import *

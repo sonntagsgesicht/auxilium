@@ -19,19 +19,23 @@ from argparse import ArgumentParser, \
     ArgumentDefaultsHelpFormatter, SUPPRESS, OPTIONAL, ZERO_OR_MORE
 from configparser import ConfigParser
 
-from auxilium.setup_tools import create_project, create_venv, create_git, \
-    commit_git, requirements, install, uninstall, cleanup as cleanup_setup
+from auxilium.setup_tools import create_project
+from auxilium.git_tools import create_git, commit_git
+from auxilium.pip_tools import requirements, install, uninstall, \
+    cleanup as cleanup_site_packages, upgrade
 
-from auxilium.test_tools import unittests, doctests, quality, security, \
-    coverage, profile, cleanup as cleanup_test
+from auxilium.test_tools import unittests, quality, security, \
+    coverage, cleanup as cleanup_test, doctests
 
-from auxilium.documentation_tools import api, html, doctest, latexpdf, \
-    show, cleanup as cleanup_doc, quality as docquality
+from auxilium.sphinx_tools import api, html, doctest, show, \
+    cleanup as cleanup_doc
 
-from auxilium.deployment_tools import docmaintain, build, deploy, \
-    cleanup as cleanup_deploy
+from auxilium.deployment_tools import docmaintain, build, \
+    cleanup as cleanup_build
 
-logging.basicConfig()
+from auxilium.pypi_tools import deploy
+
+from auxilium.system_tools import create_venv, system
 
 config = ConfigParser(allow_no_value=True)
 config.read(pathlib.Path.home().joinpath('../../.aux/config'))
@@ -59,7 +63,8 @@ class ArgumentDefaultsAndConstsHelpFormatter(ArgumentDefaultsHelpFormatter):
 
 epilog = \
     "if (default: True) a given flag turns its value to False. " + \
-    "set default behavior in `~/.aux/config` and `./.aux/config`"
+    "set default behavior in `~/.aux/config` and `./.aux/config`."
+command_epilog = epilog
 
 parser = ArgumentParser(epilog=epilog,
                         formatter_class=ArgumentDefaultsAndConstsHelpFormatter)
@@ -74,15 +79,15 @@ parser.add_argument(
 sub_parser = parser.add_subparsers(dest='command')
 
 # === create ===
-# incl. create virtenv
 
 create = sub_parser.add_parser(
     'create',
-    epilog=epilog,
+    epilog=command_epilog,
     formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
     help=create_project.__doc__)
 create.add_argument(
     '-v', '--verbosity',
+    type=int,
     default=config.getint('create', 'verbosity', fallback=logging.INFO),
     help='set logging level')
 create.add_argument(
@@ -101,12 +106,6 @@ create.add_argument(
     '--email',
     default=config.get('create', 'email', fallback=None),
     help='project email')
-# create.add_argument(
-#     '--git',
-#     action='store_const',
-#     const=not config.getboolean('create', 'git', fallback=True),
-#     default=config.getboolean('create', 'git', fallback=True),
-#     help=create_git.__doc__)
 create.add_argument(
     '--venv',
     nargs='?',
@@ -119,54 +118,54 @@ create.add_argument(
 
 update = sub_parser.add_parser(
     'update',
-    epilog=epilog,
+    epilog=command_epilog,
     formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
     help="keep project, repo and dependencies up-to-date")
 update.add_argument(
     '-v', '--verbosity',
+    type=int,
     default=config.getint('update', 'verbosity', fallback=logging.INFO),
     help='set logging level')
+update.add_argument(
+    '--docmaintain',
+    action='store_const',
+    const=not config.getboolean('update', 'docmaintain', fallback=True),
+    default=config.getboolean('update', 'docmaintain', fallback=True),
+    help=docmaintain.__doc__)
 update.add_argument(
     '--commit',
     nargs='?',
     const=config.get('update', 'commit', fallback='commit (by auxilium)'),
     help=commit_git.__doc__)
 update.add_argument(
-    '--auto-add',
-    action='store_const',
-    const=not config.get('update', 'auto-add', fallback=False),
-    default=config.get('update', 'auto-add', fallback=False),
-    help='add all new files to `git` repo')
+    '--add',
+    nargs='?',
+    const=config.get('update', 'add', fallback='--all'),
+    help='add these new files to `git` repo')
 update.add_argument(
     '--requirements',
     action='store_const',
-    const=not config.getboolean('update', 'requirements', fallback=False),
-    default=config.getboolean('update', 'requirements', fallback=False),
+    const=not config.getboolean('update', 'requirements', fallback=True),
+    default=config.getboolean('update', 'requirements', fallback=True),
     help=requirements.__doc__)
 update.add_argument(
     '--install',
     action='store_const',
-    const=not config.getboolean('update', 'install', fallback=False),
-    default=config.getboolean('update', 'install', fallback=False),
+    const=not config.getboolean('update', 'install', fallback=True),
+    default=config.getboolean('update', 'install', fallback=True),
     help=install.__doc__)
-# update.add_argument(
-#     '--uninstall',
-#     action='store_const',
-#     const=not config.getboolean('update', 'uninstall', fallback=False),
-#     default=config.getboolean('update', 'uninstall', fallback=False),
-#     help=uninstall.__doc__)
 update.add_argument(
     '--cleanup',
     action='store_const',
     const=not config.getboolean('update', 'cleanup', fallback=False),
     default=config.getboolean('update', 'cleanup', fallback=False),
-    help=cleanup_setup.__doc__)
+    help=cleanup_site_packages.__doc__)
 
 # === test ==
 
 testing = sub_parser.add_parser(
     'test',
-    epilog=epilog,
+    epilog=command_epilog,
     formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
     help="check project integrity by testing")
 testing.add_argument(
@@ -176,6 +175,7 @@ testing.add_argument(
     help='path to directory where test are found')
 testing.add_argument(
     '-v', '--verbosity',
+    type=int,
     default=config.getint('test', 'verbosity', fallback=logging.INFO),
     help='set logging level')
 testing.add_argument(
@@ -183,24 +183,12 @@ testing.add_argument(
     nargs='?',
     const=config.get('test', 'commit', fallback='commit (by auxilium)'),
     help='auto commit on successful test run')
-# testing.add_argument(
-#     '--unittests',
-#     action='store_const',
-#     const=not config.getboolean('test', 'unittests', fallback=True),
-#     default=config.getboolean('test', 'unittests', fallback=True),
-#     help=unittests.__doc__)
-# testing.add_argument(
-#     '--regtests',
-#     action='store_const',
-#     const=not config.getboolean('test', 'regtests', fallback=True),
-#     default=config.getboolean('test', 'regtests', fallback=True),
-#     help="run regression tests")
-# testing.add_argument(
-#     '--doctests',
-#     action='store_const',
-#     const=not config.getboolean('test', 'doctests', fallback=True),
-#     default=config.getboolean('test', 'doctests', fallback=True),
-#     help=doctests.__doc__)
+testing.add_argument(
+    '--doctest',
+    action='store_const',
+    const=not config.getboolean('test', 'doctest', fallback=True),
+    default=config.getboolean('test', 'doctest', fallback=True),
+    help=coverage.__doc__)
 testing.add_argument(
     '--coverage',
     action='store_const',
@@ -219,11 +207,6 @@ testing.add_argument(
     const=not config.getboolean('test', 'security', fallback=True),
     default=config.getboolean('test', 'security', fallback=True),
     help=security.__doc__)
-# testing.add_argument(
-#     '--profile',
-#     nargs='?',
-#     const=config.get('test', 'profile', fallback='test/unittests.py'),
-#     help=profile.__doc__)
 testing.add_argument(
     '--cleanup',
     action='store_const',
@@ -241,25 +224,25 @@ testing.add_argument(
 
 doc = sub_parser.add_parser(
     'doc',
-    epilog=epilog,
+    epilog=command_epilog,
     formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
     help="update project documentation using `sphinx`")
 doc.add_argument(
     '-v', '--verbosity',
+    type=int,
     default=config.getint('doc', 'verbosity', fallback=logging.INFO),
     help='set logging level')
+doc.add_argument(
+    '--commit',
+    nargs='?',
+    const=config.get('doc', 'commit', fallback='commit (by auxilium)'),
+    help='auto commit on successful test run')
 doc.add_argument(
     '--api',
     action='store_const',
     const=not config.getboolean('doc', 'api', fallback=False),
     default=config.getboolean('doc', 'api', fallback=False),
     help=api.__doc__)
-# doc.add_argument(
-#     '--quality',
-#     action='store_const',
-#     const=not config.getboolean('doc', 'quality', fallback=True),
-#     default=config.getboolean('doc', 'quality', fallback=True),
-#     help=docquality.__doc__)
 doc.add_argument(
     '--doctest',
     action='store_const',
@@ -295,11 +278,12 @@ doc.add_argument(
 
 deployment = sub_parser.add_parser(
     'deploy',
-    epilog=epilog,
+    epilog=command_epilog,
     formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
     help="manage project deployment")
 deployment.add_argument(
     '-v', '--verbosity',
+    type=int,
     default=config.getint('deploy', 'verbosity', fallback=logging.INFO),
     help='set logging level')
 deployment.add_argument(
@@ -333,7 +317,7 @@ deployment.add_argument(
     action='store_const',
     const=not config.getboolean('deploy', 'cleanup', fallback=False),
     default=config.getboolean('deploy', 'cleanup', fallback=False),
-    help=cleanup_deploy.__doc__)
+    help=cleanup_build.__doc__)
 
 full = sub_parser.add_parser(
     'full',
@@ -341,104 +325,99 @@ full = sub_parser.add_parser(
     formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
     help='make full update, test, doc and deploy run')
 for k in sub_parser.choices:
-    if not k in ('create', 'full'):
-        full._actions.extend(a for a in sub_parser.choices[k]._actions if not a.dest=='help')
+    if k not in ('create', 'full'):
+        full._actions.extend(
+            a for a in sub_parser.choices[k]._actions if not a.dest == 'help')
 
-pkg = os.path.basename(os.getcwd())
+root = os.getcwd()
+pkg = os.path.basename(root)
 args = parser.parse_args()
-# todo verbosity
 
-if args.command in ('full',):
-    print(args)
+if hasattr(args, 'verbosity'):
+    log_format = '[%(asctime)s] %(levelname)-12.8s %(message)s'
+    if args.verbosity > logging.DEBUG:
+        log_format = '%(levelname)-8.8s %(message)s'
+    logging.basicConfig(level=args.verbosity, format=log_format)
+    logging.log(0, args)
+
 if args.command == 'create':
-    print(args)
-    create_project(args.name, args.slogan, args.author, args.email)
+    create_project(args.name, args.slogan, args.author, args.email, path=root)
     os.chdir(args.name)
-    if os.system("git --version") == 0:
-        create_git(args.name)
-    create_venv(args.name, args.venv)
+    path = os.path.join(root, args.name)
+    create_git(path)
+    create_venv(args.name, args.venv, path=path)
     sys.exit()
 
-if args.command in ('update','full'):
-    print(args)
-    if args.commit:
-        commit_git(args.commit, args.auto_add)
-    if args.requirements:
-        requirements(args.env)
-    if args.install:
-        install(args.env)
+if args.command in ('update', 'full'):
     if args.cleanup:
+        upgrade(args.env)
+        cleanup_site_packages(args.env)
         uninstall(pkg, args.env)
-        cleanup_setup(args.env)
+    else:
+        if args.docmaintain:
+            docmaintain(pkg, root)
+        if args.commit:
+            commit_git(args.commit, args.add)
+        if args.requirements:
+            upgrade(args.env)
+            requirements(args.env)
+        if args.install:
+            upgrade(args.env)
+            install(args.env)
     sys.exit()
 
 if args.command in ('test', 'full'):
-    print(args)
     res = list()
     if args.path:
+        res.append(unittests(args.path, args.env))
         if args.coverage:
-            r = coverage(pkg, args.path, args.env)
-        else:
-            r = unittests(args.path, args.env)
-        res.append(r)
-    # if args.unittests:
-    #     r = unittests(args.path, args.env)
-    #     res.append(r)
-    # if args.regtests:
-    #     raise NotImplementedError('there are no regtests.')
-    # if args.doctets:
-    #     r = doctests(pkg, args.env)
-    #     res.append(r)
+            res.append(coverage(pkg, args.path, args.env))
+    if args.doctest:
+        res.append(doctests(pkg, args.env))
     if args.quality:
-        r = quality(pkg, args.env)
-        res.append(r)
+        res.append(quality(pkg, args.env))
     if args.security:
-        r = security(pkg, args.env)
-        res.append(r)
-    # if args.profile:
-    #     r = profile(args.profile, args.env)
-    #     res.append(r)
-
+        res.append(security(pkg, args.env))
     if args.commit:
         if all(res):
             commit_git(args.commit)
         else:
-            logging.log(args.verbosity,
+            logging.log(logging.INFO,
                         "Test missing or failed. Did not commit.")
-
     if args.cleanup:
         cleanup_test(args.path)
-    # if args.reset:
-    #     raise NotImplementedError('there are no regtests.')
     sys.exit()
-
 
 if args.command in ('doc', 'full'):
-    print(args)
+    res = list()
     if args.api:
-        api(pkg)
-    # if args.quality:
-    #     docquality(pkg, args.env)
+        res.append(api(pkg, args.env))
     if args.doctest:
-        doctest()
+        res.append(doctest(args.env))
     if args.html:
-        html()
+        res.append(html(args.env))
     # if args.latexpdf:
-    #     latexpdf()
+    #     res.append(latexpdf(args.env))
     if args.show:
-        show()
+        res.append(show(args.env))
+    if args.commit:
+        if all(res):
+            commit_git(args.commit)
+        else:
+            logging.log(logging.INFO,
+                        "Failed to build docs or missing. Did not commit.")
     if args.cleanup:
-        cleanup_doc()
+        cleanup_doc(args.env)
     sys.exit()
 
-if args.command in ('deploy','full'):
-    print(args)
+
+if args.command in ('deploy', 'full'):
     if args.docmaintain:
-        docmaintain(pkg, os.getcwd())
+        docmaintain(pkg, root)
     if args.build:
         build()
-    if args.deplay:
+    if args.deploy:
         deploy(args.pypi_usr, args.pypi_pwd)
     if args.cleanup:
-        cleanup_deploy()
+        cleanup_build()
     sys.exit()

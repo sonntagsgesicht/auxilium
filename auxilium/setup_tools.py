@@ -12,19 +12,15 @@
 
 
 from datetime import date
-from logging import log, INFO, basicConfig
-from os import remove, system, path, getcwd, sep, walk, makedirs, \
-    name as os_name
+from logging import log, INFO
+from os import getcwd, sep, walk, makedirs
+from os.path import exists, join
 from shutil import move
 from zipfile import ZipFile
 
-basicConfig()
 
-PYTHON = 'python3'
-VENV_PATH = '.aux/venv'
-
-
-def create_project(name=None, slogan=None, author=None, email=None):
+def create_project(name=None, slogan=None, author=None, email=None,
+                   path=getcwd()):
     """create a new python project with auxilium"""
     loc = __file__.split(sep)
     loc[-1] = sep.join(('data', 'pkg.zip'))
@@ -37,11 +33,11 @@ def create_project(name=None, slogan=None, author=None, email=None):
     author = input('Enter author name   : ') if author is None else author
     email = input('Enter author email  : ') if email is None else email
 
-    root_path = getcwd() + sep + name
+    root_path = path + sep + name
     pkg_path = root_path + sep + name
 
     # setup project infrastructure
-    if path.exists(root_path):
+    if exists(root_path):
         msg = 'Project dir %s exists. Cannot create new project.' % root_path
         raise FileExistsError(msg)
 
@@ -81,77 +77,8 @@ def create_project(name=None, slogan=None, author=None, email=None):
     for subdir, dirs, files in walk(name):
         log(INFO, '')
         for file in files:
-            log(INFO, '  ' + path.join(subdir, file))
+            log(INFO, '  ' + join(subdir, file))
 
     log(INFO, '')
     log(INFO, "Consider a first full run via: 'cd %s; auxilium full;'" % name)
     log(INFO, '')
-
-
-def create_venv(pkg=path.basename(getcwd()), venv_path=VENV_PATH, python=PYTHON):
-    """create virtual python environment"""
-    log(INFO, "create virtual environment at %s" % venv_path)
-    system(python + " -m venv --prompt %s %s" % (pkg, venv_path))
-
-
-def create_git(pkg=path.basename(getcwd())):
-    """create local `git` repo"""
-    system('git init .')
-    system('git add --all')
-    system('git commit -m "Initial commit (via auxilium)"')
-
-
-def commit_git(msg='commit (via auxilium)', git_all=False):
-    """commit changes to local `git` repo"""
-    if git_all:
-        system('git add --all')
-    system('git commit -m %s' % msg)
-
-
-def activate_venv(venv_path=VENV_PATH):
-    """activate virtual python environment"""
-    if os_name == 'nt':
-        log(INFO, "activate virtual environment at %s" % venv_path)
-        # "PS C:\\> %s\\Scripts\\Activate.ps1" % venv_path  # pwr_shell
-        system("C:\\> %s\\Scripts\\activate.bat" % venv_path)
-    elif os_name == 'posix':
-        log(INFO, "activate virtual environment at %s" % venv_path)
-        system("source %s/bin/activate" % venv_path)
-    else:
-        log(INFO, "unable to activate virtual environment for os %s" % os_name)
-
-
-def requirements(python=PYTHON):
-    """manage requirements (dependencies) in `requirements.txt`
-        and `upgrade_requirements.txt`"""
-    log(INFO, '*** setup environment requirements ***')
-    system(python + " -m pip freeze > freeze_requirements.txt")
-    if path.exists("requirements.txt"):
-        system(python + " -m pip install -r requirements.txt")
-    if path.exists("upgrade_requirements.txt"):
-        system(python + " -m pip install --upgrade -r upgrade_requirements.txt")
-
-
-def install(python=PYTHON):
-    """install current project via `pip install -e .`"""
-    log(INFO, '*** install project via pip install -e ***')
-    system(python + " -m pip install --upgrade -e .")
-    log(INFO, '')
-
-
-def uninstall(pkg=path.basename(getcwd()), python=PYTHON):
-    """uninstall current project via `pip uninstall`"""
-    log(INFO, '*** uninstall project via pip uninstall ***')
-    system(python + " -m pip uninstall -y %s" % pkg)
-
-
-def cleanup(python=PYTHON):
-    """remove temporary files"""
-    log(INFO, '*** clean environment ***')
-    if 0 or path.exists("freeze_requirements.txt"):
-        if path.exists("requirements.txt"):
-            system(python + " -m pip uninstall -y -r requirements.txt")
-        if path.exists("upgrade_requirements.txt"):
-            system(python + " -m pip uninstall -y -r upgrade_requirements.txt")
-        system(python + " -m pip install --upgrade -r freeze_requirements.txt")
-        remove("freeze_requirements.txt")

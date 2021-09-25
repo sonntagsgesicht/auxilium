@@ -9,12 +9,12 @@
 # Version:  0.1.4, copyright Sunday, 11 October 2020
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
-
+import os
 from logging import log, INFO
-from os import system, chdir, getcwd, path
-from shutil import rmtree
+from os import getcwd, path
 
-PYTHON = 'python3'
+from .system_tools import system, python as _python, module, PYTHON, del_tree
+
 PROFILE_FILE = "dev.py"
 TEST_DIR = "test"
 
@@ -22,23 +22,38 @@ TEST_DIR = "test"
 def unittests(test_dir=TEST_DIR, python=PYTHON):
     """test code by running unittests"""
     log(INFO, '*** run unittest scripts ***')
-    system(python + ' -m unittest discover %s -v -p "*.py"' % test_dir)
+    ut = module('unittest', 'discover %s -v -p "*.py"' % test_dir)
     log(INFO, '*** run pytest scripts ***')
-    system(python + ' -m pytest %s' % test_dir)
+    pt = module('pytest', test_dir, venv=python)
+    return ut or pt
 
 
-def doctests(pkg=path.basename(getcwd()), python=PYTHON):
+def doctests(pkg=path.basename(os.getcwd()), python=PYTHON):
     """test code in doc string (doctest)"""
     log(INFO, '*** run doctest scripts ***')
-    system(python + ' -m doctest ')
+    # return module('doctest', venv=python)
+    # todo search vor doctests recursively
+    cmd = '''
+import doctest, %s as pkg; 
+def _doctest_recursively(pkg, *args, **kwargs):
+    import doctest
+    import inspect
+    pkg = __import__(pkg) if isinstance(pkg, str) else pkg
+    if inspect.ismodule(pkg):
+        print(pkg.__name__)
+        return (doctest.testmod(pkg, *args, **kwargs),) + tuple(
+        _doctest_recursively(p) for p in dir(pkg))  
+doctest.testmod(pkg, verbose=True)''' % pkg
+    cmd = 'import doctest, %s as pkg; doctest.testmod(pkg, verbose=True)' % pkg
+    return _python('-c "%s"' % cmd, venv=python)
 
 
 def profile(profile_file=PROFILE_FILE, python=PYTHON):
     """profile performance"""
     log(INFO, '*** run test profiling ***')
-    system(python + ' -m cProfile -s tottime %s' % profile_file)
-    system(python + ' -m cProfile -o .cprofile %s' % profile_file)
-    system(python + ' -m pstats .cprofile stat')
+    module('cProfile', '-s tottime %s' % profile_file, venv=python)
+    module('cProfile', '-o .cprofile %s' % profile_file, venv=python)
+    module('pstats', '.cprofile stat', venv=python)
     # todo check if snakeviz exists
     system('snakeviz .cprofile')
 
@@ -48,57 +63,56 @@ def quality(pkg=path.basename(getcwd()), python=PYTHON):
     log(INFO, '*** run code analysis scripts ***')
 
     log(INFO, '*** run pylint ***')
-    system(python + '-m pylint --exit-zero %s' % pkg)
+    module('pylint', pkg, venv=python)
 
     log(INFO, '*** run flake8 ***')
-    system(python + '-m flake8 --exit-zero %s' % pkg)
+    module('flake8', pkg, venv=python)
 
     log(INFO, '*** run pycodestyle (aka pep8) ***')
-    system(python + '-m pycodestyle %s' % pkg)
+    module('pycodestyle', pkg, venv=python)
+
+    log(INFO, '*** run pydocstyle (aka pep257) ***')
+    module('pydocstyle', pkg)
 
 
 def security(pkg=path.basename(getcwd()), python=PYTHON):
     """evaluate security of source code"""
     log(INFO, '*** run code security scripts ***')
-    system(python + '-m bandit -r %s' % pkg)
+    return module('bandit', '-r %s' % pkg, venv=python)
 
 
 def coverage(pkg=path.basename(getcwd()), test_dir=TEST_DIR, python=PYTHON):
     """check code coverage of tests"""
+
+    log(INFO, '*** run test coverage scripts ***')
+    module('test', '--coverage -D `pwd`/coverage_data %s' % test_dir,
+           venv=python)
+
     log(INFO, '*** run pytest cov scripts ***')
-    system(python + ' -m pytest -v --cov %s' % test_dir)
+    module('pytest', '-v --cov %s' % test_dir, venv=python)
 
     log(INFO, '*** run coverage scripts ***')
-    cwd = getcwd()
-    chdir(test_dir)
-    cmd = python + ' -m coverage run' \
-                   ' --include="*%s*"' \
-                   ' --omit="*test?.py"' \
-                   ' --module unittest discover -v -p "*.py"' % pkg
-    system(cmd)
-    system(python + ' -m coverage xml')
-    system(python + ' -m coverage report')
-    system(python + ' -m coverage html')
-    chdir(cwd)
+    cmd = 'run' \
+          ' --include="*%s*"' \
+          ' --omit="*test?.py"' \
+          ' --module unittest discover -v -p "*.py"' % pkg
+    module('coverage', cmd, path=test_dir, venv=python)
+    module('coverage', 'xml', path=test_dir, venv=python)
+    module('coverage', 'report', path=test_dir, venv=python)
+    module('coverage', 'html', path=test_dir, venv=python)
 
 
 def cleanup(test_dir=TEST_DIR):
     """remove temporary files"""
     log(INFO, '*** clean environment ***')
 
+    # removed pytest data files
+    del_tree(".pytest_cache")
+
+    # removed coverage data files incl. files in test dir
+    files = ".coverage", "coverage.xml", "htmlcov"
+    del_tree(*files)
+    del_tree(*(path.join(test_dir, f) for f in files))
+
     # removed profiling data files
-    # system("rm -f -v .cprofile")
-    rmtree(".cprofile")
-
-    # removed coverage data files
-    # system("rm -f -v .coverage")
-    # system("rm -f -v coverage.xml")
-    # system("rm -f -r htmlcov")
-    rmtree(".coverage")
-    rmtree("coverage.xml")
-    rmtree("htmlcov")
-
-    # removed coverage data files from test/
-    rmtree("%s/.coverage" % test_dir)
-    rmtree("%s/coverage.xml" % test_dir)
-    rmtree("%s/htmlcov" % test_dir)
+    del_tree(".cprofile")

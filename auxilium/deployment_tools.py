@@ -12,21 +12,26 @@
 
 
 from datetime import date
-from logging import log, INFO
-from os import system, walk, sep, getcwd, linesep, path
-from shutil import rmtree
+from json import load, dump
+from logging import log, INFO, DEBUG
+from os import walk, sep, getcwd, linesep
+from os.path import basename, join, getmtime, exists
+from sys import path
 from textwrap import wrap
 
-PYTHON = 'python3'
+from .system_tools import system, PYTHON, del_tree
 
 
-def set_timestamp(pkg=path.basename(getcwd()), root=getcwd()):
+LAST_M_FILE = '.aux/last.json'
+
+
+def set_timestamp(pkg=basename(getcwd()), root=getcwd()):
     pkg = __import__(pkg) if isinstance(pkg, str) else pkg
 
     for subdir, dirs, files in walk(root):
         for file in files:
             if file.endswith('py'):
-                file = path.join(subdir, file)
+                file = join(subdir, file)
 
                 # read file lines into list
                 f = open(file, 'r')
@@ -38,8 +43,8 @@ def set_timestamp(pkg=path.basename(getcwd()), root=getcwd()):
                     for i, line in enumerate(lines):
                         if line.startswith('__date__ = '):
                             d = date.today().strftime('%A, %d %B %Y')
-                            log(INFO,
-                                "set %s.__date__ = %s" % (pkg.__name__, d))
+                            a = (pkg.__name__, d, file)
+                            log(INFO-1, "set %s.__date__ = %s in %s" % a)
                             lines[i] = "__date__ = '" + d + "'"
                             break
 
@@ -49,7 +54,7 @@ def set_timestamp(pkg=path.basename(getcwd()), root=getcwd()):
                     f.close()
 
 
-def replace_headers(pkg=path.basename(getcwd()), root=getcwd(), test=False):
+def replace_headers(pkg=basename(getcwd()), root=getcwd(), test=False):
     pkg = __import__(pkg) if isinstance(pkg, str) else pkg
 
     new_lines = pkg.__name__,
@@ -64,78 +69,69 @@ def replace_headers(pkg=path.basename(getcwd()), root=getcwd(), test=False):
     new_header += ['# ' + line for line in new_lines]
     new_header += ['', '']
 
+    last_mtimes = dict()
+    if exists(LAST_M_FILE):
+        last_mtimes = load(open(LAST_M_FILE, 'r'))
+
     for subdir, dirs, files in walk(root):
-        for file in files:
-            if file.endswith('py'):
-                file = path.join(subdir, file)
-                log(INFO, '\n*** process %s ***\n' % file)
+        if sep + '.' not in subdir:
+            for file in files:
+                if file.endswith('py'):
+                    file = join(subdir, file)
+                    if last_mtimes.get(file, '') == str(getmtime(file)):
+                        continue
+                    log(INFO-1, 'update file header of %s' % file)
 
-                # read file lines into list
-                f = open(file, 'r')
-                lines = list(map(str.rstrip, f.readlines()))
-                f.close()
-
-                # remove old header
-                removed = list()
-                while lines and (not lines[0] or lines[0].startswith('#')):
-                    removed.append(lines.pop(0).strip())
-
-                # keep first line in script files
-                if removed[0].startswith('#!/usr/bin/env'):
-                    new_header[0] = removed[0]
-
-                # add new header
-                new_lines = new_header + lines
-
-                if test:
-                    log(INFO, 'remove : ' + '\nremove : '.join(removed[:20]))
-                    log(INFO, '-' * 65)
-                    log(INFO, 'add    : ' + '\nadd    : '.join(new_lines[:20]))
-                else:
-                    log(INFO, '\n'.join(new_lines[:20]))
-                    f = open(file, 'w')
-                    f.write(linesep.join(new_lines))
-                    f.write(linesep)  # last empty line
+                    # read file lines into list
+                    f = open(file, 'r')
+                    lines = list(map(str.rstrip, f.readlines()))
                     f.close()
 
+                    # remove old header
+                    removed = list()
+                    while lines and (not lines[0] or lines[0].startswith('#')):
+                        removed.append(lines.pop(0).strip())
 
-def docmaintain(pkg=path.basename(getcwd()), root=getcwd()):
+                    # keep first line in script files
+                    if removed and removed[0].startswith('#!/usr/bin/env'):
+                        new_header[0] = removed[0]
+
+                    # add new header
+                    new_lines = new_header + lines
+
+                    if test:
+                        log(DEBUG, 'remove : ' + '\nremove : '.join(removed[:20]))
+                        log(DEBUG, '-' * 65)
+                        log(DEBUG, 'add    : ' + '\nadd    : '.join(new_lines[:20]))
+                    else:
+                        log(DEBUG, '\n'.join(new_lines[:20]))
+                        f = open(file, 'w')
+                        f.write(linesep.join(new_lines))
+                        f.write(linesep)  # last empty line
+                        f.close()
+                    last_mtimes[file] = str(getmtime(file))
+
+    dump(last_mtimes, open(LAST_M_FILE, 'w'), indent=2)
+
+
+def docmaintain(pkg=basename(getcwd()), root=getcwd()):
     """update timestamps and file header"""
     log(INFO, '*** run docmaintain scripts ***')
+    path.append(root)
     set_timestamp(pkg, root)
-    replace_headers(pkg, root)
+    replace_headers(pkg, root + sep + pkg)
 
 
 def build(python=PYTHON):
     """build package distribution"""
-    log(INFO, '*** run setuptools scripts ***')
+    log(INFO, '*** build package distribution ***')
     system(python + " setup.py build")
     system(python + " setup.py sdist bdist_wheel")
     system(python + "-m twine check dist/*")
 
 
-def deploy(usr, pwd, python=PYTHON):
-    """release on pypi.org"""
-    log(INFO, '*** deploy release on pypi.org ***')
-    # run setuptools build
-    system(python + " setup.py sdist bdist_wheel")
-    system(python + " -m twine check dist/*")
-
-    # push to PyPi.org
-    cmd = python + " -m twine upload -u %s -p %s" % (usr, pwd)
-    cmd += " dist/* #--repository-url https://test.pypi.org/legacy/ dist/*"
-    system(cmd)
-
-
-def cleanup():
+def cleanup(pkg=basename(getcwd())):
     """remove temporary files"""
     log(INFO, '*** clean environment ***')
     # remove setuptools release files
-    # system("rm -f -r -v ./build/")
-    # system("rm -f -r -v ./dist/")
-    # system("rm -f -r -v *.egg-info")
-    # system("rm -f -r -v .eggs")
-    rmtree("./build/")
-    rmtree("./dist/")
-    rmtree("*.egg-info")
-    rmtree(".eggs")
+    del_tree("./build/", "./dist/", pkg + ".egg-info", ".eggs")

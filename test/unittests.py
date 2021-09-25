@@ -4,7 +4,7 @@
 # --------
 # A Python project for an automated test and deploy toolkit - 100%
 # reusable.
-# 
+#
 # Author:   sonntagsgesicht
 # Version:  0.1.4, copyright Sunday, 11 October 2020
 # Website:  https://github.com/sonntagsgesicht/auxilium
@@ -59,24 +59,24 @@ if __name__ == "__main__":
     start_time = datetime.datetime.now()
 
     print('')
-    print('======================================================================')
+    print('=' * 80)
     print('')
     print(('run %s' % __file__))
     print(('in %s' % os.getcwd()))
     print(('started  at %s' % str(start_time)))
     print('')
-    print('----------------------------------------------------------------------')
+    print('-' * 80)
     print('')
 
     unittest.main(verbosity=2)
 
     print('')
-    print('======================================================================')
+    print('=' * 80)
     print('')
     print(('ran %s' % __file__))
     print(('in %s' % os.getcwd()))
     print(('started  at %s' % str(start_time)))
     print(('finished at %s' % str(datetime.datetime.now())))
     print('')
-    print('----------------------------------------------------------------------')
+    print('-' * 80)
     print('')
