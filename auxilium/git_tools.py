@@ -11,30 +11,28 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from logging import log, INFO
+from logging import log, DEBUG, INFO
+from os import getcwd
+from os.path import exists, join
 
-from .system_tools import system
-
-
-def create_git(path='.'):
-    """create local `git` repo"""
-    log(INFO, "create local `git` repo")
-    if system("git --version", level=0) == 0:
-        system('git init .', path=path)
-        commit_git('Initial commit', add='--all', path=path)
+from dulwich import porcelain
+from dulwich.repo import Repo
 
 
-def commit_git(msg='', add='', path='.'):
+def commit_git(msg='', add='', path=getcwd()):
     """commit changes to local `git` repo"""
-    log(INFO, "commit changes to local `git` repo")
-    if system("git --version", level=0) == 0:
-        if add:
-            log(INFO, "first adding all new files")
-            if isinstance(add, str):
-                system('git add %s' % add, path=path)
-            else:
-                system('git add --all', path=path)
-        if not msg:
-            msg = 'Commit'
-        msg += ' (via auxilium)'
-        system('git commit -m "%s"' % msg, path=path)
+    repo = Repo(path) if exists(join(path, '.git')) else Repo.init(path)
+    if add:
+        log(INFO, "*** adding all new files to local `git` repo***")
+        # add = add if isinstance(add, str) else '--all'
+        added, ignored = porcelain.add(repo)
+        for p in added:
+            log(DEBUG, "added: %s" % p)
+        for p in ignored:
+            log(DEBUG, "ignored: %s" % p)
+
+    msg = msg if msg else 'Commit'
+    msg += ' (via auxilium)'
+    log(INFO, "*** commit changes to local `git` repo ***")
+    log(INFO, "msg: `%s`" % msg)
+    porcelain.commit(repo, msg)

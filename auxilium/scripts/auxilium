@@ -20,7 +20,7 @@ from argparse import ArgumentParser, \
 from configparser import ConfigParser
 
 from auxilium.setup_tools import create_project
-from auxilium.git_tools import create_git, commit_git
+from auxilium.git_tools import commit_git
 from auxilium.pip_tools import requirements, install, uninstall, \
     cleanup as cleanup_site_packages, upgrade
 
@@ -135,13 +135,14 @@ update.add_argument(
 update.add_argument(
     '--commit',
     nargs='?',
-    const=config.get('update', 'commit', fallback='commit (by auxilium)'),
+    const=config.get('update', 'commit', fallback='commit'),
     help=commit_git.__doc__)
 update.add_argument(
     '--add',
-    nargs='?',
-    const=config.get('update', 'add', fallback='--all'),
-    help='add these new files to `git` repo')
+    action='store_const',
+    const=not config.get('update', 'add', fallback=False),
+    default=config.get('update', 'add', fallback=False),
+    help='add (stage) new or changed files to `git` repo')
 update.add_argument(
     '--requirements',
     action='store_const',
@@ -159,7 +160,7 @@ update.add_argument(
     action='store_const',
     const=not config.getboolean('update', 'cleanup', fallback=False),
     default=config.getboolean('update', 'cleanup', fallback=False),
-    help=cleanup_site_packages.__doc__)
+    help=cleanup_site_packages.__doc__ + ' (ignores other input)')
 
 # === test ==
 
@@ -181,14 +182,14 @@ testing.add_argument(
 testing.add_argument(
     '--commit',
     nargs='?',
-    const=config.get('test', 'commit', fallback='commit (by auxilium)'),
+    const=config.get('test', 'commit', fallback='commit tested updates'),
     help='auto commit on successful test run')
 testing.add_argument(
     '--doctest',
     action='store_const',
     const=not config.getboolean('test', 'doctest', fallback=True),
     default=config.getboolean('test', 'doctest', fallback=True),
-    help=coverage.__doc__)
+    help=doctests.__doc__)
 testing.add_argument(
     '--coverage',
     action='store_const',
@@ -213,12 +214,12 @@ testing.add_argument(
     const=not config.getboolean('test', 'cleanup', fallback=False),
     default=config.getboolean('test', 'cleanup', fallback=False),
     help=cleanup_test.__doc__)
-testing.add_argument(
-    '--reset',
-    action='store_const',
-    const=not config.getboolean('test', 'reset', fallback=False),
-    default=config.getboolean('test', 'reset', fallback=False),
-    help="clear regression data (WARNING: data could not be restored!)")
+# testing.add_argument(
+#     '--reset',
+#     action='store_const',
+#     const=not config.getboolean('test', 'reset', fallback=False),
+#     default=config.getboolean('test', 'reset', fallback=False),
+#     help="clear regression data (WARNING: data could not be restored!)")
 
 # === documentation ==
 
@@ -235,7 +236,7 @@ doc.add_argument(
 doc.add_argument(
     '--commit',
     nargs='?',
-    const=config.get('doc', 'commit', fallback='commit (by auxilium)'),
+    const=config.get('doc', 'commit', fallback='commit'),
     help='auto commit on successful test run')
 doc.add_argument(
     '--api',
@@ -329,9 +330,10 @@ for k in sub_parser.choices:
         full._actions.extend(
             a for a in sub_parser.choices[k]._actions if not a.dest == 'help')
 
+args = parser.parse_args()
+
 root = os.getcwd()
 pkg = os.path.basename(root)
-args = parser.parse_args()
 
 if hasattr(args, 'verbosity'):
     log_format = '[%(asctime)s] %(levelname)-12.8s %(message)s'
@@ -344,7 +346,7 @@ if args.command == 'create':
     create_project(args.name, args.slogan, args.author, args.email, path=root)
     os.chdir(args.name)
     path = os.path.join(root, args.name)
-    create_git(path)
+    commit_git('Initial Commit', True, path)
     create_venv(args.name, args.venv, path=path)
     sys.exit()
 
