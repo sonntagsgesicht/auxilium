@@ -19,7 +19,7 @@ from os.path import basename, join, getmtime, exists
 from sys import path
 from textwrap import wrap
 
-from .system_tools import system, PYTHON, del_tree
+from .system_tools import python as _python, module, PYTHON, del_tree
 
 
 LAST_M_FILE = '.aux/last.json'
@@ -125,9 +125,10 @@ def docmaintain(pkg=basename(getcwd()), root=getcwd()):
 def build(python=PYTHON):
     """build package distribution"""
     log(INFO, '*** build package distribution ***')
-    system(python + " setup.py build")
-    system(python + " setup.py sdist bdist_wheel")
-    system(python + "-m twine check dist/*")
+    _python("setup.py build", venv=python)
+    _python("setup.py sdist --formats=zip", venv=python)
+    _python("setup.py sdist bdist_wheel", venv=python)
+    module("twine", "check dist/*")
 
 
 def cleanup(pkg=basename(getcwd())):
