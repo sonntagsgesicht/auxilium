@@ -25,24 +25,24 @@ def commit_git(msg='', add='', path=getcwd()):
     cwd = getcwd()
     chdir(path)
     repo = Repo(path) if exists(join(path, '.git')) else Repo.init(path)
-    if add:
-        log(INFO, "*** adding all new files to `git` repo")
-        log(INFO, "    from " + path)
-        added, ignored = porcelain.add(repo)
-        log(INFO, "    added:")
-        if not added:
-            log(INFO, "      -")
-        for p in added:
-            log(INFO, "      %s" % p)
-        for p in ignored:
-            log(DEBUG, "    ignored: %s" % p)
-
+    _, files, _ = porcelain.status(repo)
+    repo.stage(files)
+    added, ignored = porcelain.add(repo)
+    log(INFO, "*** added all new files to `git` repo")
+    log(INFO, "    from " + path)
+    if not added:
+        log(INFO, "      -")
+    for p in added:
+        log(INFO, "      %s" % p)
+    for p in ignored:
+        log(DEBUG, "    ignored: %s" % p)
+    print(repo, *porcelain.status(repo), sep='\n')
     msg = msg if msg else 'Commit'
     msg += ' (via auxilium)'
-    log(INFO, "*** commit changes as %s" % msg)
+    log(INFO, "*** commit changes as `%s`" % msg)
     log(INFO, "    at " + path)
     res = porcelain.commit(repo, msg)
-    log(DEBUG, res)
+    log(DEBUG, "    with hash: %s" % res)
 
     chdir(cwd)
     return 0
