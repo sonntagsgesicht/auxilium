@@ -26,7 +26,7 @@ def api(pkg=basename(getcwd()), venv=None):
         rmtree("doc/sphinx/api")
     res = 0
     res += system("sphinx-apidoc -o doc/sphinx/api -f -E %s" % pkg, venv=venv)
-    res += commit_git('added `doc/sphinx/api`', add='doc/sphinx/api')
+    res += commit_git('added `doc/sphinx/api`')
     return res
 
 
