@@ -76,6 +76,7 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
     rp(root_path + sep + 'HOWTO.rst')
     rp(root_path + sep + 'CHANGES.rst')
     rp(root_path + sep + 'doc' + sep + 'sphinx' + sep + 'doc.rst')
+    rp(root_path + sep + 'doc' + sep + 'sphinx' + sep + 'conf.py')
 
     log(INFO, '')
     log(INFO, '*** Created project %s with these files:' % name)

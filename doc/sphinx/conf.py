@@ -10,19 +10,12 @@
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
-
 import os
-import sys
 
-sys.path.insert(0, os.path.abspath('../../'))  #  needed to import pkg
-sys.path.insert(0, os.path.abspath('.'))  #  needed to import pkg
-
-if os.getcwd().find('readthedocs')<0:
+if os.getcwd().find('readthedocs') < 0:
     pkg = __import__(os.getcwd().split(os.sep)[-3])
 else:
-    pkg = __import__(os.getcwd().split(os.sep)[-5])
-
-sys.path.insert(0, os.path.abspath('../../' + pkg.__name__))  #  needed to import pkg
+    pkg = __import__(__file__.split(os.sep)[-4])
 
 from auxilium import replacements_from_pkg, replacements, replacements_str
 
@@ -42,7 +35,7 @@ rst_prolog = replacements_str(_replacements)
 extensions = [
     'sphinx_rtd_theme',
     'sphinx.ext.autodoc',
-    #'sphinx.ext.autosectionlabel',
+    # 'sphinx.ext.autosectionlabel',
     'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
     'sphinx.ext.todo',
@@ -65,16 +58,16 @@ autodoc_default_options = {
     # 'autosummary': True,
     'inherit_docstrings': True
 }
-numpydoc_show_class_members=True
+numpydoc_show_class_members = True
 autoclass_content = 'both'
-#autosummary_generate = True
+# autosummary_generate = True
 
 # needed for version 1.8.5 (python 2.7)
-autodoc_default_flags = [ 'members', 'show-inheritance']
-autodoc_member_order = 'bysource' #'groupwise'
+autodoc_default_flags = ['members', 'show-inheritance']
+autodoc_member_order = 'bysource'  # 'groupwise'
 autodoc_inherit_docstrings = True
 
-#source_suffix = ['.rst', '.md']
+# source_suffix = ['.rst', '.md']
 source_suffix = '.rst'
 
 # The master toctree document.
@@ -142,8 +135,7 @@ latex_documents = [(
     pkg.__name__.capitalize() + ' Documentation',
     pkg.__author__,
     'manual'
-),]
-
+), ]
 
 # -- Options for manual page output ---------------------------------------
 

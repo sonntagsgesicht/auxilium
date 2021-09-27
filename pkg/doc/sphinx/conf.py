@@ -14,10 +14,7 @@
 import os
 from auxilium import replacements_from_pkg, replacements, replacements_str
 
-if os.getcwd().find('readthedocs') < 0:
-    pkg = __import__(os.getcwd().split(os.sep)[-3])
-else:
-    pkg = __import__(os.getcwd().split(os.sep)[-5])
+pkg = __import__(__file__.split(os.sep)[-4])
 
 # -- General configuration ------------------------------------------------
 

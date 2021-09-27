@@ -18,7 +18,7 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 __doc__ = 'Python project for an automated test and deploy toolkit.'
 __version__ = '0.1.5'
 __dev_status__ = '2 - Beta'
-__date__ = 'Monday, 27 September 2021'
+__date__ = 'Tuesday, 28 September 2021'
 __author__ = 'sonntagsgesicht'
 __email__ = __author__ + '@icloud.com'
 __url__ = 'https://github.com/' + __author__ + '/' + __name__

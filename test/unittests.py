@@ -49,12 +49,12 @@ class CreateRepoUnitTests(unittest.TestCase):
         self.assertEqual(0, os.system('auxilium -demo'))
 
         os.chdir('auxilium_demo')
-        self.assertEqual(0, os.system('auxilium -z update'))
-        self.assertEqual(0, os.system('auxilium -z test'))
-        self.assertEqual(0, os.system('auxilium -z doc'))
-        self.assertEqual(0, os.system('auxilium -z deploy'))
+        self.assertEqual(0, os.system('auxilium -z -vv update'))
+        self.assertEqual(0, os.system('auxilium -z -vv test'))
+        self.assertEqual(0, os.system('auxilium -z -vv doc'))
+        self.assertEqual(0, os.system('auxilium -z -vv deploy'))
 
-        self.assertNotEqual(0, os.system('auxilium deploy -z --tag'))
+        self.assertNotEqual(0, os.system('auxilium deploy -z -vv --tag'))
 
     def test_unicorn(self):
         inputs = self.name, self.doc, self.author, self.email, self.url
@@ -66,10 +66,10 @@ class CreateRepoUnitTests(unittest.TestCase):
         os.chdir(self.name)
         self.assertEqual(os.getcwd().split(os.sep)[-1], self.name)
 
-        self.assertEqual(0, os.system('auxilium update'))
-        self.assertEqual(0, os.system('auxilium test'))
-        self.assertEqual(0, os.system('auxilium doc'))
-        self.assertEqual(0, os.system('auxilium deploy'))
+        self.assertEqual(0, os.system('auxilium -z -vv update'))
+        self.assertEqual(0, os.system('auxilium -z -vv test'))
+        self.assertEqual(0, os.system('auxilium -z -vv doc'))
+        self.assertEqual(0, os.system('auxilium -z -vv deploy'))
 
 
 if __name__ == "__main__":
