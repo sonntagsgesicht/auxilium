@@ -20,7 +20,7 @@ from dulwich.repo import Repo
 from dulwich.errors import NotGitRepository
 
 
-def commit_git(msg='', add='', path=getcwd()):
+def commit_git(msg='', path=getcwd()):
     """add and commit changes to local `git` repo"""
     cwd = getcwd()
     chdir(path)

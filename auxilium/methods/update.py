@@ -36,5 +36,5 @@ def do(pkg=basename(getcwd()), commit=None, add=None, upgrade=None,
         if doc_header:
             code = code or docmaintain(pkg, path=path)
         if commit:
-            code = code or commit_git(commit, add, path=path)
+            code = code or commit_git(commit, path=path)
     return code

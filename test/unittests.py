@@ -36,7 +36,7 @@ class CreateRepoUnitTests(unittest.TestCase):
         self.url = 'https://<author>.home/<name>'
         if os.path.exists(self.wdir):
             shutil.rmtree(self.wdir)
-            os.mkdir(self.wdir)
+        os.mkdir(self.wdir)
         os.chdir(self.wdir)
 
     def tearDown(self):
