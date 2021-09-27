@@ -29,11 +29,14 @@ VENV_PATH = '.aux/venv'
 
 def create_venv(pkg=basename(getcwd()),
                 venv_path=VENV_PATH,
-                path=getcwd()):
+                path=getcwd(),
+                venv=None):
     """create virtual python environment"""
+    # check if venv exists
+    venv = venv if venv and exists(venv) else None
     log(INFO, "*** create virtual environment")
     log(INFO, "    in " + path + " at " + venv_path)
-    module('venv', "--prompt %s %s" % (pkg, venv_path), path=path)
+    module('venv', "--prompt %s %s" % (pkg, venv_path), path=path, venv=venv)
     return join(venv_path, 'bin', basename(executable))
 
 
@@ -51,7 +54,8 @@ def activate_venv(venv_path=VENV_PATH):
 
 
 def system(command, level=DEBUG, path=getcwd(), venv=None, capture_output=True):
-    log(DEBUG, "    call `%s` in %s" % (command, path))
+    log(DEBUG, "    call system(`%s`)" % command)
+    log(DEBUG, "    called in %s" % path)
     if venv:
         command = activate_venv() + command
     if LogPipe:

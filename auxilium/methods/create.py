@@ -22,7 +22,7 @@ from ..tools.docmaintain_tools import docmaintain
 
 
 def do(name=None, slogan=None, author=None, email=None, url=None,
-       commit=None, path=getcwd(), venv=None, **kwargs):
+       commit=None, path=getcwd(), venv=None, env=None, **kwargs):
     pkg_path = create_project(name, slogan, author, email, url, path=path)
     pkg = basename(pkg_path)
     code = int(not pkg_path.endswith(name)) if name else 0
@@ -33,16 +33,16 @@ def do(name=None, slogan=None, author=None, email=None, url=None,
     if venv:
         # create virtual environment
         # venv = venv.replace('bin/python3')
-        env = create_venv(pkg, venv, path=pkg_path)
+        env = create_venv(pkg, venv_path=venv, path=pkg_path, venv=env)
         # run default update command
-        code = code or upgrade(pkg_path, env)
-        code = code or install(pkg_path, env)
-        code = code or requirements(pkg_path, env)
-        code = code or docmaintain(pkg, pkg_path)
+        code = code or upgrade(path=pkg_path, venv=env)
+        code = code or install(path=pkg_path, venv=env)
+        code = code or requirements(path=pkg_path, venv=env)
+        code = code or docmaintain(pkg, path=pkg_path)
 
     if commit:
         # init git repo with initial commit
-        code = code or commit_git(commit, add=True, path=pkg_path)
+        code = code or commit_git(commit, path=pkg_path)
 
     code = code or create_finish(pkg)
     return code

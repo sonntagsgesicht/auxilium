@@ -169,6 +169,9 @@ if path not in sys.path:
     sys.path.append(path)
 
 code = method(**kwargs) if method else 1
-if code and args.exit_non_zero == 2:
-    raise Failure('failure in %s' % args.command)
-sys.exit((code and args.exit_non_zero) * 1)
+if code:
+    if args.exit_non_zero == 2:
+        raise Failure('failure in %s' % args.command)
+    if args.exit_non_zero == 1:
+        sys.exit(1)
+sys.exit()

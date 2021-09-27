@@ -22,7 +22,7 @@ sys.path.append('..')
 
 logging.basicConfig()
 
-CWD = os.getcwd()
+CWD, _ = os.path.split(__file__)
 
 
 class CreateRepoUnitTests(unittest.TestCase):
@@ -49,13 +49,12 @@ class CreateRepoUnitTests(unittest.TestCase):
         self.assertEqual(0, os.system('auxilium -demo'))
 
         os.chdir('auxilium_demo')
-        self.assertEqual(0, os.system('auxilium update'))
-        self.assertEqual(0, os.system('auxilium test'))
-        self.assertEqual(0, os.system('auxilium doc'))
-        self.assertEqual(0, os.system('auxilium deploy'))
+        self.assertEqual(0, os.system('auxilium -z update'))
+        self.assertEqual(0, os.system('auxilium -z test'))
+        self.assertEqual(0, os.system('auxilium -z doc'))
+        self.assertEqual(0, os.system('auxilium -z deploy'))
 
-        self.assertEqual(0, os.system('auxilium deploy --tag'))
-        self.assertNotEqual(0, os.system('auxilium deploy --tag'))
+        self.assertNotEqual(0, os.system('auxilium deploy -z --tag'))
 
     def test_unicorn(self):
         inputs = self.name, self.doc, self.author, self.email, self.url

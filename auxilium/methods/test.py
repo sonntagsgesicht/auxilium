@@ -24,13 +24,13 @@ def do(pkg=basename(getcwd()), commit=None,
        path=None, env=None, **kwargs):
     res = list()
     if quality:
-        res.append(_quality(pkg, env))
+        res.append(_quality(pkg, venv=env))
     if security:
-        res.append(_security(pkg, env))
+        res.append(_security(pkg, venv=env))
     if path:
-        res.append(_test(path, env))
+        res.append(_test(path, venv=env))
         if coverage:
-            res.append(_coverage(pkg, path, env))
+            res.append(_coverage(pkg, path, venv=env))
     code = any(res)
     if commit:
         if code:

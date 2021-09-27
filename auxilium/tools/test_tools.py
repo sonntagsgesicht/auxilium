@@ -32,6 +32,7 @@ def test_unittest(test_dir=TEST_DIR, venv=None):
     log(DEBUG, '*** run unittest scripts')
     return module(
         'unittest', 'discover %s -v -p "*.py"' % test_dir,
+        #'unittest', 'discover . -v -p "*.py"', path=test_dir,
         level=INFO, venv=venv)
 
 

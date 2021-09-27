@@ -34,10 +34,14 @@ def do(pkg=basename(getcwd()), commit=None, tag=None, doc_header=None,
     if commit:
         if build_return_code == 0:
             code = code or commit_git(commit)
-            if tag:
-                code = code or tag_git(tag, path=path)
         else:
-            log(ERROR, "⚠️ Failed to build. Did not commit or tag.")
+            log(ERROR, "⚠️ Failed to build. Did not commit.")
+    if tag:
+        if build_return_code == 0:
+            code = code or tag_git(tag, path=path)
+        else:
+            log(ERROR, "⚠️ Failed to build. Did not tag.")
+
     if push:
         if build_return_code == 0:
             url = remote.replace('https://', '')
