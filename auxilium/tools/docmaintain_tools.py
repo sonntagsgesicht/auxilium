@@ -21,14 +21,27 @@ from textwrap import wrap
 LAST_M_FILE = '.aux/last.json'
 
 
-def get_version(pkg=basename(getcwd()), path=getcwd()):
+def get_attr(attr, pkg=basename(getcwd()), path=getcwd()):
+    default = '<%s>' % attr
     try:
-        if not path in sys_path:
+        if path not in sys_path:
             sys_path.append(path)
         pkg = __import__(pkg) if isinstance(pkg, str) else pkg
     except ImportError:
-        return '<version>'
-    return pkg.__version__
+        return default
+    return getattr(pkg, '__%s__' % attr, default)
+
+
+def get_version(pkg=basename(getcwd()), path=getcwd()):
+    return get_attr('version', pkg, path)
+
+
+def get_author(pkg=basename(getcwd()), path=getcwd()):
+    return get_attr('author', pkg, path)
+
+
+def get_url(pkg=basename(getcwd()), path=getcwd()):
+    return get_attr('url', pkg, path)
 
 
 def set_timestamp(pkg=basename(getcwd()), path=getcwd()):

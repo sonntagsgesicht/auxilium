@@ -9,27 +9,21 @@
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
-
 from logging import log, DEBUG, INFO, ERROR
 from os import linesep, getcwd, name as os_name, remove
 from os.path import basename, exists, isdir, join
 from shutil import rmtree
-from sys import executable, stdout
+from sys import executable
 
 from subprocess import run
 
+if False:
+    from .logpipe import LogPipe
+else:
+    LogPipe = None
+
 PYTHON = executable
 VENV_PATH = '.aux/venv'
-
-
-class Stream(object):
-
-    def __init__(self, inner=stdout, level=INFO):
-        self._inner = innser
-        self._level = level
-
-    def write(self, *args, **kwargs):
-        log(self._level, line)
 
 
 def create_venv(pkg=basename(getcwd()),
@@ -57,8 +51,13 @@ def system(command, level=DEBUG, path=getcwd(), venv=None, capture_output=True):
     log(DEBUG, "call `%s` in %s" % (command, path))
     if venv:
         command = activate_venv() + command
-    proc = run(command,
-               cwd=path, shell=True, capture_output=capture_output, text=True)
+    if LogPipe:
+        proc = run(command, cwd=path, shell=True,
+                   stdout=LogPipe(level, log),
+                   stderr=LogPipe(ERROR, log), text=True)
+    else:
+        proc = run(command,cwd=path, shell=True,
+                   capture_output=capture_output, text=True)
     log_level = ERROR if proc.returncode else level
     if proc.stdout:
         for line in str(proc.stdout).split(linesep):

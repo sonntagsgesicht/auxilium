@@ -1,9 +1,0 @@
-rm -f -r me; auxilium -v create --name=me --slogan='me myself and I' --author=myself --email='me@mayself.I';
-
-cd me;
-auxilium -v update;
-auxilium -v test -v=10;
-auxilium -v doc --api;
-auxilium -v deploy;
-auxilium doc --show;
-cd ..;

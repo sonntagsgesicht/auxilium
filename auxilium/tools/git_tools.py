@@ -29,9 +29,11 @@ def commit_git(msg='', add='', path=getcwd()):
         log(INFO,
             "*** adding all new files from %s to local `git` repo ***" % path)
         added, ignored = porcelain.add(repo)
-        log(DEBUG, "added:")
+        log(INFO, "added:")
+        if not added:
+            log(INFO, "  -")
         for p in added:
-            log(DEBUG, "  %s" % p)
+            log(INFO, "  %s" % p)
         for p in ignored:
             log(DEBUG, "ignored: %s" % p)
 
@@ -39,7 +41,9 @@ def commit_git(msg='', add='', path=getcwd()):
     msg += ' (via auxilium)'
     log(INFO, "*** commit changes to local `git` repo at %s ***" % path)
     log(DEBUG, "msg: `%s`" % msg)
-    porcelain.commit(repo, msg)
+    res = porcelain.commit(repo, msg)
+    log(DEBUG, res)
+
     chdir(cwd)
     return 0
 
@@ -47,6 +51,10 @@ def commit_git(msg='', add='', path=getcwd()):
 def tag_git(tag, msg='', path=getcwd()):
     """tag current branch of local `git` repo"""
     log(INFO, "*** tag current branch of local `git` repo at %s ***" % path)
+    if bytearray(tag.encode()) in porcelain.tag_list(Repo(path)):
+        log(ERROR, "tag %s exists in current branch of local `git` repo" % tag)
+        return 1
+
     log(DEBUG, "tag: `%s`" % tag)
     if msg:
         log(DEBUG, "msg: `%s`" % msg)
@@ -62,7 +70,8 @@ def push_git(remote='None', path=getcwd()):
         log(DEBUG, "remote: `%s`" % str(remote))
     out, err = BytesIO(), BytesIO()
     try:
-        porcelain.push(Repo(path), remote, outstream=out, errstream=err)
+        porcelain.push(Repo(path), remote, 'master',
+                       outstream=out, errstream=err)
     except NotGitRepository as e:
         log(ERROR, e)
         return 1
