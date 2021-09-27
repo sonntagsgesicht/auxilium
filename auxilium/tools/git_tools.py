@@ -26,21 +26,21 @@ def commit_git(msg='', add='', path=getcwd()):
     chdir(path)
     repo = Repo(path) if exists(join(path, '.git')) else Repo.init(path)
     if add:
-        log(INFO,
-            "*** adding all new files from %s to local `git` repo ***" % path)
+        log(INFO, "*** adding all new files to `git` repo")
+        log(INFO, "    from " + path)
         added, ignored = porcelain.add(repo)
-        log(INFO, "added:")
+        log(INFO, "    added:")
         if not added:
-            log(INFO, "  -")
+            log(INFO, "      -")
         for p in added:
-            log(INFO, "  %s" % p)
+            log(INFO, "      %s" % p)
         for p in ignored:
-            log(DEBUG, "ignored: %s" % p)
+            log(DEBUG, "    ignored: %s" % p)
 
     msg = msg if msg else 'Commit'
     msg += ' (via auxilium)'
-    log(INFO, "*** commit changes to local `git` repo at %s ***" % path)
-    log(DEBUG, "msg: `%s`" % msg)
+    log(INFO, "*** commit changes as %s" % msg)
+    log(INFO, "    at " + path)
     res = porcelain.commit(repo, msg)
     log(DEBUG, res)
 
@@ -50,24 +50,24 @@ def commit_git(msg='', add='', path=getcwd()):
 
 def tag_git(tag, msg='', path=getcwd()):
     """tag current branch of local `git` repo"""
-    log(INFO, "*** tag current branch of local `git` repo at %s ***" % path)
+    log(INFO, "*** tag current branch as %s" % tag)
+    log(INFO, "    at " + path)
     if bytearray(tag.encode()) in porcelain.tag_list(Repo(path)):
-        log(ERROR, "tag %s exists in current branch of local `git` repo" % tag)
+        log(ERROR, "⚠️ Tag %s exists in current branch of local `git` repo" % tag)
         return 1
 
-    log(DEBUG, "tag: `%s`" % tag)
     if msg:
-        log(DEBUG, "msg: `%s`" % msg)
+        log(DEBUG, "    msg: `%s`" % msg)
     porcelain.tag_create(Repo(path), tag, message=msg)
     return 0
 
 
 def push_git(remote='None', path=getcwd()):
     """push current branch of local to remote `git` repo"""
-    log(INFO, "*** push current branch of local "
-              "to remote `git` repo at %s ***" % remote)
+    log(INFO, "*** push current branch to remote `git` repo")
+    log(INFO, "    at " + remote)
     if remote:
-        log(DEBUG, "remote: `%s`" % str(remote))
+        log(DEBUG, "    remote: `%s`" % str(remote))
     out, err = BytesIO(), BytesIO()
     try:
         porcelain.push(Repo(path), remote, 'master',

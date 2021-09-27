@@ -14,7 +14,7 @@ from logging import log, INFO, DEBUG
 from os import remove, getcwd
 from os.path import basename, exists, join
 
-from .system_tools import module, PYTHON
+from auxilium.tools.system_tools import module, PYTHON, del_tree
 
 FREEZE_FILE = '.freeze'
 TEMP_REMOVE_FILE = '.site_packages_to_remove'
@@ -23,14 +23,14 @@ PIP = 'pip'
 
 def upgrade(path=getcwd(), venv=PYTHON):
     """upgrade `pip`"""
-    log(DEBUG, '*** upgrade `pip` ***')
+    log(DEBUG, '*** upgrade `pip`')
     return module(PIP, 'install --upgrade pip', path=path, venv=venv)
 
 
 def requirements(path=getcwd(), venv=PYTHON):
     """manage requirements (dependencies) in `requirements.txt`
         and `upgrade_requirements.txt`"""
-    log(INFO, '*** setup environment requirements ***')
+    log(INFO, "*** setup environment requirements")
 
     res = 0
     if not exists(join(path, FREEZE_FILE)):
@@ -48,19 +48,19 @@ def requirements(path=getcwd(), venv=PYTHON):
 
 def install(path=getcwd(), venv=PYTHON):
     """install current project via `pip install -e .`"""
-    log(INFO, '*** install project via pip install -e ***')
+    log(INFO, '*** install project via pip install -e')
     return module(PIP, "install --upgrade -e .", path=path, venv=venv)
 
 
 def uninstall(pkg=basename(getcwd()), path=getcwd(), venv=PYTHON):
     """uninstall current project via `pip uninstall`"""
-    log(INFO, '*** uninstall project via pip uninstall ***')
+    log(INFO, '*** uninstall project via pip uninstall')
     return module(PIP, "uninstall -y %s" % pkg, path=path, venv=venv)
 
 
 def cleanup(path=getcwd(), venv=PYTHON):
     """remove temporary files"""
-    log(INFO, '*** clean environment ***')
+    log(INFO, '*** clean environment')
     res = 0
     if exists(join(path, FREEZE_FILE)):
         res += module(PIP, "freeze --exclude-editable > %s" % TEMP_REMOVE_FILE,
@@ -72,4 +72,5 @@ def cleanup(path=getcwd(), venv=PYTHON):
         res += module(PIP, "install --upgrade -r %s" % FREEZE_FILE,
                       path=path, venv=venv)
         remove(join(path, FREEZE_FILE))
+    res += del_tree(basename(path) + ".egg-info", ".eggs")
     return res

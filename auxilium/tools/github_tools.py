@@ -18,7 +18,7 @@ from requests import post
 
 def create(usr, pwd, pkg=path.basename(getcwd())):
     """create repo on github.com"""
-    log(INFO, '*** create repo on github.com ***')
+    log(INFO, '*** create repo on github.com')
     try:
         _pkg = __import__(pkg) if isinstance(pkg, str) else pkg
         pkg = _pkg.__name__
@@ -45,7 +45,7 @@ def create(usr, pwd, pkg=path.basename(getcwd())):
 
 def release(usr, pwd, pkg=path.basename(getcwd())):
     """draft release on github.com"""
-    log(INFO, '*** draft release on github.com ***')
+    log(INFO, '*** draft release on github.com')
 
     pkg = __import__(pkg) if isinstance(pkg, str) else pkg
     name = pkg.__name__

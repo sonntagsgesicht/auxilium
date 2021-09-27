@@ -12,9 +12,9 @@ dist/
 doc/sphinx/_build/
 */__pycache__/
 
-test/test_create_repo/
+test/working_dir/
 
-htmlcov/
+*/htmlcov/
 .coverage
 coverage.xml
 

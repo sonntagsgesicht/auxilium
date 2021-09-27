@@ -57,7 +57,7 @@ def set_timestamp(pkg=basename(getcwd()), path=getcwd()):
         if line.startswith('__date__ = '):
             d = date.today().strftime('%A, %d %B %Y')
             a = (pkg, d, file)
-            log(DEBUG, "set %s.__date__ = %s in %s" % a)
+            log(DEBUG, "    set %s.__date__ = %s in %s" % a)
             lines[i] = "__date__ = '" + d + "'"
             break
     # write file
@@ -91,7 +91,7 @@ def replace_headers(pkg=basename(getcwd()), last=dict(), path=getcwd()):
                     file = join(subdir, file)
                     if last.get(file, '') == str(getmtime(file)):
                         continue
-                    log(DEBUG, 'update file header of %s' % file)
+                    log(DEBUG, '    update file header of %s' % file)
 
                     # read file lines into list
                     f = open(file, 'r')
@@ -121,7 +121,8 @@ def replace_headers(pkg=basename(getcwd()), last=dict(), path=getcwd()):
 
 def docmaintain(pkg=basename(getcwd()), path=getcwd()):
     """update timestamps and file header"""
-    log(INFO, '*** run docmaintain scripts for %s in %s ***' % (pkg, path))
+    log(INFO, '*** run docmaintain scripts')
+    log(INFO, '    in ' + path + ' for ' + pkg)
     set_timestamp(pkg, path)
 
     last_m_file = join(path, LAST_M_FILE)

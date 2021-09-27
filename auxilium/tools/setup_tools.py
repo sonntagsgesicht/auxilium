@@ -20,8 +20,8 @@ from zipfile import ZipFile
 
 def create_project(name=None, slogan=None, author=None, email=None, url=None,
                    path=getcwd()):
-    '''create a new python project'''
-    loc = __file__.split(sep)
+    """create a new python project"""
+    loc = __file__.split(sep)[:-1]
     loc[-1] = sep.join(('data', 'pkg.zip'))
     loc = sep.join(loc)
 
@@ -36,7 +36,7 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
     author = input('Enter author name   : ') if author is None else author
     email = input('Enter project email : ') if email is None else email
     url = input('Enter project url   : ') if url is None else url
-    url = url or 'https://github.com/' + author + '/' + name
+    url = url or 'https://github.com/<author>/<name>'
 
     root_path = path + sep + name
     pkg_path = root_path + sep + name
@@ -59,6 +59,7 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
         c = f.read()
         f.close()
 
+        c = c.replace('<url>', url)
         c = c.replace('<email>', email)
         c = c.replace('<author>', author)
         c = c.replace('<doc>', slogan)
@@ -77,13 +78,14 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
     rp(root_path + sep + 'doc' + sep + 'sphinx' + sep + 'doc.rst')
 
     log(INFO, '')
-    log(INFO, 'Created project %s with these files:' % name)
+    log(INFO, '*** Created project %s with these files:' % name)
+    log(INFO, '    in %s' % path)
     for subdir, dirs, files in walk(name):
         log(INFO, '')
         for file in files:
-            log(INFO, '  ' + join(subdir, file))
+            log(INFO, '      ' + join(subdir, file))
     log(INFO, '')
-    return name
+    return root_path
 
 
 def create_finish(name=basename(getcwd())):
@@ -96,3 +98,4 @@ def create_finish(name=basename(getcwd())):
     log(INFO, '  > auxilium deploy')
     log(INFO, '  > auxilium doc --show')
     log(INFO, '')
+    return 0

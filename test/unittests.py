@@ -22,37 +22,55 @@ sys.path.append('..')
 
 logging.basicConfig()
 
+CWD = os.getcwd()
+
 
 class CreateRepoUnitTests(unittest.TestCase):
     def setUp(self):
-        self.wdir = 'test_create_repo'
+        os.chdir(CWD)
+        self.wdir = 'working_dir'
         self.name = 'unicorn'
         self.doc = 'Always be a unicorn.'
         self.author = 'dreamer'
         self.email = '<name>@home'
-
-    def test_create_repo(self):
+        self.url = 'https://<author>.home/<name>'
         if os.path.exists(self.wdir):
             shutil.rmtree(self.wdir)
-        os.mkdir(self.wdir)
+            os.mkdir(self.wdir)
         os.chdir(self.wdir)
 
-        inputs = self.name, self.doc, self.author, self.email
+    def tearDown(self):
+        os.chdir('..')
+        if os.path.exists(self.wdir):
+            shutil.rmtree(self.wdir)
+            os.mkdir(self.wdir)
+
+    def test_auxilium_demo(self):
+        self.assertEqual(0, os.system('auxilium -demo'))
+
+        os.chdir('auxilium_demo')
+        self.assertEqual(0, os.system('auxilium update'))
+        self.assertEqual(0, os.system('auxilium test'))
+        self.assertEqual(0, os.system('auxilium doc'))
+        self.assertEqual(0, os.system('auxilium deploy'))
+
+        self.assertEqual(0, os.system('auxilium deploy --tag'))
+        self.assertNotEqual(0, os.system('auxilium deploy --tag'))
+
+    def test_unicorn(self):
+        inputs = self.name, self.doc, self.author, self.email, self.url
         with open('%s_details' % self.name, "w") as f:
             f.write(os.linesep.join(inputs))
-        if os.system("auxilium create < %s_details" % self.name):
-            raise Exception()
+        self.assertEqual(0,
+                         os.system("auxilium create < %s_details" % self.name))
 
         os.chdir(self.name)
         self.assertEqual(os.getcwd().split(os.sep)[-1], self.name)
 
-        if sys.version.startswith('3.8'):
-            cmd = 'auxilium full'
-        else:
-            cmd = 'auxilium simple'
-
-        if os.system(cmd):
-            raise Exception()
+        self.assertEqual(0, os.system('auxilium update'))
+        self.assertEqual(0, os.system('auxilium test'))
+        self.assertEqual(0, os.system('auxilium doc'))
+        self.assertEqual(0, os.system('auxilium deploy'))
 
 
 if __name__ == "__main__":

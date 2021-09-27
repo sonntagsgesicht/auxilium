@@ -15,13 +15,13 @@ from os import getcwd, name as os_name
 from os.path import exists, basename
 from shutil import rmtree
 
-from .git_tools import commit_git
+from auxilium.tools.git_tools import commit_git
 from .system_tools import system
 
 
 def api(pkg=basename(getcwd()), venv=None):
     """add api entries to `sphinx` docs"""
-    log(INFO, '*** run sphinx apidoc scripts ***')
+    log(INFO, '*** run sphinx apidoc scripts')
     if exists("doc/sphinx/api"):
         rmtree("doc/sphinx/api")
     res = 0
@@ -35,21 +35,21 @@ def html(venv=None):
     cleanup(venv)
     if not exists("doc/sphinx/api"):
         api(venv=venv)
-    log(INFO, '*** run sphinx html scripts ***')
+    log(INFO, '*** run sphinx html scripts')
     return system("sphinx-build -M html ./doc/sphinx/ ./doc/sphinx/_build",
                   venv=venv)
 
 
 def latexpdf(venv=None):
     """build pdf documentation (using `sphinx` and `LaTeX`)"""
-    log(INFO, '*** run sphinx latexpdf scripts ***')
+    log(INFO, '*** run sphinx latexpdf scripts')
     return system("sphinx-build -M latexpdf ./doc/sphinx/ ./doc/sphinx/_build",
                   venv=venv)
 
 
 def doctest(venv=None):
     """run `sphinx` doctest"""
-    log(INFO, '*** run sphinx doctest scripts ***')
+    log(INFO, '*** run sphinx doctest scripts')
     return system("sphinx-build -M doctest ./doc/sphinx/ ./doc/sphinx/_build",
                   venv=venv)
 
@@ -67,7 +67,7 @@ def show(venv=None):
 
 def cleanup(venv=None):
     """remove temporary files"""
-    log(INFO, '*** clean environment ***')
+    log(INFO, '*** clean environment')
     # system("rm -f -r -v ./doc/sphinx/_build/")
     return system("sphinx-build -M clean ./doc/sphinx/ ./doc/sphinx/_build",
                   venv=venv)

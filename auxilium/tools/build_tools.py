@@ -14,23 +14,25 @@ from logging import log, INFO
 from os import getcwd
 from os.path import basename
 
-from .system_tools import python as _python, module, PYTHON, del_tree
+from auxilium.tools.system_tools import python as _python, module, del_tree
 
 
-def build(python=PYTHON):
+def build(venv=None):
     """build package distribution"""
-    log(INFO, '*** build package distribution ***')
+    log(INFO, '*** build package distribution')
+    log(INFO, '    in ' + getcwd())
     res = 0
-    res += _python("setup.py build", venv=python)
-    res += _python("setup.py sdist --formats=zip", venv=python)
-    res += _python("setup.py sdist bdist_wheel", venv=python)
+    res += _python("setup.py build", venv=venv)
+    res += _python("setup.py sdist --formats=zip", venv=venv)
+    res += _python("setup.py sdist bdist_wheel", venv=venv)
     res += module("twine", "check dist/*")
     return res
 
 
 def cleanup(pkg=basename(getcwd())):
     """remove temporary files"""
-    log(INFO, '*** clean environment ***')
+    log(INFO, '*** clean environment')
+    log(INFO, '    in ' + getcwd())
     # remove setuptools release files
-    del_tree("./build/", "./dist/", pkg + ".egg-info", ".eggs")
+    del_tree("./build/", "./dist/")
     return 0
