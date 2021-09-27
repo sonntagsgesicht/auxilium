@@ -13,7 +13,7 @@
 from datetime import date
 from json import load, dump
 from logging import log, INFO, DEBUG
-from os import walk, sep, getcwd, linesep
+from os import walk, sep, getcwd, linesep, mkdir
 from os.path import basename, join, getmtime, exists, split
 from sys import path as sys_path
 from textwrap import wrap
@@ -131,5 +131,7 @@ def docmaintain(pkg=basename(getcwd()), path=getcwd()):
     else:
         last_mtimes = dict()
     last_mtimes = replace_headers(pkg, last_mtimes, path)
+    if not exists(join(path, '.aux')):
+        mkdir(join(path, '.aux'))
     dump(last_mtimes, open(last_m_file, 'w'), indent=2)
     return 0
