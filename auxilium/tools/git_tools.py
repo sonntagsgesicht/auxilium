@@ -28,14 +28,21 @@ def commit_git(msg='', add='', path=getcwd()):
     _, files, _ = porcelain.status(repo)
     repo.stage(files)
     added, ignored = porcelain.add(repo)
-    log(INFO, "*** added all new files to `git` repo")
+    log(INFO, "*** file status in `git` repo")
     log(INFO, "    from " + path)
+    staged, unstaged, ignored = porcelain.status(repo)
     if not added:
         log(INFO, "      -")
-    for p in added:
+    for p in staged['add']:
         log(INFO, "      %s" % p)
+    for p in staged['modify']:
+        log(INFO, "      %s" % p)
+    for p in staged['delete']:
+        log(INFO, "      %s" % p)
+    for p in unstaged:
+        log(DEBUG, "    unstaged: %s" % str(p))
     for p in ignored:
-        log(DEBUG, "    ignored: %s" % p)
+        log(DEBUG, "    ignored : %s" % str(p))
     print(repo, *porcelain.status(repo), sep='\n')
     msg = msg if msg else 'Commit'
     msg += ' (via auxilium)'
