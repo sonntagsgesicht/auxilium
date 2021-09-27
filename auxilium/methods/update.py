@@ -13,13 +13,13 @@
 from os import getcwd
 from os.path import basename
 
-from ..tools.pip_tools import upgrade, uninstall, cleanup as _cleanup, \
-    requirements as _requirements, install as _install
+from ..tools.pip_tools import upgrade as _upgrade, uninstall, \
+    cleanup as _cleanup, requirements as _requirements, install as _install
 from ..tools.git_tools import commit_git
 from ..tools.docmaintain_tools import docmaintain
 
 
-def do(pkg=basename(getcwd()), commit=None, add=None,
+def do(pkg=basename(getcwd()), commit=None, add=None, upgrade=None,
        install=None, requirements=None, doc_header=None, cleanup=None,
        path=getcwd(), env=None, **kwargs):
     code = False
@@ -28,11 +28,11 @@ def do(pkg=basename(getcwd()), commit=None, add=None,
         code = code or _cleanup(path=path, venv=env)
         code = code or uninstall(pkg, venv=env)
     else:
+        if upgrade:
+            code = code or _upgrade(upgrade, path=path, venv=env)
         if install:
-            code = code or upgrade(path=path, venv=env)
             code = code or _install(path=path, venv=env)
         if requirements:
-            code = code or upgrade(path=path, venv=env)
             code = code or _requirements(path=path, venv=env)
         if doc_header:
             code = code or docmaintain(pkg, path=path)

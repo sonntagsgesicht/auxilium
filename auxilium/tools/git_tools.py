@@ -21,7 +21,7 @@ from dulwich.errors import NotGitRepository
 
 
 def commit_git(msg='', add='', path=getcwd()):
-    """commit changes to local `git` repo"""
+    """add and commit changes to local `git` repo"""
     cwd = getcwd()
     chdir(path)
     repo = Repo(path) if exists(join(path, '.git')) else Repo.init(path)
@@ -30,20 +30,23 @@ def commit_git(msg='', add='', path=getcwd()):
     added, ignored = porcelain.add(repo)
     log(INFO, "*** file status in `git` repo")
     log(INFO, "    from " + path)
-    staged, unstaged, ignored = porcelain.status(repo)
-    if not added:
-        log(INFO, "      -")
-    for p in staged['add']:
-        log(INFO, "      %s" % p)
-    for p in staged['modify']:
-        log(INFO, "      %s" % p)
-    for p in staged['delete']:
-        log(INFO, "      %s" % p)
-    for p in unstaged:
-        log(DEBUG, "    unstaged: %s" % str(p))
-    for p in ignored:
-        log(DEBUG, "    ignored : %s" % str(p))
-    print(repo, *porcelain.status(repo), sep='\n')
+    staged, un_staged, untracked = porcelain.status(repo, False)
+    if staged['add']:
+        log(INFO, "    add:")
+        for p in staged['add']:
+            log(INFO, "      %s" % p.decode())
+    if staged['modify']:
+        log(INFO, "    modify:")
+        for p in staged['modify']:
+            log(INFO, "      %s" % p.decode())
+    if staged['delete']:
+        log(INFO, "    delete:")
+        for p in staged['delete']:
+            log(INFO, "      %s" % p.decode())
+    for p in un_staged:
+        log(INFO, "    unstaged: %s" % p.decode())
+    for p in untracked:
+        log(INFO, "    untracked : %s" % p)
     msg = msg if msg else 'Commit'
     msg += ' (via auxilium)'
     log(INFO, "*** commit changes as `%s`" % msg)

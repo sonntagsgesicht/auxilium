@@ -21,10 +21,10 @@ TEMP_REMOVE_FILE = '.site_packages_to_remove'
 PIP = 'pip'
 
 
-def upgrade(path=getcwd(), venv=PYTHON):
-    """upgrade `pip`"""
-    log(DEBUG, '*** upgrade `pip`')
-    return module(PIP, 'install --upgrade pip', path=path, venv=venv)
+def upgrade(pkg=PIP, path=getcwd(), venv=PYTHON):
+    """upgrade python library [PKG] via `pip`"""
+    log(INFO, '*** upgrade `%s`' % pkg)
+    return module(PIP, 'install --upgrade %s' % pkg, path=path, venv=venv)
 
 
 def requirements(path=getcwd(), venv=PYTHON):

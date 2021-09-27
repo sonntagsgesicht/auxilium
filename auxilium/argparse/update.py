@@ -16,7 +16,7 @@ from configparser import ConfigParser
 
 from auxilium.tools.git_tools import commit_git
 from auxilium.tools.pip_tools import requirements, install, \
-    cleanup as cleanup_site_packages
+    cleanup as cleanup_site_packages, upgrade
 from auxilium.tools.docmaintain_tools import docmaintain
 
 
@@ -35,11 +35,11 @@ def arg_parser(parser=None, config=ConfigParser()):
         default=config.get('update', 'commit', fallback='commit'),
         help=commit_git.__doc__)
     parser.add_argument(
-        '--add',
-        action='store_const',
-        const=not config.get('update', 'add', fallback=False),
-        default=config.get('update', 'add', fallback=False),
-        help='add (stage) new or changed files to `git` repo')
+        '--upgrade',
+        metavar='PKG',
+        nargs='?',
+        const=config.getboolean('update', 'upgrade', fallback='pip'),
+        help=upgrade.__doc__)
     parser.add_argument(
         '--requirements',
         action='store_const',
