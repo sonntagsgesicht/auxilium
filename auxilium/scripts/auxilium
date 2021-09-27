@@ -8,6 +8,11 @@
 #
 # All steps can be run in a single task or be invoked individually
 
+# todo:
+#  - test `push` and `deploy`
+#  - windows support
+#  - refactor `auxilium`
+
 
 import logging
 import pathlib
@@ -396,15 +401,14 @@ if True:
 
 args = parser.parse_args()
 
-cmd = ("rm -f -r auxilium_demo; "
-       "auxilium -v create "
-       "--name=auxilium_demo "
-       "--slogan='a demo by auxilium'  "
-       "--author=auxilium "
-       "--email='sonntagsgesicht@icould.com' "
-       "--url='https://github.com/sonntagsgesicht/auxilium;'")
-
 if args.demo:
+    cmd = ("rm -f -r auxilium_demo; "
+           "auxilium -v create "
+           "--name=auxilium_demo "
+           "--slogan='a demo by auxilium'  "
+           "--author=auxilium "
+           "--email='sonntagsgesicht@icould.com' "
+           "--url='https://github.com/sonntagsgesicht/auxilium;'")
     print(cmd)
     os.system(cmd)
 
