@@ -27,7 +27,7 @@ def commit_git(msg='', add='', path=getcwd()):
     repo = Repo(path) if exists(join(path, '.git')) else Repo.init(path)
     _, files, _ = porcelain.status(repo)
     repo.stage(files)
-    added, ignored = porcelain.add(repo)
+    # added, ignored = porcelain.add(repo)
     log(INFO, "*** file status in `git` repo")
     log(INFO, "    from " + path)
     staged, un_staged, untracked = porcelain.status(repo, False)
@@ -52,7 +52,7 @@ def commit_git(msg='', add='', path=getcwd()):
     log(INFO, "*** commit changes as `%s`" % msg)
     log(INFO, "    at " + path)
     res = porcelain.commit(repo, msg)
-    log(DEBUG, "    with hash: %s" % res)
+    log(INFO, "    as %s" % res.decode())
 
     chdir(cwd)
     return 0
