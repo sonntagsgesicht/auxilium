@@ -7,22 +7,12 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   auxilium.argparse
+   auxilium.methods
    auxilium.tools
 
 Submodules
 ----------
-
-
-.. automodule:: auxilium.bundles
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-.. automodule:: auxilium.cli_tools
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 
 .. automodule:: auxilium.rst_tools
