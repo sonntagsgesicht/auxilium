@@ -24,7 +24,6 @@ def do(pkg=basename(getcwd()), commit=None, add=None, upgrade=None,
        path=getcwd(), env=None, **kwargs):
     code = False
     if cleanup:
-        code = code or upgrade(path=path, venv=env)
         code = code or _cleanup(path=path, venv=env)
         code = code or uninstall(pkg, venv=env)
     else:

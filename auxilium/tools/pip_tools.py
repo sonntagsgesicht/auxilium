@@ -47,7 +47,7 @@ def requirements(path=getcwd(), venv=PYTHON):
 
 
 def install(path=getcwd(), venv=PYTHON):
-    """install current project via `pip install -e .`"""
+    """(re)install current project via `pip install -e .`"""
     log(INFO, '*** install project via pip install -e')
     return module(PIP, "install --upgrade -e .", path=path, venv=venv)
 

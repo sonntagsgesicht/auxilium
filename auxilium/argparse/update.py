@@ -41,17 +41,17 @@ def arg_parser(parser=None, config=ConfigParser()):
         const=config.getboolean('update', 'upgrade', fallback='pip'),
         help=upgrade.__doc__)
     parser.add_argument(
-        '--requirements',
-        action='store_const',
-        const=not config.getboolean('update', 'requirements', fallback=True),
-        default=config.getboolean('update', 'requirements', fallback=True),
-        help=requirements.__doc__)
-    parser.add_argument(
         '--install',
         action='store_const',
         const=not config.getboolean('update', 'install', fallback=False),
         default=config.getboolean('update', 'install', fallback=False),
         help=install.__doc__)
+    parser.add_argument(
+        '--requirements',
+        action='store_const',
+        const=not config.getboolean('update', 'requirements', fallback=False),
+        default=config.getboolean('update', 'requirements', fallback=False),
+        help=requirements.__doc__)
     parser.add_argument(
         '--cleanup',
         action='store_const',
