@@ -2,39 +2,49 @@
 
 # auxilium
 # --------
-# A Python project for an automated test and deploy toolkit - 100%
-# reusable.
+# Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.4, copyright Sunday, 11 October 2020
+# Version:  0.1.5, copyright Monday, 27 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
-import os
-from logging import log, INFO
+
+
+from logging import log, INFO, DEBUG
 from os import getcwd, path
 
-from .system_tools import system, python as _python, module, PYTHON, del_tree
+from .system_tools import system, python as _python, module, del_tree
 
 PROFILE_FILE = "dev.py"
 TEST_DIR = "test"
 
 
-def unittests(test_dir=TEST_DIR, python=PYTHON):
-    """test code by running unittests"""
-    log(INFO, '*** run unittest scripts ***')
-    ut = module('unittest', 'discover %s -v -p "*.py"' % test_dir)
-    log(INFO, '*** run pytest scripts ***')
-    pt = module('pytest', test_dir, venv=python)
-    return ut or pt
+def test(test_dir=TEST_DIR, venv=None):
+    """test code by running tests"""
+    log(INFO, '*** run test scripts ***')
+    return test_unittest(test_dir, venv)
 
 
-def doctests(pkg=path.basename(os.getcwd()), python=PYTHON):
+def test_unittest(test_dir=TEST_DIR, venv=None):
+    """test code by running unittest"""
+    log(DEBUG, '*** run unittest scripts ***')
+    return module(
+        'unittest', 'discover %s -v -p "*.py"' % test_dir,
+        level=INFO, venv=venv)
+
+
+def test_pytest(test_dir=TEST_DIR, venv=None):
+    """test code by running pytest"""
+    log(DEBUG, '*** run pytest scripts ***')
+    return module('pytest', test_dir + ' unittests.py',
+                  level=INFO, venv=venv)
+
+
+def doctests(pkg=path.basename(getcwd()), venv=None):
     """test code in doc string (doctest)"""
     log(INFO, '*** run doctest scripts ***')
-    # return module('doctest', venv=python)
-    # todo search vor doctests recursively
-    cmd = '''
-import doctest, %s as pkg; 
+    cmd_recursively = '''
+import doctest, %s as pkg;
 def _doctest_recursively(pkg, *args, **kwargs):
     import doctest
     import inspect
@@ -42,64 +52,90 @@ def _doctest_recursively(pkg, *args, **kwargs):
     if inspect.ismodule(pkg):
         print(pkg.__name__)
         return (doctest.testmod(pkg, *args, **kwargs),) + tuple(
-        _doctest_recursively(p) for p in dir(pkg))  
+        _doctest_recursively(p) for p in dir(pkg))
 doctest.testmod(pkg, verbose=True)''' % pkg
     cmd = 'import doctest, %s as pkg; doctest.testmod(pkg, verbose=True)' % pkg
-    return _python('-c "%s"' % cmd, venv=python)
+    return _python('-c "%s"' % cmd, level=INFO, venv=venv)
 
 
-def profile(profile_file=PROFILE_FILE, python=PYTHON):
+def profile(profile_file=PROFILE_FILE, venv=None):
     """profile performance"""
     log(INFO, '*** run test profiling ***')
-    module('cProfile', '-s tottime %s' % profile_file, venv=python)
-    module('cProfile', '-o .cprofile %s' % profile_file, venv=python)
-    module('pstats', '.cprofile stat', venv=python)
-    # todo check if snakeviz exists
-    system('snakeviz .cprofile')
+    module('cProfile', '-s tottime %s' % profile_file, venv=venv)
+    module('cProfile', '-o .cprofile %s' % profile_file, venv=venv)
+    module('pstats', '.cprofile stat', venv=venv)
+    system('snakeviz .cprofile', venv=venv)
 
 
-def quality(pkg=path.basename(getcwd()), python=PYTHON):
+def quality(pkg=path.basename(getcwd()), venv=None):
     """evaluate quality of source code"""
-    log(INFO, '*** run code analysis scripts ***')
+    log(INFO, '*** evaluate quality of source code ***')
+    return quality_flake8(pkg, venv)
 
-    log(INFO, '*** run pylint ***')
-    module('pylint', pkg, venv=python)
 
-    log(INFO, '*** run flake8 ***')
-    module('flake8', pkg, venv=python)
+def quality_pylint(pkg=path.basename(getcwd()), venv=None):
+    """evaluate quality of source code with pylint"""
+    log(DEBUG, '*** run pylint ***')
+    return module('pylint', pkg, level=INFO, venv=venv)
 
-    log(INFO, '*** run pycodestyle (aka pep8) ***')
-    module('pycodestyle', pkg, venv=python)
 
+def quality_flake8(pkg=path.basename(getcwd()), venv=None):
+    """evaluate quality of source code with flake8"""
+    log(DEBUG, '*** run flake8 ***')
+    return module('flake8', pkg, level=INFO, venv=venv)
+
+
+def quality_pep8(pkg=path.basename(getcwd()), venv=None):
+    """evaluate quality of source code with pep8/pep257"""
+    log(DEBUG, '*** run pycodestyle (aka pep8) ***')
+    res = module('pycodestyle', pkg, level=INFO, venv=venv)
     log(INFO, '*** run pydocstyle (aka pep257) ***')
-    module('pydocstyle', pkg)
+    return res or module('pydocstyle', pkg, level=INFO, venv=venv)
 
 
-def security(pkg=path.basename(getcwd()), python=PYTHON):
+def security(pkg=path.basename(getcwd()), venv=None):
     """evaluate security of source code"""
-    log(INFO, '*** run code security scripts ***')
-    return module('bandit', '-r %s' % pkg, venv=python)
+    log(INFO, '*** evaluate security of source code ***')
+    return security_bandit(pkg, venv=venv)
 
 
-def coverage(pkg=path.basename(getcwd()), test_dir=TEST_DIR, python=PYTHON):
+def security_bandit(pkg=path.basename(getcwd()), venv=None):
+    """run `bandit` on source code """
+    log(DEBUG, '*** run `bandit` on source code ***')
+    return module('bandit', '-r %s' % pkg, level=INFO, venv=venv)
+
+
+def coverage(pkg=path.basename(getcwd()), test_dir=TEST_DIR, venv=None):
     """check code coverage of tests"""
-
     log(INFO, '*** run test coverage scripts ***')
-    module('test', '--coverage -D `pwd`/coverage_data %s' % test_dir,
-           venv=python)
+    return coverage_coverage(pkg, test_dir, venv)
 
-    log(INFO, '*** run pytest cov scripts ***')
-    module('pytest', '-v --cov %s' % test_dir, venv=python)
 
-    log(INFO, '*** run coverage scripts ***')
-    cmd = 'run' \
-          ' --include="*%s*"' \
-          ' --omit="*test?.py"' \
-          ' --module unittest discover -v -p "*.py"' % pkg
-    module('coverage', cmd, path=test_dir, venv=python)
-    module('coverage', 'xml', path=test_dir, venv=python)
-    module('coverage', 'report', path=test_dir, venv=python)
-    module('coverage', 'html', path=test_dir, venv=python)
+def coverage_test(test_dir=TEST_DIR, venv=None):
+    """check code coverage of tests with native test"""
+    log(DEBUG, '*** run test coverage scripts ***')
+    return module('test', '--coverage -D `pwd`/coverage_data %s' % test_dir,
+                  level=INFO, venv=venv)
+
+
+def coverage_pytest(test_dir=TEST_DIR, venv=None):
+    """check code coverage of tests with pytest"""
+    log(DEBUG, '*** run pytest cov scripts ***')
+    # --cov=[SOURCE]
+    # --cov-fail-under = MIN
+    return module('pytest', '--cov %s --cov-fail-under=80 ' % test_dir,
+                  level=INFO, venv=venv)
+
+
+def coverage_coverage(
+        pkg=path.basename(getcwd()), test_dir=TEST_DIR, venv=None):
+    """check code coverage of tests with coverage"""
+    log(DEBUG, '*** run coverage scripts ***')
+    cmd = 'run --include="%s*"' \
+          ' --module unittest discover %s -v -p "*.py"' % (pkg, test_dir)
+    res = module('coverage', cmd, venv=venv)
+    module('coverage', 'report -m', level=INFO, venv=venv)
+    return res
 
 
 def cleanup(test_dir=TEST_DIR):
@@ -116,3 +152,4 @@ def cleanup(test_dir=TEST_DIR):
 
     # removed profiling data files
     del_tree(".cprofile")
+    return 0

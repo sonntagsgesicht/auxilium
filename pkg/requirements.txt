@@ -1,12 +1,8 @@
+auxilium
 bandit
 coverage
 dulwich
 flake8
-pycodestyle
-pydocstyle
-pylint
-pytest
-pytest-cov
 Sphinx
 sphinx-math-dollar
 sphinx-rtd-theme

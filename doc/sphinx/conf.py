@@ -4,7 +4,7 @@
 # --------
 # A Python project for an automated test and deploy toolkit - 100%
 # reusable.
-# 
+#
 # Author:   sonntagsgesicht
 # Version:  0.1.4, copyright Sunday, 11 October 2020
 # Website:  https://github.com/sonntagsgesicht/auxilium
@@ -111,7 +111,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
 
-# If true, `todo` and `todoList` produce output, else they produce nothing.
+# If true, `to_do` and `to_do_List` produce output, else they produce nothing.
 todo_include_todos = False
 
 # A boolean that decides whether module names are prepended to all object names.

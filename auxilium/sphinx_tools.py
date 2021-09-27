@@ -2,69 +2,72 @@
 
 # auxilium
 # --------
-# A Python project for an automated test and deploy toolkit - 100%
-# reusable.
+# Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.4, copyright Sunday, 11 October 2020
+# Version:  0.1.5, copyright Monday, 27 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
 
 from logging import log, INFO
-from os import path, getcwd, name as os_name
+from os import getcwd, name as os_name
+from os.path import exists, basename
 from shutil import rmtree
 
 from .git_tools import commit_git
 from .system_tools import system
 
 
-def api(pkg=path.basename(getcwd()), venv=None):
-    """add api entries to docs"""
+def api(pkg=basename(getcwd()), venv=None):
+    """add api entries to `sphinx` docs"""
     log(INFO, '*** run sphinx apidoc scripts ***')
-    if path.exists("doc/sphinx/api"):
+    if exists("doc/sphinx/api"):
         rmtree("doc/sphinx/api")
-    system("sphinx-apidoc -o doc/sphinx/api -f -E %s" % pkg, venv=venv)
-    # todo: add file under doc/sphinx/api to git
-    commit_git('added `doc/sphinx/api`', add='doc/sphinx/api')
+    res = 0
+    res += system("sphinx-apidoc -o doc/sphinx/api -f -E %s" % pkg, venv=venv)
+    res += commit_git('added `doc/sphinx/api`', add='doc/sphinx/api')
+    return res
 
 
 def html(venv=None):
-    """build html documentation (using sphinx)"""
+    """build html documentation (using `sphinx`)"""
     cleanup(venv)
+    if not exists("doc/sphinx/api"):
+        api(venv=venv)
     log(INFO, '*** run sphinx html scripts ***')
-    system("sphinx-build -M html ./doc/sphinx/ ./doc/sphinx/_build",
-           venv=venv)
+    return system("sphinx-build -M html ./doc/sphinx/ ./doc/sphinx/_build",
+                  venv=venv)
 
 
 def latexpdf(venv=None):
-    """build pdf documentation (using sphinx and LaTeX)"""
+    """build pdf documentation (using `sphinx` and `LaTeX`)"""
     log(INFO, '*** run sphinx latexpdf scripts ***')
-    system("sphinx-build -M latexpdf ./doc/sphinx/ ./doc/sphinx/_build",
-           venv=venv)
+    return system("sphinx-build -M latexpdf ./doc/sphinx/ ./doc/sphinx/_build",
+                  venv=venv)
 
 
 def doctest(venv=None):
-    """run sphinx doctest"""
+    """run `sphinx` doctest"""
     log(INFO, '*** run sphinx doctest scripts ***')
-    system("sphinx-build -M doctest ./doc/sphinx/ ./doc/sphinx/_build",
-           venv=venv)
+    return system("sphinx-build -M doctest ./doc/sphinx/ ./doc/sphinx/_build",
+                  venv=venv)
 
 
 def show(venv=None):
     """show html documentation"""
-    index_file = './doc/sphinx/_build/html/index.html'
+    index_file = './doc/sphinx/_build/html/intro.html'
     if os_name == 'posix':
-        system("open %s" % index_file, venv=venv)
-    elif os_name == 'nt':
-        system(index_file, venv=venv)
-    else:
-        log(INFO, 'find docs at %s' % index_file)
+        return system("open %s" % index_file, venv=venv)
+    if os_name == 'nt':
+        return system(index_file, venv=venv)
+    log(INFO, 'find docs at %s' % index_file)
+    return 1
 
 
 def cleanup(venv=None):
     """remove temporary files"""
     log(INFO, '*** clean environment ***')
     # system("rm -f -r -v ./doc/sphinx/_build/")
-    system("sphinx-build -M clean ./doc/sphinx/ ./doc/sphinx/_build",
-           venv=venv)
+    return system("sphinx-build -M clean ./doc/sphinx/ ./doc/sphinx/_build",
+                  venv=venv)

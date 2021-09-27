@@ -4,7 +4,7 @@
 # --------
 # A Python project for an automated test and deploy toolkit - 100%
 # reusable.
-# 
+#
 # Author:   sonntagsgesicht
 # Version:  0.1.4, copyright Sunday, 11 October 2020
 # Website:  https://github.com/sonntagsgesicht/auxilium
@@ -12,18 +12,12 @@
 
 
 import os
-import sys
 from auxilium import replacements_from_pkg, replacements, replacements_str
 
-sys.path.insert(0, os.path.abspath('../../'))  #  needed to import pkg
-sys.path.insert(0, os.path.abspath('.'))  #  needed to import pkg
-
-if os.getcwd().find('readthedocs')<0:
+if os.getcwd().find('readthedocs') < 0:
     pkg = __import__(os.getcwd().split(os.sep)[-3])
 else:
     pkg = __import__(os.getcwd().split(os.sep)[-5])
-
-sys.path.insert(0, os.path.abspath('../../' + pkg.__name__))  #  needed to import pkg
 
 # -- General configuration ------------------------------------------------
 
@@ -36,8 +30,8 @@ sys.path.insert(0, os.path.abspath('../../' + pkg.__name__))  #  needed to impor
 # ones.
 extensions = [
     'sphinx_rtd_theme',
+    'sphinx_math_dollar',
     'sphinx.ext.autodoc',
-    #'sphinx.ext.autosectionlabel',
     'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
     'sphinx.ext.todo',
@@ -106,7 +100,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
 
-# If true, `todo` and `todoList` produce output, else they produce nothing.
+# If true, `to_do` and `to_do_List` produce output, else they produce nothing.
 todo_include_todos = False
 
 # A boolean that decides whether module names are prepended to all object names.

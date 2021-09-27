@@ -15,8 +15,3 @@ import auxilium
 
 if 1:
     print(auxilium.__name__)
-
-
-# to upgrade auxilium locally (incl. pkg.zip) simply invoke: :code:`auxilium install -p=pre`
-
-# todo: move dev.py in subfolder since otherwise will be part of the pip dist !!!

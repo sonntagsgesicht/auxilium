@@ -1,5 +1,6 @@
 
 .. module:: <name>
+    :noindex:
 
 -----------------
 API Documentation
