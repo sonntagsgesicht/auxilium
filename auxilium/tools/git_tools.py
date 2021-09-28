@@ -19,6 +19,8 @@ from dulwich import porcelain
 from dulwich.repo import Repo
 from dulwich.errors import NotGitRepository
 
+from .setup_tools import EXT
+
 
 def commit_git(msg='', path=getcwd()):
     """add and commit changes to local `git` repo"""
@@ -56,7 +58,7 @@ def commit_git(msg='', path=getcwd()):
     for p in untracked:
         log(INFO, "    untracked : %s" % p)
     msg = msg if msg else 'Commit'
-    msg += ' (via auxilium)'
+    msg += EXT
     log(INFO, "*** commit changes as `%s`" % msg)
     log(INFO, "    at " + path)
     res = porcelain.commit(repo, msg)

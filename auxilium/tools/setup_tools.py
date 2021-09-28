@@ -17,6 +17,8 @@ from os.path import exists, join, basename
 from shutil import move
 from zipfile import ZipFile
 
+EXT = ' (created by auxilium)'
+
 
 def create_project(name=None, slogan=None, author=None, email=None, url=None,
                    path=getcwd()):
@@ -32,7 +34,7 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
 
     name = input('Enter project name  : ') if name is None else name
     slogan = input('Enter project slogan: ') if slogan is None else slogan
-    slogan += ' (created with auxilium)'
+    slogan += EXT
     author = input('Enter author name   : ') if author is None else author
     email = input('Enter project email : ') if email is None else email
     url = input('Enter project url  : ') if url is None else url
