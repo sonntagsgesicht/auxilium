@@ -46,7 +46,7 @@ class CreateRepoUnitTests(unittest.TestCase):
             os.mkdir(self.wdir)
 
     def test_auxilium_demo(self):
-        self.assertEqual(0, os.system('auxilium -demo'))
+        self.assertEqual(0, os.system('auxilium -z -vv -demo'))
 
         os.chdir('auxilium_demo')
         self.assertEqual(0, os.system('auxilium -z -vv update'))
@@ -60,8 +60,8 @@ class CreateRepoUnitTests(unittest.TestCase):
         inputs = self.name, self.doc, self.author, self.email, self.url
         with open('%s_details' % self.name, "w") as f:
             f.write(os.linesep.join(inputs))
-        self.assertEqual(0,
-                         os.system("auxilium create < %s_details" % self.name))
+        self.assertEqual(0, os.system(
+            "auxilium -z -vv create < %s_details" % self.name))
 
         os.chdir(self.name)
         self.assertEqual(os.getcwd().split(os.sep)[-1], self.name)

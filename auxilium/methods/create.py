@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 # auxilium
 # --------
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Tuesday, 28 September 2021
+# Version:  0.1.5, copyright Wednesday, 29 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -36,10 +36,15 @@ def do(name=None, slogan=None, author=None, email=None, url=None,
         pkg = basename(project_path)
         code = int(not project_path.endswith(name)) if name else 0
 
-    chdir(project_path)
-    sys_path.append(project_path)
+        chdir(project_path)
+        sys_path.append(project_path)
+        code = code or docmaintain(pkg, path=project_path)
+        if commit:
+            # init git repo with initial commit
+            code = code or commit_git(commit, path=project_path)
 
     if venv:
+        chdir(project_path)
         # create virtual environment
         # venv = venv.replace('bin/python3')
         del_tree(venv)
@@ -49,11 +54,7 @@ def do(name=None, slogan=None, author=None, email=None, url=None,
         code = code or upgrade(path=project_path, venv=env)
         code = code or install(path=project_path, venv=env)
         code = code or requirements(path=project_path, venv=env)
-        code = code or docmaintain(pkg, path=project_path)
 
-    if commit:
-        # init git repo with initial commit
-        code = code or commit_git(commit, path=project_path)
-
-    code = code or create_finish(pkg)
+    if not update:
+        code = code or create_finish(pkg)
     return code

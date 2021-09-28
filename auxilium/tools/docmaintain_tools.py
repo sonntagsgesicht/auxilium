@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 # auxilium
 # --------
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Tuesday, 28 September 2021
+# Version:  0.1.5, copyright Wednesday, 29 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -122,7 +122,7 @@ def replace_headers(pkg=basename(getcwd()), last=dict(), path=getcwd()):
 
 def docmaintain(pkg=basename(getcwd()), path=getcwd()):
     """update timestamps and file header of modified files"""
-    log(INFO, '*** run docmaintain scripts')
+    log(INFO, '*** 🛠️ run docmaintain scripts')
     log(INFO, '    in ' + path + ' for ' + pkg)
     set_timestamp(pkg, path)
 

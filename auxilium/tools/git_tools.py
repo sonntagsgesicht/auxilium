@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 # auxilium
 # --------
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Tuesday, 28 September 2021
+# Version:  0.1.5, copyright Wednesday, 29 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -59,7 +59,7 @@ def commit_git(msg='', path=getcwd()):
         log(INFO, "    untracked : %s" % p)
     msg = msg if msg else 'Commit'
     msg += EXT
-    log(INFO, "*** commit changes as `%s`" % msg)
+    log(INFO, "*** 📌 commit changes as `%s`" % msg)
     log(INFO, "    at " + path)
     res = porcelain.commit(repo, msg)
     log(INFO, "    as %s" % res.decode())
@@ -70,7 +70,7 @@ def commit_git(msg='', path=getcwd()):
 
 def tag_git(tag, msg='', path=getcwd()):
     """tag current branch of local `git` repo"""
-    log(INFO, "*** tag current branch as %s" % tag)
+    log(INFO, "*** 🏷️ tag current branch as %s" % tag)
     log(INFO, "    at " + path)
     if bytearray(tag.encode()) in porcelain.tag_list(Repo(path)):
         log(ERROR,
@@ -85,7 +85,7 @@ def tag_git(tag, msg='', path=getcwd()):
 
 def push_git(remote='None', path=getcwd()):
     """push current branch of local to remote `git` repo"""
-    log(INFO, "*** push current branch to remote `git` repo")
+    log(INFO, "*** 📦 push current branch to remote `git` repo")
     http, last = remote.split('//', 1)
     usr_pwd, url = last.split('@', 1)
     usr, _ = usr_pwd.split(':', 1) if ':' in usr_pwd else (usr_pwd, '')

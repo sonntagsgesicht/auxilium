@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 # auxilium
 # --------
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Tuesday, 28 September 2021
+# Version:  0.1.5, copyright Wednesday, 29 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -14,8 +14,11 @@ from os import getcwd
 from os.path import basename
 from logging import log, ERROR
 
-from ..tools.test_tools import quality as _quality, security as _security, \
-    test as _test, coverage as _coverage, cleanup as _cleanup
+from ..tools.test_tools import test as _test, cleanup as cleanup_test
+from ..tools.security_tools import security as _security
+from ..tools.quality_tools import quality as _quality
+from ..tools.coverage_tools import coverage as _coverage, \
+    cleanup as cleanup_coverage
 from ..tools.git_tools import commit_git
 
 
@@ -25,7 +28,7 @@ def do(pkg=basename(getcwd()), commit=None,
     """run test process"""
 
     if cleanup:
-        return _cleanup(path)
+        return cleanup_test(path) or cleanup_coverage(path)
 
     test_return_code = -1
     code = False

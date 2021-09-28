@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 # auxilium
 # --------
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Tuesday, 28 September 2021
+# Version:  0.1.5, copyright Wednesday, 29 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -114,13 +114,15 @@ def main():
     args = parser.parse_args()
 
     if args.demo:
+        v = '-' + 'v' * args.verbosity if args.verbosity else ''
+        z = '-' + 'z' * args.exit_non_zero if args.exit_non_zero else ''
         cmd = ("rm -f -r auxilium_demo; "
-               "auxilium create "
+               "auxilium %s %s create "
                "--name=auxilium_demo "
                "--slogan='a demo by auxilium'  "
                "--author=auxilium "
                "--email='sonntagsgesicht@icould.com' "
-               "--url='https://github.com/sonntagsgesicht/auxilium;'")
+               "--url='https://github.com/sonntagsgesicht/auxilium;'") % (v, z)
         print(cmd)
         sys.exit(os.system(cmd))
 

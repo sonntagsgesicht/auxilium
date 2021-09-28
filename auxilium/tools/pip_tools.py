@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 # auxilium
 # --------
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Tuesday, 28 September 2021
+# Version:  0.1.5, copyright Wednesday, 29 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -30,7 +30,7 @@ def upgrade(pkg=PIP, path=getcwd(), venv=PYTHON):
 def requirements(path=getcwd(), venv=PYTHON):
     """manage requirements (dependencies) in `requirements.txt`
         and `upgrade_requirements.txt`"""
-    log(INFO, "*** setup environment requirements")
+    log(INFO, "*** ⚙️ setup environment requirements")
 
     res = 0
     if not exists(join(path, FREEZE_FILE)):
@@ -48,13 +48,13 @@ def requirements(path=getcwd(), venv=PYTHON):
 
 def install(path=getcwd(), venv=PYTHON):
     """(re)install current project via `pip install -e .`"""
-    log(INFO, '*** install project via pip install -e')
+    log(INFO, '*** 🗜️ install project via pip install -e')
     return module(PIP, "install --upgrade -e .", path=path, venv=venv)
 
 
 def uninstall(pkg=basename(getcwd()), path=getcwd(), venv=PYTHON):
     """uninstall current project via `pip uninstall`"""
-    log(INFO, '*** uninstall project via pip uninstall')
+    log(INFO, '*** 💔 uninstall project via pip uninstall')
     return module(PIP, "uninstall -y %s" % pkg, path=path, venv=venv)
 
 

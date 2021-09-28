@@ -1,11 +1,11 @@
-#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 # auxilium
 # --------
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Tuesday, 28 September 2021
+# Version:  0.1.5, copyright Wednesday, 29 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -30,7 +30,7 @@ def create_venv(pkg=basename(getcwd()),
     venv = venv if venv and exists(venv) else None
     # strip potential executable from venv_path
     venv_path = venv_path.replace(VENV_TAIL, '')
-    log(INFO, "*** create virtual environment")
+    log(INFO, "*** 👻 create virtual environment")
     log(INFO, "    in " + path + " at " + venv_path)
     module('venv', "--clear --prompt %s %s" % (pkg, venv_path),
            path=path, venv=venv)
