@@ -1,4 +1,4 @@
-# auxilium>=0.1.5
+auxilium
 dulwich
 bandit
 coverage
