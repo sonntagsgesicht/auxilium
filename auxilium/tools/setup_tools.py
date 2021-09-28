@@ -25,7 +25,7 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
     """create a new python project"""
     pkg_zip_file = __file__.split(sep)[:-2]
     pkg_zip_file.extend(('data', 'pkg.zip'))
-    pkg_zip_file = join(*pkg_zip_file)
+    pkg_zip_file = sep + join(*pkg_zip_file)
 
     if not any((name, slogan, author, email)):
         log(INFO, '')

@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Monday, 27 September 2021
+# Version:  0.1.5, copyright Tuesday, 28 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -18,10 +18,6 @@ from sys import executable
 
 from subprocess import run
 
-if False:
-    from auxilium.tools.logpipe import LogPipe
-else:
-    LogPipe = None
 
 PYTHON = executable
 VENV_PATH = '.aux/venv'
@@ -36,7 +32,8 @@ def create_venv(pkg=basename(getcwd()),
     venv = venv if venv and exists(venv) else None
     log(INFO, "*** create virtual environment")
     log(INFO, "    in " + path + " at " + venv_path)
-    module('venv', "--prompt %s %s" % (pkg, venv_path), path=path, venv=venv)
+    module('venv', "--clear --prompt %s %s" % (pkg, venv_path),
+           path=path, venv=venv)
     return join(venv_path, 'bin', basename(executable))
 
 
@@ -58,13 +55,8 @@ def system(command, level=DEBUG, path=getcwd(), venv=None, capture_output=True):
     log(DEBUG, "    called in %s" % path)
     if venv:
         command = activate_venv() + command
-    if LogPipe:
-        proc = run(command, cwd=path, shell=True,
-                   stdout=LogPipe(level, log),
-                   stderr=LogPipe(ERROR, log), text=True)
-    else:
-        proc = run(command,cwd=path, shell=True,
-                   capture_output=capture_output, text=True)
+    proc = run(command, cwd=path, shell=True,
+               capture_output=capture_output, text=True)
     log_level = ERROR if proc.returncode else level
     if proc.stdout:
         for line in str(proc.stdout).split(linesep):
