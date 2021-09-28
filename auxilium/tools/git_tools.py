@@ -80,6 +80,7 @@ def push_git(remote='None', path=getcwd()):
     usr, pwd = usr_pwd.split(':', 1) if ':' in usr_pwd else (usr_pwd, '_')
     pwd = '*' * len(pwd)
     clean = http + '//' + usr + ':' + pwd + '@' + url
+    clean = http + '//' + usr + '@' + url
     log(INFO, "    at " + clean)
     if remote:
         log(DEBUG, "    remote: `%s`" % str(remote))
