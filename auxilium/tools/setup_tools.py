@@ -13,19 +13,18 @@
 from datetime import date
 from logging import log, INFO
 from os import getcwd, sep, walk, makedirs
-from os.path import exists, join, basename
+from os.path import exists, join, basename, split
 from shutil import move
 from zipfile import ZipFile
 
 EXT = ' (created by auxilium)'
+PKG_ZIP_FILE = \
+    __file__.replace(join(*__file__.split(sep)[-2:]), join('data', 'pkg.zip'))
 
 
 def create_project(name=None, slogan=None, author=None, email=None, url=None,
-                   path=getcwd()):
+                   pkg_zip_file=PKG_ZIP_FILE, path=getcwd()):
     """create a new python project"""
-    pkg_zip_file = __file__.split(sep)[:-2]
-    pkg_zip_file.extend(('data', 'pkg.zip'))
-    pkg_zip_file = sep + join(*pkg_zip_file)
 
     if not any((name, slogan, author, email)):
         log(INFO, '')
@@ -45,10 +44,15 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
 
     # setup project infrastructure
     if exists(project_path):
-        ms = 'Project dir %s exists. Cannot create new project.' % project_path
-        raise FileExistsError(ms)
+        msg = 'Project dir %s exists. ' \
+              'Cannot create new project.' % project_path
+        raise FileExistsError(msg)
 
-    # shutil.copytree(pkg_zip_file, project_path)
+    if not exists(pkg_zip_file):
+        msg = 'Project template %s does not exists. ' \
+              'Cannot create new project.' % pkg_zip_file
+        raise FileNotFoundError(msg)
+
     with ZipFile(pkg_zip_file, 'r') as zip_ref:
         zip_ref.extractall(project_path)
 
