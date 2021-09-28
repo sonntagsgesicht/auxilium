@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 # auxilium
 # --------
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Monday, 27 September 2021
+# Version:  0.1.5, copyright Tuesday, 28 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -17,7 +17,7 @@ from auxilium.tools.sphinx_tools import api, html, doctest, show, \
     cleanup as cleanup_doc
 
 
-def arg_parser(parser=None, config=ConfigParser()):
+def add_arguments(parser=None, config=ConfigParser()):
     parser = ArgumentParser() if parser is None else parser
     parser.add_argument(
         '--commit',

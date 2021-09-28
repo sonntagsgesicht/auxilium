@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 # auxilium
 # --------
@@ -20,7 +20,7 @@ from auxilium.tools.pip_tools import requirements, install, \
 from auxilium.tools.docmaintain_tools import docmaintain
 
 
-def arg_parser(parser=None, config=ConfigParser()):
+def add_arguments(parser=None, config=ConfigParser()):
     parser = ArgumentParser() if parser is None else parser
     parser.add_argument(
         '--upgrade',
