@@ -18,7 +18,7 @@ from os.path import basename, join, getmtime, exists, split
 from sys import path as sys_path
 from textwrap import wrap
 
-LAST_M_FILE = '.aux/last.json'
+from .const import LAST_M_FILE
 
 
 def get_attr(attr, pkg=basename(getcwd()), path=getcwd()):
@@ -105,7 +105,7 @@ def replace_headers(pkg=basename(getcwd()), last=dict(), path=getcwd()):
                         removed.append(lines.pop(0).strip())
 
                     # keep first line in script files
-                    if removed and removed[0].startswith('#!/usr/bin/env'):
+                    if removed and removed[0].startswith('#!'):
                         new_header[0] = removed[0]
 
                     # add new header

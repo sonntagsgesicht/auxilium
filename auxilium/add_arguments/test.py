@@ -16,13 +16,15 @@ from configparser import ConfigParser
 from auxilium.tools.test_tools import quality, security, coverage, \
     cleanup as cleanup_test
 
+from auxilium.tools.const import TEST_PATH
+
 
 def add_arguments(parser=None, config=ConfigParser()):
     parser = ArgumentParser() if parser is None else parser
     parser.add_argument(
         'path',
         nargs='?',
-        default=config.get('test', 'path', fallback='test/'),
+        default=config.get('test', 'path', fallback=TEST_PATH),
         help='path to directory where test are found')
     parser.add_argument(
         '--commit',

@@ -18,9 +18,7 @@ from sys import executable
 
 from subprocess import run
 
-
-PYTHON = executable
-VENV_PATH = '.aux/venv'
+from .const import PYTHON, VENV_PATH, VENV_TAIL
 
 
 def create_venv(pkg=basename(getcwd()),
@@ -30,6 +28,8 @@ def create_venv(pkg=basename(getcwd()),
     """create virtual python environment"""
     # check if venv exists
     venv = venv if venv and exists(venv) else None
+    # strip potential executable from venv_path
+    venv_path = venv_path.replace(VENV_TAIL, '')
     log(INFO, "*** create virtual environment")
     log(INFO, "    in " + path + " at " + venv_path)
     module('venv', "--clear --prompt %s %s" % (pkg, venv_path),
@@ -39,12 +39,14 @@ def create_venv(pkg=basename(getcwd()),
 
 def activate_venv(venv_path=VENV_PATH):
     """activate virtual python environment"""
+    # strip potential executable from venv_path
+    venv_path = venv_path.replace(VENV_TAIL, '')
     if os_name == 'nt':
         log(DEBUG, "    activate virtual environment at %s" % venv_path)
-        return "C:\\> %s\\Scripts\\activate.bat; " % normpath(venv_path)
+        return normpath(join(venv_path, 'Scripts', 'activate.bat'))
     elif os_name == 'posix':
         log(DEBUG, "    activate virtual environment at %s" % venv_path)
-        return "source %s/bin/activate; " % venv_path
+        return "source %s; " % normpath(join(venv_path, 'bin', 'activate'))
     else:
         log(ERROR,
             "    unable to activate virtual environment for os %s" % os_name)
@@ -55,7 +57,7 @@ def system(command, level=DEBUG, path=getcwd(),
     log(DEBUG, "    call system(`%s`)" % command)
     log(DEBUG, "    called in %s" % path)
     if venv:
-        command = activate_venv(venv) + command
+        command = activate_venv(venv) + ' ' + command
     proc = run(command, cwd=path, shell=True,
                capture_output=capture_output, text=True)
     log_level = ERROR if proc.returncode else level
@@ -72,9 +74,8 @@ def system(command, level=DEBUG, path=getcwd(),
 
 def python(command, level=DEBUG, path=getcwd(), venv=None,
            capture_output=True):
-    if not venv:
-        venv = PYTHON
-    return system(normpath(venv) + ' ' + command, level, path,
+    venv = normpath(venv) if venv else PYTHON
+    return system(venv + ' ' + command, level, path,
                   capture_output=capture_output)
 
 

@@ -10,12 +10,10 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from os.path import basename
-
 from argparse import ArgumentParser
 from configparser import ConfigParser
 
-from ..tools.system_tools import PYTHON
+from ..tools.const import VENV
 
 
 def add_arguments(parser=None, config=ConfigParser()):
@@ -28,8 +26,7 @@ def add_arguments(parser=None, config=ConfigParser()):
              '(-v=ALL, -vv=DEBUG, -vvv=INFO, -vvvv=WARNING, -vvvvv=ERROR) '
              '(default: INFO)')
 
-    venv = config.get('create', 'venv', fallback='.aux/venv/')
-    env = venv + 'bin/%s' % basename(PYTHON)
+    env = config.get('DEFAULT', 'env', fallback=VENV)
     parser.add_argument(
         '-e', '--env',
         metavar='PATH',

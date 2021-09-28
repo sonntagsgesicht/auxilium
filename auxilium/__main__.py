@@ -20,7 +20,9 @@ from configparser import ConfigParser
 
 from auxilium.add_arguments import ArgumentDefaultsAndConstsHelpFormatter
 from auxilium.tools.setup_tools import create_project
+from auxilium.tools.const import CONFIG_PATH
 from auxilium import add_arguments, methods
+
 
 LEVELS = (logging.INFO, 0, logging.DEBUG,
           logging.INFO, logging.WARNING, logging.ERROR)
@@ -33,8 +35,8 @@ def main():
     # ==========================
 
     config = ConfigParser(allow_no_value=True)
-    config.read(pathlib.Path.home().joinpath('.aux/config'))
-    config.read('.aux/config')
+    config.read(pathlib.Path.home().joinpath(CONFIG_PATH))
+    config.read(CONFIG_PATH)
 
     # ===========================
     # === add argument parser ===
@@ -43,7 +45,8 @@ def main():
     epilog = \
         "if (default: True) a given flag turns its value to False. " + \
         "default behavior may depend on current path and project. " + \
-        "set default behavior in `~/.aux/config` and `./.aux/config`."
+        "set default behavior in `~/%s` and `./%s`." % \
+        (CONFIG_PATH, CONFIG_PATH)
 
     parser = ArgumentParser(
         epilog=epilog, formatter_class=ArgumentDefaultsAndConstsHelpFormatter)

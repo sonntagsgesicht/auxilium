@@ -13,7 +13,7 @@
 from argparse import ArgumentParser
 from configparser import ConfigParser
 
-from ..tools.system_tools import create_venv
+from ..tools.system_tools import create_venv, VENV_PATH
 
 
 def add_arguments(parser=None, config=ConfigParser()):
@@ -42,8 +42,8 @@ def add_arguments(parser=None, config=ConfigParser()):
         '--venv',
         metavar='PATH',
         nargs='?',
-        const=config.get('create', 'venv', fallback='.aux/venv/'),
-        default=config.get('create', 'venv', fallback='.aux/venv/'),
+        const=config.get('create', 'venv', fallback=VENV_PATH),
+        default=config.get('create', 'venv', fallback=VENV_PATH),
         help=create_venv.__doc__)
     parser.add_argument(
         '--update',
