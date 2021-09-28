@@ -15,16 +15,16 @@ from os.path import basename, join
 from sys import path as sys_path
 
 from ..tools.setup_tools import create_project, create_finish
-from ..tools.system_tools import create_venv
+from ..tools.system_tools import create_venv, del_tree
 from ..tools.git_tools import commit_git
 from ..tools.pip_tools import upgrade, install, requirements
 from ..tools.docmaintain_tools import docmaintain
 
 
 def do(name=None, slogan=None, author=None, email=None, url=None,
-       commit=None, path=getcwd(), venv=None, venv_only=None, env=None,
+       commit=None, path=getcwd(), venv=None, update=None, env=None,
        **kwargs):
-    if venv_only:
+    if update:
         project_path = join(path, name) if name else path
         pkg = basename(project_path)
         code = 0
@@ -42,6 +42,7 @@ def do(name=None, slogan=None, author=None, email=None, url=None,
     if venv:
         # create virtual environment
         # venv = venv.replace('bin/python3')
+        del_tree(venv)
         env = create_venv(pkg, venv_path=venv, path=project_path, venv=env)
 
         # run default update command

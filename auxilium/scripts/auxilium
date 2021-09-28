@@ -40,6 +40,7 @@ config.read('.aux/config')
 
 epilog = \
     "if (default: True) a given flag turns its value to False. " + \
+    "default behavior may depend on current path and project. " + \
     "set default behavior in `~/.aux/config` and `./.aux/config`."
 
 parser = ArgumentParser(
@@ -62,7 +63,7 @@ parser.add_argument(
     const=config.get('DEFAULT', 'python', fallback=None),
     default=config.get('DEFAULT', 'env', fallback=env),
     help='set path to python executable or virtual environment. '
-         'to use system interpreter just set empty flag -e=')
+         'to use system interpreter just set empty flag `-e=`')
 
 parser.add_argument(
     '-z', '--exit-non-zero',
@@ -158,7 +159,15 @@ if verbosity > logging.DEBUG:
 logging.basicConfig(level=verbosity, format=log_format)
 logging.log(1, args)
 
+
 method = getattr(methods, str(args.command), None)
+if method is None:
+    print('>>> auxilium -h')
+    parser.print_help()
+    for key, choice in sub_parser.choices.items():
+        print('\n>>> auxilium ' + key + ' -h')
+        choice.print_help()
+
 path = os.getcwd()
 pkg = os.path.basename(os.getcwd())
 kwargs = vars(args)

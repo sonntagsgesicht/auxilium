@@ -46,11 +46,11 @@ def arg_parser(parser=None, config=ConfigParser()):
         default=config.get('create', 'venv', fallback='.aux/venv/'),
         help=create_venv.__doc__)
     parser.add_argument(
-        '--venv-only',
+        '--update',
         action='store_const',
         const=not config.get('create', 'venv-only', fallback=False),
         default=config.get('create', 'venv-only', fallback=False),
-        help='just setup virtual environment '
+        help='just (re)install/update virtual environment '
              '(skip commit as well as to create project)')
     parser.add_argument(
         '--commit',
