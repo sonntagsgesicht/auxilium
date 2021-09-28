@@ -23,17 +23,6 @@ from auxilium.tools.pypi_tools import deploy
 def arg_parser(parser=None, config=ConfigParser()):
     parser = ArgumentParser() if parser is None else parser
     parser.add_argument(
-        '--commit',
-        nargs='?',
-        const=config.get('deploy', 'commit', fallback='commit build'),
-        help='auto commit on successful build')
-    ver = 'v' + get_version()
-    parser.add_argument(
-        '--tag',
-        nargs='?',
-        const=config.getboolean('deploy', 'tag', fallback=ver),
-        help='auto tag on successful build')
-    parser.add_argument(
         '--header',
         action='store_const',
         const=not config.getboolean('deployment', 'header', fallback=True),
@@ -45,6 +34,17 @@ def arg_parser(parser=None, config=ConfigParser()):
         const=not config.getboolean('deploy', 'build', fallback=True),
         default=config.getboolean('deploy', 'build', fallback=True),
         help=build.__doc__)
+    parser.add_argument(
+        '--commit',
+        nargs='?',
+        const=config.get('deploy', 'commit', fallback='commit build'),
+        help='auto commit on successful build')
+    ver = 'v' + get_version()
+    parser.add_argument(
+        '--tag',
+        nargs='?',
+        const=config.getboolean('deploy', 'tag', fallback=ver),
+        help='auto tag on successful build')
     parser.add_argument(
         '--push',
         action='store_const',
