@@ -77,9 +77,7 @@ def push_git(remote='None', path=getcwd()):
     log(INFO, "*** push current branch to remote `git` repo")
     http, last = remote.split('//', 1)
     usr_pwd, url = last.split('@', 1)
-    usr, pwd = usr_pwd.split(':', 1) if ':' in usr_pwd else (usr_pwd, '_')
-    pwd = '*' * len(pwd)
-    clean = http + '//' + usr + ':' + pwd + '@' + url
+    usr, _ = usr_pwd.split(':', 1) if ':' in usr_pwd else (usr_pwd, '')
     clean = http + '//' + usr + '@' + url
     log(INFO, "    at " + clean)
     if remote:
