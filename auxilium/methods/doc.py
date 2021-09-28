@@ -23,7 +23,6 @@ def do(pkg=basename(getcwd()), commit=None,
        api=None, doctest=None, html=None, show=None, cleanup=None,
        path=None, env=None, **kwargs):
     if cleanup:
-        log(INFO, "🧹 cleanup and exit")
         return _cleanup(env)
 
     doctest_return_code = html_return_code = -1

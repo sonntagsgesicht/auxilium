@@ -25,7 +25,6 @@ def do(pkg=basename(getcwd()), commit=None,
     """run test process"""
 
     if cleanup:
-        log(INFO, "🧹 cleanup and exit")
         return _cleanup(path)
 
     test_return_code = -1

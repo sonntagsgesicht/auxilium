@@ -84,8 +84,7 @@ def push_git(remote='None', path=getcwd()):
         log(DEBUG, "    remote: `%s`" % str(remote))
     out, err = BytesIO(), BytesIO()
     try:
-        #porcelain.push(Repo(path), remote, 'master', outstream=out, errstream=err)
-        pass
+        porcelain.push(Repo(path), remote, 'master', outstream=out, errstream=err)
     except NotGitRepository as e:
         log(ERROR, e)
         return 1

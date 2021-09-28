@@ -27,7 +27,6 @@ def do(pkg=basename(getcwd()), commit=None, tag=None, header=None,
     """run deploy process"""
 
     if cleanup:
-        log(INFO, "🧹 cleanup and exit")
         return _cleanup()
 
     build_return_code = -1
