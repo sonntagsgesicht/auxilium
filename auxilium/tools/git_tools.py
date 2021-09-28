@@ -35,6 +35,7 @@ def commit_git(msg='', path=getcwd()):
         log(INFO, "    at " + path)
         chdir(cwd)
         return 0
+
     log(INFO, "*** file status in `git` repo")
     log(INFO, "    at " + path)
 
