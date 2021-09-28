@@ -13,7 +13,7 @@
 from datetime import date
 from logging import log, INFO
 from os import getcwd, sep, walk, makedirs
-from os.path import exists, join, basename, split
+from os.path import exists, join, basename
 from shutil import move
 from zipfile import ZipFile
 

@@ -12,7 +12,7 @@
 
 from logging import log, DEBUG, INFO, ERROR
 from os import linesep, getcwd, name as os_name, remove
-from os.path import basename, exists, isdir, join
+from os.path import basename, exists, isdir, join, normpath
 from shutil import rmtree
 from sys import executable
 
@@ -41,7 +41,7 @@ def activate_venv(venv_path=VENV_PATH):
     """activate virtual python environment"""
     if os_name == 'nt':
         log(DEBUG, "    activate virtual environment at %s" % venv_path)
-        return "C:\\> %s\\Scripts\\activate.bat; " % venv_path
+        return "C:\\> %s\\Scripts\\activate.bat; " % normpath(venv_path)
     elif os_name == 'posix':
         log(DEBUG, "    activate virtual environment at %s" % venv_path)
         return "source %s/bin/activate; " % venv_path
@@ -55,7 +55,7 @@ def system(command, level=DEBUG, path=getcwd(),
     log(DEBUG, "    call system(`%s`)" % command)
     log(DEBUG, "    called in %s" % path)
     if venv:
-        command = activate_venv() + command
+        command = activate_venv(venv) + command
     proc = run(command, cwd=path, shell=True,
                capture_output=capture_output, text=True)
     log_level = ERROR if proc.returncode else level
@@ -74,7 +74,7 @@ def python(command, level=DEBUG, path=getcwd(), venv=None,
            capture_output=True):
     if not venv:
         venv = PYTHON
-    return system(venv + ' ' + command, level, path,
+    return system(normpath(venv) + ' ' + command, level, path,
                   capture_output=capture_output)
 
 
