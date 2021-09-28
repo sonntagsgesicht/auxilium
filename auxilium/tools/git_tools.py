@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Monday, 27 September 2021
+# Version:  0.1.5, copyright Tuesday, 28 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -75,13 +75,18 @@ def tag_git(tag, msg='', path=getcwd()):
 def push_git(remote='None', path=getcwd()):
     """push current branch of local to remote `git` repo"""
     log(INFO, "*** push current branch to remote `git` repo")
-    log(INFO, "    at " + remote)
+    http, url = remote.split('//', 1)
+    usr_pwd, url = remote.split('@', 1)
+    usr, pwd = usr_pwd.split(':', 1) if ':' in usr_pwd else (usr_pwd, '_')
+    pwd = '*' * len(pwd)
+    clean = http + '//' + usr + ':' + pwd + '@' + url
+    log(INFO, "    at " + clean)
     if remote:
         log(DEBUG, "    remote: `%s`" % str(remote))
     out, err = BytesIO(), BytesIO()
     try:
-        porcelain.push(Repo(path), remote, 'master',
-                       outstream=out, errstream=err)
+        #porcelain.push(Repo(path), remote, 'master', outstream=out, errstream=err)
+        pass
     except NotGitRepository as e:
         log(ERROR, e)
         return 1
