@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 # auxilium
 # --------
@@ -69,7 +69,8 @@ if __name__ == "__main__":
     import sys
     import subprocess
 
-    logging.basicConfig(format='%(levelname)s  %(message)s', level=logging.INFO)
+    logging.basicConfig(format='%(levelname)s  %(message)s',
+                        level=logging.INFO)
 
     logpipe = LogPipe(logging.INFO, logging.log)
     with subprocess.Popen(['/bin/ls'], stdout=logpipe, stderr=logpipe) as s:

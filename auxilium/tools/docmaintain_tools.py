@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 # auxilium
 # --------
@@ -76,7 +76,8 @@ def replace_headers(pkg=basename(getcwd()), last=dict(), path=getcwd()):
     new_lines += tuple(wrap(pkg.__doc__))
     new_lines += '',
     new_lines += "Author:   " + pkg.__author__,
-    new_lines += "Version:  " + pkg.__version__ + ', copyright ' + pkg.__date__,
+    new_lines += "Version:  " + pkg.__version__ + \
+                 ', copyright ' + pkg.__date__,
     new_lines += "Website:  " + pkg.__url__,
     new_lines += "License:  " + pkg.__license__ + " (see LICENSE file)",
     new_header = ["# -*- coding: utf-8 -*-", '']
@@ -110,7 +111,7 @@ def replace_headers(pkg=basename(getcwd()), last=dict(), path=getcwd()):
                     # add new header
                     new_lines = new_header + lines
 
-                    log(DEBUG-1, '\n'.join(new_lines[:20]))
+                    log(DEBUG - 1, '\n'.join(new_lines[:20]))
                     f = open(file, 'w')
                     f.write(linesep.join(new_lines))
                     f.write(linesep)  # last empty line

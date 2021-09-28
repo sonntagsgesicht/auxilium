@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 # auxilium
 # --------
@@ -45,8 +45,8 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
 
     # setup project infrastructure
     if exists(project_path):
-        msg = 'Project dir %s exists. Cannot create new project.' % project_path
-        raise FileExistsError(msg)
+        ms = 'Project dir %s exists. Cannot create new project.' % project_path
+        raise FileExistsError(ms)
 
     # shutil.copytree(pkg_zip_file, project_path)
     with ZipFile(pkg_zip_file, 'r') as zip_ref:

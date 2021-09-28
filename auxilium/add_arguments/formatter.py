@@ -31,4 +31,3 @@ class ArgumentDefaultsAndConstsHelpFormatter(ArgumentDefaultsHelpFormatter):
             if '%(const)' not in action.help:
                 action_help += ' (default value if flagged: %(const)s)'
         return action_help
-

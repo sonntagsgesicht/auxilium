@@ -13,7 +13,7 @@
 from argparse import ArgumentParser
 from configparser import ConfigParser
 
-from auxilium.tools.git_tools import tag_git, push_git
+from auxilium.tools.git_tools import push_git
 from auxilium.tools.build_tools import build, cleanup as cleanup_build
 from auxilium.tools.docmaintain_tools import docmaintain, \
     get_version, get_url, get_author

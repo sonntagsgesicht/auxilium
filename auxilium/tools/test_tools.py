@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 # auxilium
 # --------
@@ -45,17 +45,17 @@ def test_pytest(test_dir=TEST_DIR, venv=None):
 def doctests(pkg=basename(getcwd()), venv=None):
     """test code in doc string (doctest)"""
     log(INFO, '*** run doctest scripts')
-    cmd_recursively = '''
-import doctest, %s as pkg;
-def _doctest_recursively(pkg, *args, **kwargs):
-    import doctest
-    import inspect
-    pkg = __import__(pkg) if isinstance(pkg, str) else pkg
-    if inspect.ismodule(pkg):
-        print(pkg.__name__)
-        return (doctest.testmod(pkg, *args, **kwargs),) + tuple(
-        _doctest_recursively(p) for p in dir(pkg))
-doctest.testmod(pkg, verbose=True)''' % pkg
+#     cmd = '''
+# import doctest, %s as pkg;
+# def _doctest_recursively(pkg, *args, **kwargs):
+#     import doctest
+#     import inspect
+#     pkg = __import__(pkg) if isinstance(pkg, str) else pkg
+#     if inspect.ismodule(pkg):
+#         print(pkg.__name__)
+#         return (doctest.testmod(pkg, *args, **kwargs),) + tuple(
+#         _doctest_recursively(p) for p in dir(pkg))
+# doctest.testmod(pkg, verbose=True)''' % pkg
     cmd = 'import doctest, %s as pkg; doctest.testmod(pkg, verbose=True)' % pkg
     return _python('-c "%s"' % cmd, level=INFO, venv=venv)
 

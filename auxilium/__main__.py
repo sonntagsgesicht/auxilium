@@ -22,13 +22,12 @@ from auxilium.add_arguments import ArgumentDefaultsAndConstsHelpFormatter
 from auxilium.tools.setup_tools import create_project
 from auxilium import add_arguments, methods
 
-LEVELS = \
-    logging.INFO, 0, logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR
+LEVELS = (logging.INFO, 0, logging.DEBUG,
+          logging.INFO, logging.WARNING, logging.ERROR)
 Failure = Exception
 
 
 def main():
-
     # ==========================
     # === init config parser ===
     # ==========================

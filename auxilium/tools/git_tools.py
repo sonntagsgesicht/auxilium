@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 # auxilium
 # --------
@@ -10,7 +10,7 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from io import *
+from io import BytesIO
 from logging import log, DEBUG, INFO, ERROR
 from os import getcwd, linesep, chdir
 from os.path import exists, join

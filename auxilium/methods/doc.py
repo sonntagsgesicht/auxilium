@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 # auxilium
 # --------
@@ -10,7 +10,7 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from logging import log, INFO, ERROR
+from logging import log, ERROR
 from os import getcwd
 from os.path import basename
 
@@ -41,5 +41,6 @@ def do(pkg=basename(getcwd()), commit=None,
         if doctest_return_code == 0 and html_return_code == 0:
             code = code or commit_git(commit)
         else:
-            log(ERROR, "⚠️ Doc test or build missing or failed. Did not commit.")
+            log(ERROR,
+                "⚠️ Doc test or build missing or failed. Did not commit.")
     return code

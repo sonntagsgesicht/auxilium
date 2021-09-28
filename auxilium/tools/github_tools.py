@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 # auxilium
 # --------
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Monday, 27 September 2021
+# Version:  0.1.5, copyright Tuesday, 28 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -29,13 +29,13 @@ def create(usr, pwd, pkg=path.basename(getcwd())):
     repos = "https://api.github.com/%s/repos" % usr
     remote = "https://github.com/%s/%s" % (usr, pkg)
     json = {
-      "name": pkg,
-      "description": slogan,
-      "homepage": remote,
-      "private": False,
-      "has_issues": True,
-      "has_projects": True,
-      "has_wiki": True
+        "name": pkg,
+        "description": slogan,
+        "homepage": remote,
+        "private": False,
+        "has_issues": True,
+        "has_projects": True,
+        "has_wiki": True
     }
     post(repos)
     post(remote, auth=(usr, pwd), data=json)

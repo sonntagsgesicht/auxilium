@@ -12,6 +12,9 @@
 
 import logging
 
+from .rst_tools import replacements_str, replacements_from_pkg, \
+    replacements_from_cls, replacements   # noqa: F401
+
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
@@ -29,8 +32,3 @@ __dependencies__ = 'pip', 'dulwich', 'flake8', 'bandit', 'coverage', \
 __dependency_links__ = ()
 __data__ = ('data/pkg.zip',)
 __scripts__ = ('auxilium/scripts/auxilium',)
-
-
-
-from .rst_tools import replacements_str, replacements_from_pkg, \
-    replacements_from_cls, replacements

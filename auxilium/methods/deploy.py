@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 # auxilium
 # --------
@@ -12,7 +12,7 @@
 
 from os import getcwd
 from os.path import basename
-from logging import log, INFO, ERROR
+from logging import log, ERROR
 
 from ..tools.docmaintain_tools import docmaintain
 from ..tools.build_tools import build as _build, cleanup as _cleanup

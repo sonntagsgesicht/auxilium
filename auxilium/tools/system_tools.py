@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 # auxilium
 # --------
@@ -50,7 +50,8 @@ def activate_venv(venv_path=VENV_PATH):
             "    unable to activate virtual environment for os %s" % os_name)
 
 
-def system(command, level=DEBUG, path=getcwd(), venv=None, capture_output=True):
+def system(command, level=DEBUG, path=getcwd(),
+           venv=None, capture_output=True):
     log(DEBUG, "    call system(`%s`)" % command)
     log(DEBUG, "    called in %s" % path)
     if venv:
