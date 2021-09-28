@@ -1,4 +1,4 @@
-auxilium
+git+https://github.com/sonntagsgesicht/auxilium
 dulwich
 bandit
 coverage
