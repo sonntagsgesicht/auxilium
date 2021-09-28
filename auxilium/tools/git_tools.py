@@ -29,9 +29,14 @@ def commit_git(msg='', path=getcwd()):
     repo.stage(files)
     repo.stage(untracked)
     # added, ignored = porcelain.add(repo)
+    staged, un_staged, untracked = porcelain.status(repo, False)
+    if not any(staged.values()):
+        log(INFO, "*** nothing to commit.")
+        chdir(cwd)
+        return 0
     log(INFO, "*** file status in `git` repo")
     log(INFO, "    from " + path)
-    staged, un_staged, untracked = porcelain.status(repo, False)
+
     if staged['add']:
         log(INFO, "    add:")
         for p in staged['add']:
