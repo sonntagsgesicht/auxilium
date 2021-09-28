@@ -56,13 +56,13 @@ parser.add_argument(
 venv = config.get('create', 'venv', fallback='.aux/venv/')
 env = venv + 'bin/%s' % os.path.basename(sys.executable)
 parser.add_argument(
-    '-env',
+    '-e', '--env',
     metavar='PATH',
     nargs='?',
     const=config.get('DEFAULT', 'python', fallback=None),
     default=config.get('DEFAULT', 'env', fallback=env),
     help='set path to python executable or virtual environment. '
-         'to us system interpreter just use flag -e=')
+         'to use system interpreter just set empty flag -e=')
 
 parser.add_argument(
     '-z', '--exit-non-zero',

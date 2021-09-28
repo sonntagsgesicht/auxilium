@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Monday, 27 September 2021
+# Version:  0.1.5, copyright Tuesday, 28 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -27,11 +27,17 @@ def arg_parser(parser=None, config=ConfigParser()):
         nargs='?',
         const=config.get('deploy', 'commit', fallback='commit build'),
         help='auto commit on successful build')
+    ver = 'v' + get_version()
     parser.add_argument(
-        '--doc-header',
+        '--tag',
+        nargs='?',
+        const=config.getboolean('deploy', 'tag', fallback=ver),
+        help='auto tag on successful build')
+    parser.add_argument(
+        '--header',
         action='store_const',
-        const=not config.getboolean('deployment', 'doc-header', fallback=True),
-        default=config.getboolean('deployment', 'doc-header', fallback=True),
+        const=not config.getboolean('deployment', 'header', fallback=True),
+        default=config.getboolean('deployment', 'header', fallback=True),
         help=docmaintain.__doc__)
     parser.add_argument(
         '--build',
@@ -39,13 +45,6 @@ def arg_parser(parser=None, config=ConfigParser()):
         const=not config.getboolean('deploy', 'build', fallback=True),
         default=config.getboolean('deploy', 'build', fallback=True),
         help=build.__doc__)
-    ver = 'v' + get_version()
-    parser.add_argument(
-        '--tag',
-        nargs='?',
-        const=config.getboolean('deploy', 'tag', fallback=ver),
-        default=config.getboolean('deploy', 'tag', fallback=ver),
-        help=tag_git.__doc__)
     parser.add_argument(
         '--push',
         action='store_const',

@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Monday, 27 September 2021
+# Version:  0.1.5, copyright Tuesday, 28 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -23,7 +23,7 @@ __author__ = 'sonntagsgesicht'
 __email__ = __author__ + '@icloud.com'
 __url__ = 'https://github.com/' + __author__ + '/' + __name__
 __license__ = 'Apache License 2.0'
-__dependencies__ = 'pip', 'dulwich', 'pytest', 'flake8', 'bandit', \
+__dependencies__ = 'pip', 'dulwich', 'flake8', 'bandit', 'coverage', \
                    'sphinx', 'sphinx_rtd_theme', 'sphinx_math_dollar', \
                    'twine',
 __dependency_links__ = ()

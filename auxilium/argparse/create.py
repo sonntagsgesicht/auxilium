@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Monday, 27 September 2021
+# Version:  0.1.5, copyright Tuesday, 28 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -40,10 +40,18 @@ def arg_parser(parser=None, config=ConfigParser()):
         help='project url')
     parser.add_argument(
         '--venv',
+        metavar='PATH',
         nargs='?',
         const=config.get('create', 'venv', fallback='.aux/venv/'),
         default=config.get('create', 'venv', fallback='.aux/venv/'),
         help=create_venv.__doc__)
+    parser.add_argument(
+        '--venv-only',
+        action='store_const',
+        const=not config.get('create', 'venv-only', fallback=False),
+        default=config.get('create', 'venv-only', fallback=False),
+        help='just setup virtual environment '
+             '(skip commit as well as to create project)')
     parser.add_argument(
         '--commit',
         nargs='?',

@@ -5,14 +5,14 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Monday, 27 September 2021
+# Version:  0.1.5, copyright Tuesday, 28 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
 
 from os import getcwd
 from os.path import basename
-from logging import log, ERROR
+from logging import log, INFO, ERROR
 
 from ..tools.docmaintain_tools import docmaintain
 from ..tools.build_tools import build as _build, cleanup as _cleanup
@@ -20,27 +20,37 @@ from ..tools.git_tools import commit_git, tag_git, push_git
 from ..tools.pypi_tools import deploy as _deploy
 
 
-def do(pkg=basename(getcwd()), commit=None, tag=None, doc_header=None,
+def do(pkg=basename(getcwd()), commit=None, tag=None, header=None,
        build=None, push=None, remote=None, remote_usr=None, remote_pwd=None,
        deploy=None, pypi_usr=None, pypi_pwd=None, cleanup=None,
        path=None, env=None, **kwargs):
+    """run deploy process"""
+
+    if cleanup:
+        log(INFO, "🧹 cleanup and exit")
+        return _cleanup()
+
     build_return_code = -1
     code = False
-    if doc_header:
+
+    if header:
         code = code or docmaintain(pkg, path=path)
+
     if build:
         build_return_code = _build()
         code = code or build_return_code
+
     if commit:
         if build_return_code == 0:
             code = code or commit_git(commit)
         else:
-            log(ERROR, "⚠️ Failed to build. Did not commit.")
+            log(ERROR, "⚠️ Build missing or failed. Did not commit.")
+
     if tag:
         if build_return_code == 0:
             code = code or tag_git(tag, path=path)
         else:
-            log(ERROR, "⚠️ Failed to build. Did not tag.")
+            log(ERROR, "⚠️ Build missing or failed. Did not tag.")
 
     if push:
         if build_return_code == 0:
@@ -50,12 +60,12 @@ def do(pkg=basename(getcwd()), commit=None, tag=None, doc_header=None,
             remote = 'https://' + usr + pwd + '@' + url
             code = code or push_git(remote, path)
         else:
-            log(ERROR, "⚠️ Failed to build. Did not push.")
+            log(ERROR, "⚠️ Build missing or failed. Did not push.")
+
     if deploy:
         if build_return_code == 0:
             code = code or _deploy(pypi_usr, pypi_pwd)
         else:
-            log(ERROR, "⚠️ Failed to build. Did not deploy.")
-    if cleanup:
-        code = code or _cleanup()
+            log(ERROR, "⚠️ Build missing or failed. Did not deploy.")
+
     return code

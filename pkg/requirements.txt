@@ -1,7 +1,7 @@
-auxilium
+# auxilium>=0.1.5
+dulwich
 bandit
 coverage
-dulwich
 flake8
 Sphinx
 sphinx-math-dollar

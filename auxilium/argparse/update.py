@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Monday, 27 September 2021
+# Version:  0.1.5, copyright Tuesday, 28 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -22,18 +22,6 @@ from auxilium.tools.docmaintain_tools import docmaintain
 
 def arg_parser(parser=None, config=ConfigParser()):
     parser = ArgumentParser() if parser is None else parser
-    parser.add_argument(
-        '--doc-header',
-        action='store_const',
-        const=not config.getboolean('update', 'doc-header', fallback=True),
-        default=config.getboolean('update', 'doc-header', fallback=True),
-        help=docmaintain.__doc__)
-    parser.add_argument(
-        '--commit',
-        nargs='?',
-        const=config.get('update', 'commit', fallback='commit'),
-        default=config.get('update', 'commit', fallback='commit'),
-        help=commit_git.__doc__)
     parser.add_argument(
         '--upgrade',
         metavar='PKG',
@@ -52,6 +40,18 @@ def arg_parser(parser=None, config=ConfigParser()):
         const=not config.getboolean('update', 'requirements', fallback=False),
         default=config.getboolean('update', 'requirements', fallback=False),
         help=requirements.__doc__)
+    parser.add_argument(
+        '--header',
+        action='store_const',
+        const=not config.getboolean('update', 'header', fallback=True),
+        default=config.getboolean('update', 'header', fallback=True),
+        help=docmaintain.__doc__)
+    parser.add_argument(
+        '--commit',
+        nargs='?',
+        const=config.get('update', 'commit', fallback='commit'),
+        default=config.get('update', 'commit', fallback='commit'),
+        help=commit_git.__doc__)
     parser.add_argument(
         '--cleanup',
         action='store_const',

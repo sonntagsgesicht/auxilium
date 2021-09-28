@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Monday, 27 September 2021
+# Version:  0.1.5, copyright Tuesday, 28 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -21,9 +21,9 @@ from zipfile import ZipFile
 def create_project(name=None, slogan=None, author=None, email=None, url=None,
                    path=getcwd()):
     """create a new python project"""
-    loc = __file__.split(sep)[:-1]
-    loc[-1] = sep.join(('data', 'pkg.zip'))
-    loc = sep.join(loc)
+    pkg_zip_file = __file__.split(sep)[:-2]
+    pkg_zip_file.extend(('data', 'pkg.zip'))
+    pkg_zip_file = join(*pkg_zip_file)
 
     if not any((name, slogan, author, email)):
         log(INFO, '')
@@ -35,23 +35,23 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
     slogan += ' (created with auxilium)'
     author = input('Enter author name   : ') if author is None else author
     email = input('Enter project email : ') if email is None else email
-    url = input('Enter project url   : ') if url is None else url
+    url = input('Enter project url  : ') if url is None else url
     url = url or 'https://github.com/<author>/<name>'
 
-    root_path = path + sep + name
-    pkg_path = root_path + sep + name
+    project_path = join(path, name)
+    pkg_path = join(path, name, name)
 
     # setup project infrastructure
-    if exists(root_path):
-        msg = 'Project dir %s exists. Cannot create new project.' % root_path
+    if exists(project_path):
+        msg = 'Project dir %s exists. Cannot create new project.' % project_path
         raise FileExistsError(msg)
 
-    # shutil.copytree(loc, root_path)
-    with ZipFile(loc, 'r') as zip_ref:
-        zip_ref.extractall(root_path)
+    # shutil.copytree(pkg_zip_file, project_path)
+    with ZipFile(pkg_zip_file, 'r') as zip_ref:
+        zip_ref.extractall(project_path)
 
     makedirs(pkg_path)
-    move(root_path + sep + '__init__.py', pkg_path)
+    move(project_path + sep + '__init__.py', pkg_path)
 
     # setup source directory
     def rp(pth):
@@ -71,12 +71,12 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
         f.close()
 
     rp(pkg_path + sep + '__init__.py')
-    rp(root_path + sep + 'setup.py')
-    rp(root_path + sep + 'README.rst')
-    rp(root_path + sep + 'HOWTO.rst')
-    rp(root_path + sep + 'CHANGES.rst')
-    rp(root_path + sep + 'doc' + sep + 'sphinx' + sep + 'doc.rst')
-    rp(root_path + sep + 'doc' + sep + 'sphinx' + sep + 'conf.py')
+    rp(project_path + sep + 'setup.py')
+    rp(project_path + sep + 'README.rst')
+    rp(project_path + sep + 'HOWTO.rst')
+    rp(project_path + sep + 'CHANGES.rst')
+    rp(project_path + sep + 'doc' + sep + 'sphinx' + sep + 'doc.rst')
+    rp(project_path + sep + 'doc' + sep + 'sphinx' + sep + 'conf.py')
 
     log(INFO, '')
     log(INFO, '*** Created project %s with these files:' % name)
@@ -86,7 +86,7 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
         for file in files:
             log(INFO, '      ' + join(subdir, file))
     log(INFO, '')
-    return root_path
+    return project_path
 
 
 def create_finish(name=basename(getcwd())):
