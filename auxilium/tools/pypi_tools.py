@@ -10,6 +10,13 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
+
+
+
+
+
+
+
 from logging import log, INFO
 
 from auxilium.tools.system_tools import python as _python, module, PYTHON
@@ -17,7 +24,7 @@ from auxilium.tools.system_tools import python as _python, module, PYTHON
 
 def deploy(usr, pwd, python=PYTHON):
     """release on `pypi.org`"""
-    log(INFO, '*** 🛫 deploy release on `pypi.org`')
+    log(INFO, '🛫  deploy release on `pypi.org`')
     # run setuptools build
     _python("setup.py sdist bdist_wheel", venv=python)
     module('twine', 'check dist/*', venv=python)

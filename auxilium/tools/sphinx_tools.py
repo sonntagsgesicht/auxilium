@@ -10,6 +10,17 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
+
+
+
+
+
+
+
+
+
+
+
 from logging import log, INFO
 from os import getcwd, name as os_name
 from os.path import exists, basename
@@ -27,7 +38,7 @@ SPHINX_IN_OUT_PATHS = SPHINX_PATH, SPHINX_BUILD_PATH
 
 def api(pkg=basename(getcwd()), venv=None):
     """add api entries to `sphinx` docs"""
-    log(INFO, '*** 📌 run sphinx apidoc scripts')
+    log(INFO, '📌  run sphinx apidoc scripts')
     if exists(SPHINX_API_PATH):
         rmtree(SPHINX_API_PATH)
     res = 0
@@ -42,21 +53,21 @@ def html(venv=None):
     cleanup(venv)
     if not exists(SPHINX_API_PATH):
         api(venv=venv)
-    log(INFO, '*** 📋 run sphinx html scripts')
+    log(INFO, '📋  run sphinx html scripts')
     return system("sphinx-build -M html %s %s" % SPHINX_IN_OUT_PATHS,
                   venv=venv)
 
 
 def latexpdf(venv=None):
     """build pdf documentation (using `sphinx` and `LaTeX`)"""
-    log(INFO, '*** 📖 run sphinx latexpdf scripts')
+    log(INFO, '📖  run sphinx latexpdf scripts')
     return system("sphinx-build -M latexpdf %s %s" % SPHINX_IN_OUT_PATHS,
                   venv=venv)
 
 
 def doctest(venv=None):
     """run `sphinx` doctest"""
-    log(INFO, '*** 📝 run sphinx doctest scripts')
+    log(INFO, '📝  run sphinx doctest scripts')
     return system("sphinx-build -M doctest %s %s " % SPHINX_IN_OUT_PATHS,
                   venv=venv)
 
@@ -67,12 +78,12 @@ def show(venv=None):
         return system("open %s" % SPHINX_INDEX_FILE, venv=venv)
     if os_name == 'nt':
         return system("start %s" % SPHINX_INDEX_FILE, venv=venv)
-    log(INFO, '*** 💡 find docs at %s' % SPHINX_INDEX_FILE)
+    log(INFO, '💡  find docs at %s' % SPHINX_INDEX_FILE)
     return 1
 
 
 def cleanup(venv=None):
     """remove temporary files"""
-    log(INFO, '*** clean environment')
+    log(INFO, '🧹  clean environment')
     return system("sphinx-build -M clean %s %s" % SPHINX_IN_OUT_PATHS,
                   venv=venv)

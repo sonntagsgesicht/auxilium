@@ -10,6 +10,16 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
+
+
+
+
+
+
+
+
+
+
 from logging import log, INFO
 from os import remove, getcwd
 from os.path import basename, exists, join
@@ -23,14 +33,14 @@ PIP = 'pip'
 
 def upgrade(pkg=PIP, path=getcwd(), venv=PYTHON):
     """upgrade python library [PKG] via `pip`"""
-    log(INFO, '*** upgrade `%s`' % pkg)
+    log(INFO, '🏅  upgrade `%s`' % pkg)
     return module(PIP, 'install --upgrade %s' % pkg, path=path, venv=venv)
 
 
 def requirements(path=getcwd(), venv=PYTHON):
     """manage requirements (dependencies) in `requirements.txt`
         and `upgrade_requirements.txt`"""
-    log(INFO, "*** ⚙️ setup environment requirements")
+    log(INFO, "⚙️  setup environment requirements")
 
     res = 0
     if not exists(join(path, FREEZE_FILE)):
@@ -48,19 +58,19 @@ def requirements(path=getcwd(), venv=PYTHON):
 
 def install(path=getcwd(), venv=PYTHON):
     """(re)install current project via `pip install -e .`"""
-    log(INFO, '*** 🗜️ install project via pip install -e')
+    log(INFO, '🗜  install project via pip install -e')
     return module(PIP, "install --upgrade -e .", path=path, venv=venv)
 
 
 def uninstall(pkg=basename(getcwd()), path=getcwd(), venv=PYTHON):
     """uninstall current project via `pip uninstall`"""
-    log(INFO, '*** 💔 uninstall project via pip uninstall')
+    log(INFO, '💔  uninstall project via pip uninstall')
     return module(PIP, "uninstall -y %s" % pkg, path=path, venv=venv)
 
 
 def cleanup(path=getcwd(), venv=PYTHON):
     """remove temporary files"""
-    log(INFO, '*** clean environment')
+    log(INFO, '🧹  clean environment')
     res = 0
     if exists(join(path, FREEZE_FILE)):
         res += module(PIP, "freeze --exclude-editable > %s" % TEMP_REMOVE_FILE,

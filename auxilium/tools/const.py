@@ -33,3 +33,10 @@ elif os_name == 'posix':
 else:
     VENV_TAIL = ''
     VENV = PYTHON
+
+VERBOSITY_LEVELS = 20, 0, 10, 20, 30, 40, 50
+
+DEBUG_FORMATTER = '%(levelname)-7.7s  %(message)s'
+INFO_FORMATTER = ' %(message)s'
+ERROR_FORMATTER = DEBUG_FORMATTER
+SUB_FORMATTER_PREFIX = '| '

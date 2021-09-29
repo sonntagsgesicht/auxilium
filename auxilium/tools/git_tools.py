@@ -10,6 +10,9 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
+
+
+
 from io import BytesIO
 from logging import log, DEBUG, INFO, ERROR
 from os import getcwd, linesep, chdir
@@ -33,12 +36,12 @@ def commit_git(msg='', path=getcwd()):
     # added, ignored = porcelain.add(repo)
     staged, un_staged, untracked = porcelain.status(repo, False)
     if not any(staged.values()):
-        log(INFO, "*** ⚠️ nothing to commit")
-        log(INFO, "    at " + path)
+        log(INFO, "⚠️  nothing to commit")
+        log(DEBUG, "    at " + path)
         chdir(cwd)
         return 0
 
-    log(INFO, "*** 🚦 file status in `git` repo")
+    log(INFO, "🚦  file status in `git` repo")
     log(INFO, "    at " + path)
 
     if staged['add']:
@@ -59,10 +62,10 @@ def commit_git(msg='', path=getcwd()):
         log(INFO, "    untracked : %s" % p)
     msg = msg if msg else 'Commit'
     msg += EXT
-    log(INFO, "*** 📌 commit changes as `%s`" % msg)
-    log(INFO, "    at " + path)
+    log(INFO, "📌  commit changes as `%s`" % msg)
+    log(DEBUG, "    at " + path)
     res = porcelain.commit(repo, msg)
-    log(INFO, "    as %s" % res.decode())
+    log(DEBUG, "    as %s" % res.decode())
 
     chdir(cwd)
     return 0
@@ -70,8 +73,8 @@ def commit_git(msg='', path=getcwd()):
 
 def tag_git(tag, msg='', path=getcwd()):
     """tag current branch of local `git` repo"""
-    log(INFO, "*** 🏷️ tag current branch as %s" % tag)
-    log(INFO, "    at " + path)
+    log(INFO, "🏷️  tag current branch as %s" % tag)
+    log(DEBUG, "    at " + path)
     if bytearray(tag.encode()) in porcelain.tag_list(Repo(path)):
         log(ERROR,
             "⚠️ Tag %s exists in current branch of local `git` repo" % tag)
@@ -85,12 +88,12 @@ def tag_git(tag, msg='', path=getcwd()):
 
 def push_git(remote='None', path=getcwd()):
     """push current branch of local to remote `git` repo"""
-    log(INFO, "*** 📦 push current branch to remote `git` repo")
+    log(INFO, "📦  push current branch to remote `git` repo")
     http, last = remote.split('//', 1)
     usr_pwd, url = last.split('@', 1)
     usr, _ = usr_pwd.split(':', 1) if ':' in usr_pwd else (usr_pwd, '')
     clean = http + '//' + usr + '@' + url
-    log(INFO, "    at " + clean)
+    log(DEBUG, "    at " + clean)
     if remote:
         log(DEBUG, "    remote: `%s`" % str(remote))
     out, err = BytesIO(), BytesIO()

@@ -10,7 +10,15 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from logging import log, INFO
+
+
+
+
+
+
+
+
+from logging import log, DEBUG, INFO
 from os import getcwd
 
 from .const import PROFILE_PATH
@@ -19,8 +27,8 @@ from .system_tools import system, module, del_tree
 
 def profile(profile_file=PROFILE_PATH, venv=None):
     """profile performance"""
-    log(INFO, '*** ⏱️ run test profiling')
-    log(INFO, '    in ' + getcwd() + ' with ' + profile_file)
+    log(INFO, '⏱️  run test profiling')
+    log(DEBUG, '    in ' + getcwd() + ' with ' + profile_file)
     module('cProfile', '-s tottime %s' % profile_file, venv=venv)
     module('cProfile', '-o .cprofile %s' % profile_file, venv=venv)
     module('pstats', '.cprofile stat', venv=venv)
@@ -29,8 +37,8 @@ def profile(profile_file=PROFILE_PATH, venv=None):
 
 def cleanup():
     """remove temporary files"""
-    log(INFO, '*** cleaner profile')
-    log(INFO, '    in ' + getcwd())
+    log(INFO, '🧹  clean profile')
+    log(DEBUG, '    in ' + getcwd())
 
     # removed profiling data files
     del_tree(".cprofile")

@@ -10,6 +10,12 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
+
+
+
+
+
+
 from logging import log, DEBUG, INFO, ERROR
 from os import linesep, getcwd, name as os_name, remove
 from os.path import basename, exists, isdir, join, normpath
@@ -18,7 +24,7 @@ from sys import executable
 
 from subprocess import run
 
-from .const import PYTHON, VENV_PATH, VENV_TAIL
+from .const import PYTHON, VENV_PATH, VENV_TAIL, SUB_FORMATTER_PREFIX
 
 
 def create_venv(pkg=basename(getcwd()),
@@ -30,8 +36,8 @@ def create_venv(pkg=basename(getcwd()),
     venv = venv if venv and exists(venv) else None
     # strip potential executable from venv_path
     venv_path = venv_path.replace(VENV_TAIL, '')
-    log(INFO, "*** 👻 create virtual environment")
-    log(INFO, "    in " + path + " at " + venv_path)
+    log(INFO, "👻  create virtual environment")
+    log(DEBUG, "    in " + path + " at " + venv_path)
     module('venv', "--clear --prompt %s %s" % (pkg, venv_path),
            path=path, venv=venv)
     return join(venv_path, 'bin', basename(executable))
@@ -52,8 +58,30 @@ def activate_venv(venv_path=VENV_PATH):
             "    unable to activate virtual environment for os %s" % os_name)
 
 
-def system(command, level=DEBUG, path=getcwd(),
-           venv=None, capture_output=True):
+import subprocess
+
+
+def system(command, level=DEBUG, path=getcwd(), venv=None,
+           capture_output=True):
+    log(DEBUG, "    call system(`%s`)" % command)
+    log(DEBUG, "    called in %s" % path)
+    if venv:
+        command = activate_venv(venv) + ' ' + command
+
+    proc = subprocess.Popen(
+        command,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        universal_newlines=True,
+        cwd=path, shell=True, text=True)
+    for stdout_line in iter(proc.stdout.readline, ""):
+        log(level, "    " + SUB_FORMATTER_PREFIX + " " + stdout_line.rstrip())
+    proc.stdout.close()
+    return proc.wait()
+
+
+def _system(command, level=DEBUG, path=getcwd(),
+            venv=None, capture_output=True):
     log(DEBUG, "    call system(`%s`)" % command)
     log(DEBUG, "    called in %s" % path)
     if venv:
@@ -88,9 +116,9 @@ def del_tree(*paths, level=DEBUG):
     for f in paths:
         if exists(f):
             if isdir(f):
-                log(level, '    remove tree below %s' % f)
+                log(level, 'remove tree below %s' % f)
                 rmtree(f)
             else:
-                log(level, '    remove file %s' % f)
+                log(level, 'remove file %s' % f)
                 remove(f)
     return 0

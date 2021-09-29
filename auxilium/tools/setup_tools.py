@@ -10,6 +10,7 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
+
 from datetime import date
 from logging import log, INFO
 from os import getcwd, sep, walk, makedirs
@@ -85,7 +86,7 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
     rp(project_path + sep + 'doc' + sep + 'sphinx' + sep + 'conf.py')
 
     log(INFO, '')
-    log(INFO, '*** 🪚 Created project %s with these files:' % name)
+    log(INFO, '🪚  created project %s with these files:' % name)
     log(INFO, '    in %s' % path)
     for subdir, dirs, files in walk(name):
         log(INFO, '')
@@ -96,6 +97,7 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
 
 
 def create_finish(name=basename(getcwd())):
+    log(INFO, '🏁  project setup finished')
     log(INFO, '')
     log(INFO, 'Consider a first full run via: ')
     log(INFO, '')

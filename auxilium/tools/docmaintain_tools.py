@@ -9,7 +9,6 @@
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
-
 from datetime import date
 from json import load, dump
 from logging import log, INFO, DEBUG
@@ -67,7 +66,8 @@ def set_timestamp(pkg=basename(getcwd()), path=getcwd()):
     f.close()
 
 
-def replace_headers(pkg=basename(getcwd()), last=dict(), path=getcwd()):
+def replace_headers(pkg=basename(getcwd()), last=None, path=getcwd()):
+    last = dict() if last is None else last
     pkg = __import__(pkg) if isinstance(pkg, str) else pkg
     root, _ = split(pkg.__file__)
 
@@ -109,7 +109,7 @@ def replace_headers(pkg=basename(getcwd()), last=dict(), path=getcwd()):
 
                     # add new header
                     if lines:
-                        new_header += '',
+                        # new_header += '',
                         new_lines = new_header + lines
                     else:
                         new_lines = new_header
@@ -117,7 +117,8 @@ def replace_headers(pkg=basename(getcwd()), last=dict(), path=getcwd()):
                     log(DEBUG - 1, linesep.join(new_lines[:20]))
                     f = open(file, 'w')
                     f.write(linesep.join(new_lines))
-                    f.write(linesep)  # last empty line
+                    if new_lines[-1]:
+                        f.write(linesep)  # last empty line
                     f.close()
                     last[file] = str(getmtime(file))
     return last
@@ -125,8 +126,8 @@ def replace_headers(pkg=basename(getcwd()), last=dict(), path=getcwd()):
 
 def docmaintain(pkg=basename(getcwd()), path=getcwd()):
     """update timestamps and file header of modified files"""
-    log(INFO, '*** 🛠️ run docmaintain scripts')
-    log(INFO, '    in ' + path + ' for ' + pkg)
+    log(INFO, '🛠  run header maintenance')
+    log(DEBUG, '    in ' + path + ' for ' + pkg)
     set_timestamp(pkg, path)
 
     last_m_file = join(path, LAST_M_FILE)
