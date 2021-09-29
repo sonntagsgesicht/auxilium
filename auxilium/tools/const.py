@@ -18,11 +18,11 @@ PYTHON = basename(executable)
 
 DEMO_PATH = "auxilium_demo"
 PROFILE_PATH = "dev.py"
-TEST_PATH = normpath('test/')
+TEST_PATH = normpath('./test/')
 
-LAST_M_FILE = normpath('.aux/last.json')
-CONFIG_PATH = normpath('.aux/config')
-VENV_PATH = normpath('.aux/venv/')
+LAST_M_FILE = normpath('./.aux/last.json')
+CONFIG_PATH = normpath('./.aux/config')
+VENV_PATH = normpath('./.aux/venv/')
 
 if os_name == 'nt':
     VENV_TAIL = join('Scripts', PYTHON)
