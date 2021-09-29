@@ -8,10 +8,6 @@
 # Version:  0.1.5, copyright Wednesday, 29 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
-
-
-
-
 from datetime import date
 from json import load, dump
 from logging import log, INFO, DEBUG
@@ -110,8 +106,8 @@ def replace_headers(pkg=basename(getcwd()), last=dict(), path=getcwd()):
                         new_header[0] = removed[0]
 
                     # add new header
-                    if len(lines) > 1:
-                        new_header += ['', '']
+                    # if len(lines) > 1:
+                    #     new_header += ['', '']
                     print(len(lines), file)
                     new_lines = new_header + lines
 
