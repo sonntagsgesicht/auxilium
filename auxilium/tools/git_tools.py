@@ -39,7 +39,7 @@ def commit_git(msg='', path=getcwd()):
         return 0
 
     log(INFO, "🚦  file status in `git` repo")
-    log(INFO, "    at " + path)
+    log(DEBUG, "    at " + path)
 
     if staged['add']:
         log(INFO, "    add:")
