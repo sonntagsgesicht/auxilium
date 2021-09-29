@@ -8,6 +8,8 @@
 # Version:  0.1.5, copyright Wednesday, 29 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
+
+
 import logging
 
 from .rst_tools import replacements_str, replacements_from_pkg, \
