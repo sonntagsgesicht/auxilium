@@ -25,7 +25,7 @@ CONFIG_PATH = normpath('.aux/config')
 VENV_PATH = normpath('.aux/venv/')
 
 if os_name == 'nt':
-    VENV_TAIL = join('Script', PYTHON)
+    VENV_TAIL = join('Scripts', PYTHON)
     VENV = join(VENV_PATH, VENV_TAIL)
 elif os_name == 'posix':
     VENV_TAIL = join('bin', PYTHON)
