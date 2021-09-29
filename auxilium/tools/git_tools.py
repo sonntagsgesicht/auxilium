@@ -33,7 +33,7 @@ def commit_git(msg='', path=getcwd()):
     # added, ignored = porcelain.add(repo)
     staged, un_staged, untracked = porcelain.status(repo, False)
     if not any(staged.values()):
-        log(INFO, "⚠️  nothing to commit")
+        log(INFO, "🤷 not files found. Did not commit.")
         log(DEBUG, "    at " + path)
         chdir(cwd)
         return 0
@@ -70,11 +70,11 @@ def commit_git(msg='', path=getcwd()):
 
 def tag_git(tag, msg='', path=getcwd()):
     """tag current branch of local `git` repo"""
-    log(INFO, "🏷️  tag current branch as %s" % tag)
+    log(INFO, "🏷️ tag current branch as %s" % tag)
     log(DEBUG, "    at " + path)
     if bytearray(tag.encode()) in porcelain.tag_list(Repo(path)):
-        log(ERROR,
-            "⚠️ Tag %s exists in current branch of local `git` repo" % tag)
+        log(ERROR, "🚫  Tag %s exists in current branch "
+                   "of local `git` repo" % tag)
         return 1
 
     if msg:

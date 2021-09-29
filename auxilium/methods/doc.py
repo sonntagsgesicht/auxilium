@@ -41,6 +41,6 @@ def do(pkg=basename(getcwd()), commit=None,
         if doctest_return_code == 0 and html_return_code == 0:
             code = code or commit_git(commit)
         else:
-            log(ERROR,
-                "⚠️ Doc test or build missing or failed. Did not commit.")
+            log(ERROR, "🚫 doctest or build missing or failed. "
+                       "Did not commit.")
     return code

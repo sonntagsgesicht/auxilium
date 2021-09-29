@@ -28,7 +28,6 @@ def do(name=None, slogan=None, author=None, email=None, url=None,
         project_path = join(path, name) if name else path
         pkg = basename(project_path)
         code = 0
-        commit = ''  # skip commit too
     else:
         # creat project
         project_path = \

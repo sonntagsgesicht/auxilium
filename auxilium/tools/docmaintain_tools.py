@@ -48,6 +48,9 @@ def set_timestamp(pkg=basename(getcwd()), path=getcwd()):
     # pkg = __import__(pkg) if isinstance(pkg, str) else pkg
     pkg = pkg if isinstance(pkg, str) else pkg.__name__
     file = join(path, pkg, '__init__.py')
+    d = date.today().strftime('%A, %d %B %Y')
+    a = (pkg, d, file)
+    log(DEBUG, "    set %s.__date__ = %s in %s" % a)
     # read file lines into list
     f = open(file, 'r')
     lines = list(map(str.rstrip, f.readlines()))
@@ -55,9 +58,6 @@ def set_timestamp(pkg=basename(getcwd()), path=getcwd()):
     # make replacement
     for i, line in enumerate(lines):
         if line.startswith('__date__ = '):
-            d = date.today().strftime('%A, %d %B %Y')
-            a = (pkg, d, file)
-            log(DEBUG, "    set %s.__date__ = %s in %s" % a)
             lines[i] = "__date__ = '" + d + "'"
             break
     # write file
@@ -65,6 +65,7 @@ def set_timestamp(pkg=basename(getcwd()), path=getcwd()):
     f.write(linesep.join(lines))
     f.write(linesep)  # last empty line
     f.close()
+    return
 
 
 def replace_headers(pkg=basename(getcwd()), last=None, path=getcwd()):

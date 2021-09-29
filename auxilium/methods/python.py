@@ -10,6 +10,7 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
+from logging import INFO, log
 from ..tools.system_tools import python as _python
 
 
@@ -25,4 +26,5 @@ def do(c='', m='', f='', stdin='', arg=(), env=None, **kwargs):
         cmd = '-'
     if arg:
         cmd += ' ' + ' '.join(arg)
-    return _python(cmd, venv=env, capture_output=False)
+    log(INFO, '🐍 ...')
+    return _python(cmd, level=INFO, venv=env, capture_output=False)

@@ -10,7 +10,7 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from logging import log, INFO
+from logging import log, INFO, WARNING
 from os import remove, getcwd
 from os.path import basename, exists, join
 
@@ -49,7 +49,11 @@ def requirements(path=getcwd(), venv=PYTHON):
 def install(path=getcwd(), venv=PYTHON):
     """(re)install current project via `pip install -e .`"""
     log(INFO, '🗜  install project via pip install -e')
-    return module(PIP, "install --upgrade -e .", path=path, venv=venv)
+    if exists('setup.py') or exists('setup.cfg'):
+        return module(PIP, "install --upgrade -e .", path=path, venv=venv)
+    log(WARNING, '⛔️  could not install project via pip install -e '
+                 '(setup.py or setup.cfg not found in %s)' % path)
+    return 1
 
 
 def uninstall(pkg=basename(getcwd()), path=getcwd(), venv=PYTHON):

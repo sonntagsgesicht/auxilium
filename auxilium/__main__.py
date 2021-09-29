@@ -124,8 +124,21 @@ def main():
     logging.basicConfig(level=verbosity, format=formatter)
     logging.log(1, args)
 
+    # check virtual environment
+    if args.env \
+            and not os.path.exists(args.env) \
+            and args.command != 'create'\
+            and not args.demo:
+        msg = '⛔   did not find a virtual environment at %s. ' % args.env
+        logging.log(logging.WARN, msg)
+        msg = '    consider creating one with ' \
+              '`auxilium create --update --venv=[PATH]` or ' \
+              'use an `-e= ` argument'
+        logging.log(logging.WARN, msg)
+        sys.exit(1)
+
     if args.demo:
-        logging.log(logging.INFO, '🍹  starting demo')
+        logging.log(logging.INFO, '🍹  starting demo - relax')
 
         del_tree(DEMO_PATH)
         v = '-' + 'v' * args.verbosity if args.verbosity else ''
@@ -150,9 +163,23 @@ def main():
 
     path = os.getcwd()
     pkg = os.path.basename(os.getcwd())
+    full_path = os.path.join(path, pkg)
+
+    if not os.path.exists(full_path) \
+            and args.command not in ('create', 'python'):
+        msg = '⛔   no maintainable project found at %s ' % full_path
+        logging.log(logging.WARN, msg)
+        msg = '    consider creating one with `auxilium create` ' \
+              '(or did you mean `auxilium python`?)'
+
+        logging.log(logging.WARN, msg)
+        sys.exit(1)
+
     kwargs = vars(args)
     kwargs['path'] = kwargs.get('path', path)
     kwargs['pkg'] = kwargs.get('name', pkg)
+
+    # path/project/project
 
     if path not in sys.path:
         sys.path.append(path)
