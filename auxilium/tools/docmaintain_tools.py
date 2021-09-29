@@ -110,8 +110,9 @@ def replace_headers(pkg=basename(getcwd()), last=dict(), path=getcwd()):
                     # add new header
                     if lines:
                         new_header += '',
-                    print(len(lines), file)
-                    new_lines = new_header + lines
+                        new_lines = new_header + lines
+                    else:
+                        new_lines = new_header
 
                     log(DEBUG - 1, linesep.join(new_lines[:20]))
                     f = open(file, 'w')

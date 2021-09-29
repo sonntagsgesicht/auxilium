@@ -9,7 +9,6 @@
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
-
 import logging
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
