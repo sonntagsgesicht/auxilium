@@ -11,6 +11,7 @@
 
 
 from datetime import date
+from io import open
 from json import load, dump
 from logging import log, INFO, DEBUG
 from os import walk, sep, getcwd, linesep, mkdir
@@ -52,7 +53,7 @@ def set_timestamp(pkg=basename(getcwd()), path=getcwd()):
     a = (pkg, d, file)
     log(DEBUG, "    set %s.__date__ = %s in %s" % a)
     # read file lines into list
-    f = open(file, 'r')
+    f = open(file, 'r', newline='\n', encoding='utf-8')
     lines = list(map(str.rstrip, f.readlines()))
     f.close()
     # make replacement
@@ -61,8 +62,8 @@ def set_timestamp(pkg=basename(getcwd()), path=getcwd()):
             lines[i] = "__date__ = '" + d + "'"
             break
     # write file
-    f = open(file, 'w')
-    f.write(linesep.join(lines))
+    f = open(file, 'w', newline='\n', encoding='utf-8')
+    f.writelines(lines)
     f.write(linesep)  # last empty line
     f.close()
     return
@@ -96,7 +97,7 @@ def replace_headers(pkg=basename(getcwd()), last=None, path=getcwd()):
                     log(DEBUG, '    update file header of %s' % file)
 
                     # read file lines into list
-                    f = open(file, 'r')
+                    f = open(file, 'r', newline='\n', encoding='utf-8')
                     lines = list(map(str.rstrip, f.readlines()))
                     f.close()
 
@@ -118,7 +119,7 @@ def replace_headers(pkg=basename(getcwd()), last=None, path=getcwd()):
                         new_lines = new_header
 
                     log(DEBUG - 1, linesep.join(new_lines[:20]))
-                    f = open(file, 'w')
+                    f = open(file, 'w', newline='\n', encoding='utf-8')
                     f.write(linesep.join(new_lines))
                     if new_lines[-1].strip():
                         f.write(linesep)  # last empty line
