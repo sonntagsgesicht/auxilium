@@ -1,7 +1,0 @@
-
---------
-Tutorial
---------
-
-
-.. include:: ..//..//HOWTO.rst
