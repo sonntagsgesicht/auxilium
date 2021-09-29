@@ -10,19 +10,13 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-
-
-
-
-
-
 from logging import log, DEBUG, INFO, ERROR
 from os import linesep, getcwd, name as os_name, remove
 from os.path import basename, exists, isdir, join, normpath
 from shutil import rmtree
 from sys import executable
 
-from subprocess import run
+from subprocess import run, Popen, PIPE, STDOUT
 
 from .const import PYTHON, VENV_PATH, VENV_TAIL, SUB_FORMATTER_PREFIX
 
@@ -58,9 +52,6 @@ def activate_venv(venv_path=VENV_PATH):
             "    unable to activate virtual environment for os %s" % os_name)
 
 
-import subprocess
-
-
 def system(command, level=DEBUG, path=getcwd(), venv=None,
            capture_output=True):
     log(DEBUG, "    call system(`%s`)" % command)
@@ -68,10 +59,10 @@ def system(command, level=DEBUG, path=getcwd(), venv=None,
     if venv:
         command = activate_venv(venv) + ' ' + command
 
-    proc = subprocess.Popen(
+    proc = Popen(
         command,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
+        stdout=PIPE,
+        stderr=STDOUT,
         universal_newlines=True,
         cwd=path, shell=True, text=True)
     for stdout_line in iter(proc.stdout.readline, ""):

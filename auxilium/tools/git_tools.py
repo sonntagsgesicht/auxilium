@@ -10,9 +10,6 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-
-
-
 from io import BytesIO
 from logging import log, DEBUG, INFO, ERROR
 from os import getcwd, linesep, chdir

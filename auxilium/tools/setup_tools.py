@@ -10,7 +10,6 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-
 from datetime import date
 from logging import log, INFO
 from os import getcwd, sep, walk, makedirs

@@ -9,6 +9,7 @@
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
+
 from datetime import date
 from json import load, dump
 from logging import log, INFO, DEBUG
@@ -100,7 +101,9 @@ def replace_headers(pkg=basename(getcwd()), last=None, path=getcwd()):
 
                     # remove old header
                     removed = list()
-                    while lines and (not lines[0] or lines[0].startswith('#')):
+                    while lines and \
+                            (lines[0].strip() == '' or
+                             lines[0].startswith('#')):
                         removed.append(lines.pop(0).strip())
 
                     # keep first line in script files
@@ -109,15 +112,14 @@ def replace_headers(pkg=basename(getcwd()), last=None, path=getcwd()):
 
                     # add new header
                     if lines:
-                        # new_header += '',
-                        new_lines = new_header + lines
+                        new_lines = new_header + ['', ''] + lines
                     else:
                         new_lines = new_header
 
                     log(DEBUG - 1, linesep.join(new_lines[:20]))
                     f = open(file, 'w')
                     f.write(linesep.join(new_lines))
-                    if new_lines[-1]:
+                    if new_lines[-1].strip():
                         f.write(linesep)  # last empty line
                     f.close()
                     last[file] = str(getmtime(file))

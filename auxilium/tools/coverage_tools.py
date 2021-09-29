@@ -10,18 +10,6 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 from logging import log, INFO, DEBUG
 from os import getcwd
 from os.path import basename
