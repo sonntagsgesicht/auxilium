@@ -14,15 +14,18 @@
 import sys
 import os
 import unittest
-import logging
 import datetime
 import shutil
 
+from auxilium.tools.system_tools import module
+
 sys.path.append('..')
 
-logging.basicConfig()
-
 CWD, _ = os.path.split(__file__)
+
+
+def auxilium(command):
+    return(module('auxilium', command))
 
 
 class CreateRepoUnitTests(unittest.TestCase):
@@ -46,30 +49,31 @@ class CreateRepoUnitTests(unittest.TestCase):
             os.mkdir(self.wdir)
 
     def test_auxilium_demo(self):
+        self.assertEqual(0, auxilium('-z -vv -e="" -demo'))
         self.assertEqual(0, os.system('auxilium -z -vv -demo'))
 
         os.chdir('auxilium_demo')
-        self.assertEqual(0, os.system('auxilium -z -vv update'))
-        self.assertEqual(0, os.system('auxilium -z -vv test'))
-        self.assertEqual(0, os.system('auxilium -z -vv doc'))
-        self.assertEqual(0, os.system('auxilium -z -vv deploy'))
+        os.chdir('auxilium_demo')
+        self.assertEqual(0, auxilium('-z -vv update'))
+        self.assertEqual(0, auxilium('-z -vv test'))
+        self.assertEqual(0, auxilium('-z -vv doc'))
+        self.assertEqual(0, auxilium('-z -vv deploy'))
 
-        self.assertNotEqual(0, os.system('auxilium deploy -z -vv --tag'))
+        self.assertNotEqual(0, auxilium('deploy -z -vv --tag'))
 
     def test_unicorn(self):
         inputs = self.name, self.doc, self.author, self.email, self.url
         with open('%s_details' % self.name, "w") as f:
             f.write(os.linesep.join(inputs))
-        self.assertEqual(0, os.system(
-            "auxilium -z -vv create < %s_details" % self.name))
+        self.assertEqual(0, auxilium('-z -vv create < %s_details' % self.name))
 
         os.chdir(self.name)
         self.assertEqual(os.getcwd().split(os.sep)[-1], self.name)
 
-        self.assertEqual(0, os.system('auxilium -z -vv update'))
-        self.assertEqual(0, os.system('auxilium -z -vv test'))
-        self.assertEqual(0, os.system('auxilium -z -vv doc'))
-        self.assertEqual(0, os.system('auxilium -z -vv deploy'))
+        self.assertEqual(0, auxilium('-z -vv update'))
+        self.assertEqual(0, auxilium('-z -vv test'))
+        self.assertEqual(0, auxilium('-z -vv doc'))
+        self.assertEqual(0, auxilium('-z -vv deploy'))
 
 
 if __name__ == "__main__":

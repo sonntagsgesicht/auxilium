@@ -16,6 +16,7 @@ from sys import executable
 
 PYTHON = basename(executable)
 
+DEMO_PATH = "auxilium_demo"
 PROFILE_PATH = "dev.py"
 TEST_PATH = normpath('test/')
 

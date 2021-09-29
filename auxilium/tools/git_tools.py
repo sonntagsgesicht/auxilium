@@ -38,7 +38,7 @@ def commit_git(msg='', path=getcwd()):
         chdir(cwd)
         return 0
 
-    log(INFO, "*** file status in `git` repo")
+    log(INFO, "*** 🚦 file status in `git` repo")
     log(INFO, "    at " + path)
 
     if staged['add']:

@@ -19,8 +19,9 @@ from argparse import ArgumentParser
 from configparser import ConfigParser
 
 from auxilium.add_arguments import ArgumentDefaultsAndConstsHelpFormatter
+from auxilium.tools.const import CONFIG_PATH, DEMO_PATH
 from auxilium.tools.setup_tools import create_project
-from auxilium.tools.const import CONFIG_PATH
+from auxilium.tools.system_tools import module, del_tree
 from auxilium import add_arguments, methods
 
 
@@ -113,25 +114,27 @@ def main():
 
     args = parser.parse_args()
 
-    if args.demo:
-        v = '-' + 'v' * args.verbosity if args.verbosity else ''
-        z = '-' + 'z' * args.exit_non_zero if args.exit_non_zero else ''
-        cmd = ("rm -f -r auxilium_demo; "
-               "auxilium %s %s create "
-               "--name=auxilium_demo "
-               "--slogan='a demo by auxilium'  "
-               "--author=auxilium "
-               "--email='sonntagsgesicht@icould.com' "
-               "--url='https://github.com/sonntagsgesicht/auxilium;'") % (v, z)
-        print(cmd)
-        sys.exit(os.system(cmd))
-
     verbosity = LEVELS[min(args.verbosity, len(LEVELS) - 1)]
     log_format = '[%(asctime)s] %(levelname)-12.8s %(message)s'
     if verbosity > logging.DEBUG:
         log_format = '%(message)s'
     logging.basicConfig(level=verbosity, format=log_format)
     logging.log(1, args)
+
+    if args.demo:
+        del_tree(DEMO_PATH)
+        v = '-' + 'v' * args.verbosity if args.verbosity else ''
+        z = '-' + 'z' * args.exit_non_zero if args.exit_non_zero else ''
+        e = '-e=' + args.env
+        cmd = (" %s %s %s create "
+               "--name=%s "
+               "--slogan='a demo by auxilium'  "
+               "--author=auxilium "
+               "--email='sonntagsgesicht@icould.com' "
+               "--url='https://github.com/sonntagsgesicht/auxilium'") % \
+              (v, z, e, DEMO_PATH)
+        print(cmd)
+        sys.exit(module('auxilium', cmd))
 
     method = getattr(methods, str(args.command), None)
     if method is None:
