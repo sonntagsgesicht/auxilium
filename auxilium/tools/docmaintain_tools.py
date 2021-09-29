@@ -10,8 +10,6 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-
-
 from datetime import date
 from json import load, dump
 from logging import log, INFO, DEBUG
@@ -111,7 +109,7 @@ def replace_headers(pkg=basename(getcwd()), last=dict(), path=getcwd()):
 
                     # add new header
                     if lines:
-                        new_header += '', ''
+                        new_header += '',
                     print(len(lines), file)
                     new_lines = new_header + lines
 
