@@ -32,7 +32,7 @@ def create_venv(pkg=basename(getcwd()),
     log(INFO, "👻  create virtual environment")
     module('venv', "--clear --prompt %s %s" % (pkg, venv_path),
            path=path, venv=venv)
-    return join(venv_path, 'bin', basename(executable))
+    return join(venv_path, VENV_TAIL)
 
 
 def activate_venv(venv_path=VENV_PATH):
@@ -41,10 +41,10 @@ def activate_venv(venv_path=VENV_PATH):
     venv_path = venv_path.replace(VENV_TAIL, '')
     if os_name == 'nt':
         log(DEBUG, "    activate virtual environment at %s" % venv_path)
-        return normpath(join(venv_path, 'Scripts', 'activate.bat'))
+        return join(venv_path, 'Scripts', 'activate.bat')
     elif os_name == 'posix':
         log(DEBUG, "    activate virtual environment at %s" % venv_path)
-        return "source %s; " % normpath(join(venv_path, 'bin', 'activate'))
+        return "source %s; " % join(venv_path, 'bin', 'activate')
     else:
         log(ERROR,
             "    unable to activate virtual environment for os %s" % os_name)
@@ -89,7 +89,7 @@ def _run(command, level=DEBUG, path=getcwd()):
 
 def python(command, level=DEBUG, path=getcwd(), venv=None,
            capture_output=True):
-    venv = normpath(venv) if venv else PYTHON
+    venv = venv if venv else PYTHON
     return shell(venv + ' ' + command, level, path,
                  capture_output=capture_output)
 

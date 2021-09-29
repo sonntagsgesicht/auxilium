@@ -14,20 +14,20 @@ from logging import log, INFO, WARNING
 from os import remove, getcwd
 from os.path import basename, exists, join
 
-from auxilium.tools.system_tools import module, PYTHON, del_tree
+from auxilium.tools.system_tools import module, del_tree
 
 FREEZE_FILE = '.freeze'
 TEMP_REMOVE_FILE = '.site_packages_to_remove'
 PIP = 'pip'
 
 
-def upgrade(pkg=PIP, path=getcwd(), venv=PYTHON):
+def upgrade(pkg=PIP, path=getcwd(), venv=None):
     """upgrade python library [PKG] via `pip`"""
     log(INFO, '🏅  upgrade `%s`' % pkg)
     return module(PIP, 'install --upgrade %s' % pkg, path=path, venv=venv)
 
 
-def requirements(path=getcwd(), venv=PYTHON):
+def requirements(path=getcwd(), venv=None):
     """manage requirements (dependencies) in `requirements.txt`
         and `upgrade_requirements.txt`"""
     log(INFO, "⚙️  setup environment requirements")
@@ -46,7 +46,7 @@ def requirements(path=getcwd(), venv=PYTHON):
     return res
 
 
-def install(path=getcwd(), venv=PYTHON):
+def install(path=getcwd(), venv=None):
     """(re)install current project via `pip install -e .`"""
     log(INFO, '🗜  install project via pip install -e')
     if exists('setup.py') or exists('setup.cfg'):
@@ -56,13 +56,13 @@ def install(path=getcwd(), venv=PYTHON):
     return 1
 
 
-def uninstall(pkg=basename(getcwd()), path=getcwd(), venv=PYTHON):
+def uninstall(pkg=basename(getcwd()), path=getcwd(), venv=None):
     """uninstall current project via `pip uninstall`"""
     log(INFO, '💔  uninstall project via pip uninstall')
     return module(PIP, "uninstall -y %s" % pkg, path=path, venv=venv)
 
 
-def cleanup(path=getcwd(), venv=PYTHON):
+def cleanup(path=getcwd(), venv=None):
     """remove temporary files"""
     log(INFO, '🧹  clean environment')
     res = 0
