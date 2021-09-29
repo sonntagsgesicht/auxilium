@@ -10,6 +10,8 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
+
+
 from datetime import date
 from json import load, dump
 from logging import log, INFO, DEBUG
@@ -82,7 +84,6 @@ def replace_headers(pkg=basename(getcwd()), last=dict(), path=getcwd()):
     new_lines += "License:  " + pkg.__license__ + " (see LICENSE file)",
     new_header = ["# -*- coding: utf-8 -*-", '']
     new_header += ['# ' + line for line in new_lines]
-    new_header += ['', '']
     new_header = [line.strip() for line in new_header]
 
     for subdir, dirs, files in walk(root):
@@ -109,6 +110,9 @@ def replace_headers(pkg=basename(getcwd()), last=dict(), path=getcwd()):
                         new_header[0] = removed[0]
 
                     # add new header
+                    if len(lines) > 1:
+                        new_header += ['', '']
+                    print(len(lines), file)
                     new_lines = new_header + lines
 
                     log(DEBUG - 1, '\n'.join(new_lines[:20]))
