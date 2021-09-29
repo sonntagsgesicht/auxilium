@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Wednesday, 29 September 2021
+# Version:  0.1.5, copyright Thursday, 30 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -16,6 +16,8 @@ from os import getcwd, sep, walk, makedirs
 from os.path import exists, join, basename
 from shutil import move
 from zipfile import ZipFile
+
+from .system_tools import open
 
 EXT = ' (created by auxilium)'
 PKG_ZIP_FILE = \

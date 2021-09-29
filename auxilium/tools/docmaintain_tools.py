@@ -5,22 +5,21 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Wednesday, 29 September 2021
+# Version:  0.1.5, copyright Thursday, 30 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
 
 from datetime import date
-from io import open
 from json import load, dump
 from logging import log, INFO, DEBUG
-from os import walk, sep, getcwd, linesep, mkdir
+from os import walk, sep, getcwd, linesep as _linesep, mkdir
 from os.path import basename, join, getmtime, exists, split
 from sys import path as sys_path
 from textwrap import wrap
 
 from .const import LAST_M_FILE
-
+from .system_tools import linesep, open
 
 def get_attr(attr, pkg=basename(getcwd()), path=getcwd()):
     default = '<%s>' % attr
@@ -53,7 +52,7 @@ def set_timestamp(pkg=basename(getcwd()), path=getcwd()):
     a = (pkg, d, file)
     log(DEBUG, "    set %s.__date__ = %s in %s" % a)
     # read file lines into list
-    f = open(file, 'r', newline='\n', encoding='utf-8')
+    f = open(file)
     lines = list(map(str.rstrip, f.readlines()))
     f.close()
     # make replacement
@@ -62,8 +61,8 @@ def set_timestamp(pkg=basename(getcwd()), path=getcwd()):
             lines[i] = "__date__ = '" + d + "'"
             break
     # write file
-    f = open(file, 'w', newline='\n', encoding='utf-8')
-    f.writelines(lines)
+    f = open(file, 'w')
+    f.write(linesep.join(lines))
     f.write(linesep)  # last empty line
     f.close()
     return
@@ -97,7 +96,7 @@ def replace_headers(pkg=basename(getcwd()), last=None, path=getcwd()):
                     log(DEBUG, '    update file header of %s' % file)
 
                     # read file lines into list
-                    f = open(file, 'r', newline='\n', encoding='utf-8')
+                    f = open(file)
                     lines = list(map(str.rstrip, f.readlines()))
                     f.close()
 
@@ -118,8 +117,8 @@ def replace_headers(pkg=basename(getcwd()), last=None, path=getcwd()):
                     else:
                         new_lines = new_header
 
-                    log(DEBUG - 1, linesep.join(new_lines[:20]))
-                    f = open(file, 'w', newline='\n', encoding='utf-8')
+                    log(DEBUG - 1, _linesep.join(new_lines[:20]))
+                    f = open(file, 'w')
                     f.write(linesep.join(new_lines))
                     if new_lines[-1].strip():
                         f.write(linesep)  # last empty line

@@ -5,17 +5,17 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Wednesday, 29 September 2021
+# Version:  0.1.5, copyright Thursday, 30 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
 
 from logging import log, INFO
 
-from auxilium.tools.system_tools import python as _python, module, PYTHON
+from auxilium.tools.system_tools import python as _python, module
 
 
-def deploy(usr, pwd, python=PYTHON):
+def deploy(usr, pwd, python=None):
     """release on `pypi.org`"""
     log(INFO, '🛫  deploy release on `pypi.org`')
     # run setuptools build

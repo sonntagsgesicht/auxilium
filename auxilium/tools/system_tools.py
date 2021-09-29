@@ -5,19 +5,26 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Wednesday, 29 September 2021
+# Version:  0.1.5, copyright Thursday, 30 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
 
+from io import open as _open
 from logging import log, DEBUG, INFO, ERROR
-from os import linesep, getcwd, name as os_name, remove
+from os import linesep as _linesep, getcwd, name as os_name, remove
 from os.path import basename, exists, isdir, join, normpath
 from shutil import rmtree
 from subprocess import run, Popen, PIPE, STDOUT  # nosec
 from sys import executable
 
 from .const import PYTHON, VENV_PATH, VENV_TAIL, SUB_FORMATTER_PREFIX
+
+linesep = '\n'
+
+
+def open(name, mode='r'):
+    return _open(name, mode, encoding='utf-8', newline=linesep)
 
 
 def create_venv(pkg=basename(getcwd()),
@@ -77,11 +84,11 @@ def _run(command, level=DEBUG, path=getcwd()):
         command, cwd=path, shell=True, capture_output=True, text=True)  # nosec
     log_level = ERROR if proc.returncode else level
     if proc.stdout:
-        for line in str(proc.stdout).split(linesep):
+        for line in str(proc.stdout).split(_linesep):
             if line:
                 log(log_level, line)
     if proc.stderr:
-        for line in str(proc.stderr).split(linesep):
+        for line in str(proc.stderr).split(_linesep):
             if line:
                 log(log_level, line)
     return proc.returncode
