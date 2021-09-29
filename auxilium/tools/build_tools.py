@@ -10,7 +10,7 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from logging import log, DEBUG, INFO
+from logging import log, INFO
 from os import getcwd
 from os.path import basename
 
@@ -20,7 +20,6 @@ from auxilium.tools.system_tools import python as _python, module, del_tree
 def build(venv=None):
     """build package distribution"""
     log(INFO, '🏗  build package distribution')
-    log(DEBUG, '    in ' + getcwd())
     res = 0
     res += _python("setup.py build", venv=venv)
     res += _python("setup.py sdist --formats=zip", venv=venv)
@@ -32,7 +31,6 @@ def build(venv=None):
 def cleanup(pkg=basename(getcwd())):
     """remove temporary files"""
     log(INFO, '🧹  clean environment')
-    log(DEBUG, '    in ' + getcwd())
     # remove setuptools release files
     del_tree("build", "dist")
     return 0

@@ -129,7 +129,6 @@ def replace_headers(pkg=basename(getcwd()), last=None, path=getcwd()):
 def docmaintain(pkg=basename(getcwd()), path=getcwd()):
     """update timestamps and file header of modified files"""
     log(INFO, '🛠  run header maintenance')
-    log(DEBUG, '    in ' + path + ' for ' + pkg)
     set_timestamp(pkg, path)
 
     last_m_file = join(path, LAST_M_FILE)

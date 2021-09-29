@@ -55,7 +55,7 @@ def do(pkg=basename(getcwd()), commit=None, tag=None, header=None,
         if build_return_code == 0:
             url = remote.replace('https://', '')
             usr = remote_usr
-            pwd = '' if remote_pwd == 'None' else ':' + remote_pwd
+            pwd = '' if remote_pwd == 'None' else ':' + remote_pwd  # nosec
             remote = 'https://' + usr + pwd + '@' + url
             code = code or push_git(remote, path)
         else:

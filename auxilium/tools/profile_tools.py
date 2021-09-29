@@ -10,28 +10,24 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from logging import log, DEBUG, INFO
-from os import getcwd
+from logging import log, INFO
 
 from .const import PROFILE_PATH
-from .system_tools import system, module, del_tree
+from .system_tools import shell, module, del_tree
 
 
 def profile(profile_file=PROFILE_PATH, venv=None):
     """profile performance"""
     log(INFO, '⏱️  run test profiling')
-    log(DEBUG, '    in ' + getcwd() + ' with ' + profile_file)
     module('cProfile', '-s tottime %s' % profile_file, venv=venv)
     module('cProfile', '-o .cprofile %s' % profile_file, venv=venv)
     module('pstats', '.cprofile stat', venv=venv)
-    system('snakeviz .cprofile', venv=venv)
+    shell('snakeviz .cprofile', venv=venv)
 
 
 def cleanup():
     """remove temporary files"""
     log(INFO, '🧹  clean profile')
-    log(DEBUG, '    in ' + getcwd())
-
     # removed profiling data files
     del_tree(".cprofile")
     return 0

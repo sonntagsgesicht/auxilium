@@ -10,7 +10,7 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from logging import log, INFO, DEBUG
+from logging import log, INFO
 from os import getcwd
 from os.path import basename
 
@@ -20,11 +20,9 @@ from auxilium.tools.system_tools import module
 def security(pkg=basename(getcwd()), venv=None):
     """evaluate security of source code"""
     log(INFO, '🚨  evaluate security of source code')
-    log(DEBUG, '    in ' + getcwd() + ' for ' + pkg)
     return security_bandit(pkg, venv=venv)
 
 
 def security_bandit(pkg=basename(getcwd()), venv=None):
     """run `bandit` on source code """
-    log(DEBUG, '  run `bandit` on source code')
     return module('bandit', '-r -q %s' % pkg, level=INFO, venv=venv)

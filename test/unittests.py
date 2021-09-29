@@ -24,7 +24,7 @@ sys.path.append('..')
 
 CWD, _ = os.path.split(__file__)
 
-log_format = "•%(message)s"
+log_format = "• %(message)s"
 logging.basicConfig(level=logging.DEBUG, format=log_format)
 
 
@@ -34,6 +34,8 @@ def auxilium(command, path=None):
 
 class CreateRepoUnitTests(unittest.TestCase):
     def setUp(self):
+        logging.log(logging.INFO, '')
+        logging.log(logging.DEBUG, 'start unittests')
         self.wdir = os.path.join(CWD, 'working_dir')
         self.name = 'unicorn'
         self.doc = 'Always be a unicorn.'
@@ -48,22 +50,23 @@ class CreateRepoUnitTests(unittest.TestCase):
         del_tree(self.wdir)
 
     def test_auxilium_demo(self):
-        self.assertEqual(0, auxilium('-z -vv -e="" -demo', path=self.wdir))
+        self.assertEqual(0, auxilium('-z -vv -demo', path=self.wdir))
         path = os.path.join(self.wdir, DEMO_PATH)
-        #self.assertEqual(0, auxilium('-z -vv update', path=path))
-        #self.assertEqual(0, auxilium('-z -vv test', path=path))
-        #self.assertEqual(0, auxilium('-z -vv doc', path=path))
-        #self.assertEqual(0, auxilium('-z -vv deploy', path=path))
+        self.assertEqual(0, auxilium('-z -vv update', path=path))
+        self.assertEqual(0, auxilium('-z -vv test', path=path))
+        self.assertEqual(0, auxilium('-z -vv doc', path=path))
+        self.assertEqual(0, auxilium('-z -vv deploy', path=path))
 
-        #self.assertNotEqual(0, auxilium('deploy -z -vv --tag', path=path))
+        self.assertEqual(0, auxilium('-z -vv deploy --tag', path=path))
+        self.assertNotEqual(0, auxilium('-z -vv deploy --tag', path=path))
 
-    def _test_unicorn(self):
+    def test_unicorn(self):
         inputs = self.name, self.doc, self.author, self.email, self.url
         file_path = os.path.join(self.wdir, self.name + '_details')
         with open(file_path, "w") as f:
             f.write(os.linesep.join(inputs))
         self.assertEqual(0, auxilium('-z -vv create < %s' % file_path,
-                                     path = self.wdir))
+                                     path=self.wdir))
 
         path = os.path.join(self.wdir, self.name)
 

@@ -16,7 +16,7 @@ from os.path import exists, basename
 from shutil import rmtree
 
 from auxilium.tools.git_tools import commit_git
-from .system_tools import system
+from .system_tools import shell
 
 SPHINX_API_PATH = "doc/sphinx/api"
 SPHINX_INDEX_FILE = "./doc/sphinx/_build/html/intro.html"
@@ -32,7 +32,7 @@ def api(pkg=basename(getcwd()), venv=None):
         rmtree(SPHINX_API_PATH)
     res = 0
     cmd = "sphinx-apidoc -o %s -f -E %s" % (SPHINX_API_PATH, pkg)
-    res += system(cmd, venv=venv)
+    res += shell(cmd, venv=venv)
     res += commit_git('added `%s`' % SPHINX_API_PATH)
     return res
 
@@ -43,30 +43,30 @@ def html(venv=None):
     if not exists(SPHINX_API_PATH):
         api(venv=venv)
     log(INFO, '📋  run sphinx html scripts')
-    return system("sphinx-build -M html %s %s" % SPHINX_IN_OUT_PATHS,
-                  venv=venv)
+    return shell("sphinx-build -M html %s %s" % SPHINX_IN_OUT_PATHS,
+                 venv=venv)
 
 
 def latexpdf(venv=None):
     """build pdf documentation (using `sphinx` and `LaTeX`)"""
     log(INFO, '📖  run sphinx latexpdf scripts')
-    return system("sphinx-build -M latexpdf %s %s" % SPHINX_IN_OUT_PATHS,
-                  venv=venv)
+    return shell("sphinx-build -M latexpdf %s %s" % SPHINX_IN_OUT_PATHS,
+                 venv=venv)
 
 
 def doctest(venv=None):
     """run `sphinx` doctest"""
     log(INFO, '📝  run sphinx doctest scripts')
-    return system("sphinx-build -M doctest %s %s " % SPHINX_IN_OUT_PATHS,
-                  venv=venv)
+    return shell("sphinx-build -M doctest %s %s " % SPHINX_IN_OUT_PATHS,
+                 venv=venv)
 
 
 def show(venv=None):
     """show html documentation"""
     if os_name == 'posix':
-        return system("open %s" % SPHINX_INDEX_FILE, venv=venv)
+        return shell("open %s" % SPHINX_INDEX_FILE, venv=venv)
     if os_name == 'nt':
-        return system("start %s" % SPHINX_INDEX_FILE, venv=venv)
+        return shell("start %s" % SPHINX_INDEX_FILE, venv=venv)
     log(INFO, '💡  find docs at %s' % SPHINX_INDEX_FILE)
     return 1
 
@@ -74,5 +74,5 @@ def show(venv=None):
 def cleanup(venv=None):
     """remove temporary files"""
     log(INFO, '🧹  clean environment')
-    return system("sphinx-build -M clean %s %s" % SPHINX_IN_OUT_PATHS,
-                  venv=venv)
+    return shell("sphinx-build -M clean %s %s" % SPHINX_IN_OUT_PATHS,
+                 venv=venv)

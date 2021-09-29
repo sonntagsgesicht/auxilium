@@ -11,7 +11,7 @@
 
 
 from logging import log, INFO
-from os import system, path, getcwd
+from os import path, getcwd
 
 from requests import post
 
@@ -39,8 +39,8 @@ def create(usr, pwd, pkg=path.basename(getcwd())):
     }
     post(repos)
     post(remote, auth=(usr, pwd), data=json)
-    system('git fetch %s' % remote)
-    system('git push')
+    # system('git fetch %s' % remote)
+    # system('git push')
 
 
 def release(usr, pwd, pkg=path.basename(getcwd())):
