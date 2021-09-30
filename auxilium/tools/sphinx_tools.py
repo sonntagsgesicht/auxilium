@@ -12,7 +12,7 @@
 
 from logging import log, INFO
 from os import getcwd, name as os_name
-from os.path import exists, basename, normpath
+from os.path import exists, basename, normpath, join
 from shutil import rmtree
 
 from auxilium.tools.git_tools import commit_git
@@ -63,7 +63,7 @@ def doctest(venv=None):
 
 def show(venv=None):
     """show html documentation"""
-    log(INFO, '💡  find docs at %s' % SPHINX_INDEX_FILE)
+    log(INFO, '💡  find docs at %s' % join(getcwd(), SPHINX_INDEX_FILE))
     if os_name == 'posix':
         return shell("open %s" % SPHINX_INDEX_FILE, venv=venv)
     if os_name == 'nt':
