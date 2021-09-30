@@ -11,6 +11,10 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 import os
+import sys
+
+sys.path.extend(('..', '../..',  '../../auxilium'))
+
 
 if os.getcwd().find('readthedocs') < 0:
     pkg = __import__(os.getcwd().split(os.sep)[-3])
@@ -33,6 +37,7 @@ rst_prolog = replacements_str(_replacements)
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'karma_sphinx_theme',
     'sphinx_rtd_theme',
     'sphinx.ext.autodoc',
     # 'sphinx.ext.autosectionlabel',
@@ -113,6 +118,8 @@ add_module_names = True
 # -- Options for HTML output ----------------------------------------------
 
 html_theme = 'sphinx_rtd_theme'
+html_theme = 'pyramid'
+html_theme = 'karma_sphinx_theme'
 html_logo = 'logo.png'
 # html_theme_options = {}
 # html_static_path = ['_static']
