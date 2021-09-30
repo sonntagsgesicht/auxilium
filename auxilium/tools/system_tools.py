@@ -13,12 +13,11 @@
 from io import open as _open
 from logging import log, DEBUG, INFO, ERROR
 from os import linesep as _linesep, getcwd, name as os_name, remove
-from os.path import basename, exists, isdir, join, normpath
+from os.path import basename, exists, isdir, join
 from shutil import rmtree
 from subprocess import run, Popen, PIPE, STDOUT  # nosec
-from sys import executable
 
-from .const import PYTHON, VENV_PATH, VENV_TAIL, SUB_FORMATTER_PREFIX
+from .const import PYTHON, VENV_PATH, VENV_TAIL, ICONS, SUB_FORMATTER_PREFIX
 
 linesep = '\n'
 
@@ -36,7 +35,7 @@ def create_venv(pkg=basename(getcwd()),
     venv = venv if venv and exists(venv) else None
     # strip potential executable from venv_path
     venv_path = venv_path.replace(VENV_TAIL, '')
-    log(INFO, "👻  create virtual environment")
+    log(INFO, ICONS["venv"] + "create virtual environment")
     module('venv', "--clear --prompt %s %s" % (pkg, venv_path),
            path=path, venv=venv)
     return join(venv_path, VENV_TAIL)
@@ -47,10 +46,10 @@ def activate_venv(venv_path=VENV_PATH):
     # strip potential executable from venv_path
     venv_path = venv_path.replace(VENV_TAIL, '')
     if os_name == 'nt':
-        log(DEBUG, "    in virtual environment at %s" % venv_path)
+        log(DEBUG, ICONS[""] + "in virtual environment at %s" % venv_path)
         return join(venv_path, 'Scripts', 'activate.bat')
     elif os_name == 'posix':
-        log(DEBUG, "    in virtual environment at %s" % venv_path)
+        log(DEBUG, ICONS[""] + "in virtual environment at %s" % venv_path)
         return "source %s; " % join(venv_path, 'bin', 'activate')
     else:
         log(ERROR,
@@ -59,10 +58,10 @@ def activate_venv(venv_path=VENV_PATH):
 
 def shell(command, level=DEBUG, path=getcwd(), venv=None,
           capture_output=True):
-    log(DEBUG, "    >>> %s" % command)
+    log(DEBUG, ICONS[""] + ">>> %s" % command)
     if venv:
         command = activate_venv(venv) + ' ' + command
-    log(DEBUG, "    in %s" % path)
+    log(DEBUG, ICONS[""] + "in %s" % path)
     return _popen(command, level, path)
 
 
@@ -74,7 +73,8 @@ def _popen(command, level=DEBUG, path=getcwd()):
         universal_newlines=True,
         cwd=path, shell=True, text=True)  # nosec
     for stdout_line in iter(proc.stdout.readline, ""):
-        log(level, "    " + SUB_FORMATTER_PREFIX + " " + stdout_line.rstrip())
+        log(level, ICONS[""] +
+            SUB_FORMATTER_PREFIX + ' ' + stdout_line.rstrip())
     proc.stdout.close()
     return proc.wait()
 

@@ -10,10 +10,11 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from logging import log, INFO, WARNING
+from logging import log, INFO, WARN
 from os import remove, getcwd
 from os.path import basename, exists, join
 
+from auxilium.tools.const import ICONS
 from auxilium.tools.system_tools import module, del_tree
 
 FREEZE_FILE = '.freeze'
@@ -23,14 +24,14 @@ PIP = 'pip'
 
 def upgrade(pkg=PIP, path=getcwd(), venv=None):
     """upgrade python library [PKG] via `pip`"""
-    log(INFO, '🏅  upgrade `%s`' % pkg)
+    log(INFO, ICONS["upgrade"] + 'upgrade `%s`' % pkg)
     return module(PIP, 'install --upgrade %s' % pkg, path=path, venv=venv)
 
 
 def requirements(path=getcwd(), venv=None):
     """manage requirements (dependencies) in `requirements.txt`
         and `upgrade_requirements.txt`"""
-    log(INFO, "⚙️  setup environment requirements")
+    log(INFO, ICONS["setup"] + "setup environment requirements")
 
     res = 0
     if not exists(join(path, FREEZE_FILE)):
@@ -48,23 +49,24 @@ def requirements(path=getcwd(), venv=None):
 
 def install(path=getcwd(), venv=None):
     """(re)install current project via `pip install -e .`"""
-    log(INFO, '🗜  install project via pip install -e')
+    log(INFO, ICONS["install"] + 'install project via pip install -e')
     if exists('setup.py') or exists('setup.cfg'):
         return module(PIP, "install --upgrade -e .", path=path, venv=venv)
-    log(WARNING, '⛔️  could not install project via pip install -e '
-                 '(setup.py or setup.cfg not found in %s)' % path)
+    log(WARN, ICONS["warn"] +
+        'could not install project via pip install -e '
+        '(setup.py or setup.cfg not found in %s)' % path)
     return 1
 
 
 def uninstall(pkg=basename(getcwd()), path=getcwd(), venv=None):
     """uninstall current project via `pip uninstall`"""
-    log(INFO, '💔  uninstall project via pip uninstall')
+    log(INFO, ICONS["uninstall"] + 'uninstall project via pip uninstall')
     return module(PIP, "uninstall -y %s" % pkg, path=path, venv=venv)
 
 
 def cleanup(path=getcwd(), venv=None):
     """remove temporary files"""
-    log(INFO, '🧹  clean environment')
+    log(INFO, ICONS["clean"] + 'clean environment')
     res = 0
     if exists(join(path, FREEZE_FILE)):
         res += module(PIP, "freeze --exclude-editable > %s" % TEMP_REMOVE_FILE,

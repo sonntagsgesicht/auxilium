@@ -17,6 +17,7 @@ from os.path import exists, join, basename
 from shutil import move
 from zipfile import ZipFile
 
+from .const import ICONS
 from .system_tools import open
 
 EXT = ' (created by auxilium)'
@@ -87,7 +88,8 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
     rp(project_path + sep + 'doc' + sep + 'sphinx' + sep + 'conf.py')
 
     log(INFO, '')
-    log(INFO, '🪚  created project %s with these files:' % name)
+    log(INFO, ICONS["create"] +
+        'created project %s with these files:' % name)
     log(INFO, '    in %s' % path)
     for subdir, dirs, files in walk(name):
         log(INFO, '')
@@ -98,7 +100,7 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
 
 
 def create_finish(name=basename(getcwd())):
-    log(INFO, '🏁  project setup finished')
+    log(INFO, ICONS["finish"] + 'project setup finished')
     log(INFO, '')
     log(INFO, 'Consider a first full run via: ')
     log(INFO, '')

@@ -15,7 +15,8 @@ from os import getcwd, name as os_name
 from os.path import exists, basename, normpath, join
 from shutil import rmtree
 
-from auxilium.tools.git_tools import commit_git
+from .const import ICONS
+from .git_tools import commit_git
 from .system_tools import shell
 
 SPHINX_API_PATH = normpath("doc/sphinx/api")
@@ -27,7 +28,7 @@ SPHINX_IN_OUT_PATHS = SPHINX_PATH, SPHINX_BUILD_PATH
 
 def api(pkg=basename(getcwd()), venv=None):
     """add api entries to `sphinx` docs"""
-    log(INFO, '📌  run sphinx apidoc scripts')
+    log(INFO, ICONS["commit"] + 'run sphinx apidoc scripts')
     if exists(SPHINX_API_PATH):
         rmtree(SPHINX_API_PATH)
     res = 0
@@ -42,28 +43,29 @@ def html(venv=None):
     # cleanup(venv)
     # if not exists(SPHINX_API_PATH):
     #     api(venv=venv)
-    log(INFO, '📋  run sphinx html scripts')
+    log(INFO, ICONS["html"] + 'run sphinx html scripts')
     return shell("sphinx-build -M html %s %s" % SPHINX_IN_OUT_PATHS,
                  venv=venv)
 
 
 def latexpdf(venv=None):
     """build pdf documentation (using `sphinx` and `LaTeX`)"""
-    log(INFO, '📖  run sphinx latexpdf scripts')
+    log(INFO, ICONS["latexpdf"] + 'run sphinx latexpdf scripts')
     return shell("sphinx-build -M latexpdf %s %s" % SPHINX_IN_OUT_PATHS,
                  venv=venv)
 
 
 def doctest(venv=None):
     """run `sphinx` doctest"""
-    log(INFO, '📝  run sphinx doctest scripts')
+    log(INFO, ICONS["doctest"] + 'run sphinx doctest scripts')
     return shell("sphinx-build -M doctest %s %s " % SPHINX_IN_OUT_PATHS,
                  venv=venv)
 
 
 def show(venv=None):
     """show html documentation"""
-    log(INFO, '💡  find docs at %s' % join(getcwd(), SPHINX_INDEX_FILE))
+    log(INFO, ICONS["show"] +
+        'find docs at %s' % join(getcwd(), SPHINX_INDEX_FILE))
     if os_name == 'posix':
         return shell("open %s" % SPHINX_INDEX_FILE, venv=venv)
     if os_name == 'nt':
@@ -73,6 +75,6 @@ def show(venv=None):
 
 def cleanup(venv=None):
     """remove temporary files"""
-    log(INFO, '🧹  clean environment')
+    log(INFO, ICONS["clean"] + 'clean environment')
     return shell("sphinx-build -M clean %s %s" % SPHINX_IN_OUT_PATHS,
                  venv=venv)

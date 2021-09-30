@@ -14,9 +14,10 @@ from logging import log, ERROR
 from os import getcwd
 from os.path import basename
 
+from ..tools.git_tools import commit_git
+from ..tools.const import ICONS
 from ..tools.sphinx_tools import api as _api, doctest as _doctest, \
     html as _html, show as _show, cleanup as _cleanup
-from ..tools.git_tools import commit_git
 
 
 def do(pkg=basename(getcwd()), commit=None,
@@ -41,6 +42,6 @@ def do(pkg=basename(getcwd()), commit=None,
         if doctest_return_code == 0 and html_return_code == 0:
             code = code or commit_git(commit)
         else:
-            log(ERROR, "🚫 doctest or build missing or failed. "
-                       "Did not commit.")
+            log(ERROR, ICONS["error"] +
+                'doctest or build missing or failed. Did not commit.')
     return code

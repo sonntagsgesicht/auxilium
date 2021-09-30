@@ -9,7 +9,6 @@
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
-
 from os import name as os_name
 from os.path import basename, join, normpath
 from sys import executable
@@ -39,9 +38,9 @@ VERBOSITY_LEVELS = 20, 0, 10, 20, 30, 40, 50
 DEBUG_FORMATTER = '%(levelname)-7.7s  %(message)s'
 INFO_FORMATTER = ' %(message)s'
 ERROR_FORMATTER = DEBUG_FORMATTER
-SUB_FORMATTER_PREFIX = '| '
+SUB_FORMATTER_PREFIX = '|'
 
-ICONS = {
+_ICONS = {
     'warn': '⛔',
     'error': '🚫',
     'demo': '🍹',
@@ -58,7 +57,7 @@ ICONS = {
     'setup': '⚙',
     'install': '🗜',
     'uninstall': '💔',
-    'profiling': '⏱️',
+    'profiling': '⏱',
     'deploy': '🛫',
     'python': '🐍',
     'quality': '🔍',
@@ -77,19 +76,22 @@ ICONS = {
 
 
 class IconContainer(dict):
+    none = ''
+    default = '*'
+    length = 3, 1
 
-    def __getitem__(self, k):
-        if super(IconContainer, self).__contains__(k):
-            v = super(IconContainer, self).__getitem__(k)
-            if v is None:
-                return ''
-            return ' ' + v.ljust(2)
-        return ' * '
+    def __getitem__(self, item):
+        if super(IconContainer, self).__contains__(item):
+            value = super(IconContainer, self).__getitem__(item)
+            if value is None:
+                value = ''
+        elif not item:
+            value = ''
+        else:
+            value = '*'
+        length, pre = self.__class__.length
+        value = value.ljust(length if len(value.encode()) < 4 else length-1)
+        return ' ' * pre + value
 
 
-if __name__ == '__main__':
-
-    ic = IconContainer(ICONS)
-    # ic.setdefault('*')
-    for k in tuple(ic.keys()) + ('12', '423'):
-        print(ic[k] + ' ' + k, len(ic[k]))
+ICONS = IconContainer(_ICONS)

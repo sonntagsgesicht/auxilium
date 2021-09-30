@@ -14,12 +14,13 @@ from os import getcwd
 from os.path import basename
 from logging import log, ERROR
 
-from ..tools.test_tools import test as _test, cleanup as cleanup_test
-from ..tools.security_tools import security as _security
-from ..tools.quality_tools import quality as _quality
+from ..tools.const import ICONS
 from ..tools.coverage_tools import coverage as _coverage, \
     cleanup as cleanup_coverage
 from ..tools.git_tools import commit_git
+from ..tools.quality_tools import quality as _quality
+from ..tools.security_tools import security as _security
+from ..tools.test_tools import test as _test, cleanup as cleanup_test
 
 
 def do(pkg=basename(getcwd()), commit=None,
@@ -50,6 +51,7 @@ def do(pkg=basename(getcwd()), commit=None,
         if test_return_code == 0:
             code = code or commit_git(commit)
         else:
-            log(ERROR, "🚫 Test missing or failed. Did not commit.")
+            log(ERROR, ICONS["error"] +
+                'Test missing or failed. Did not commit.')
 
     return code

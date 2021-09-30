@@ -20,7 +20,7 @@ from configparser import ConfigParser
 
 from auxilium.add_arguments import ArgumentDefaultsAndConstsHelpFormatter
 from auxilium.tools.const import CONFIG_PATH, DEMO_PATH, VERBOSITY_LEVELS, \
-    DEBUG_FORMATTER, INFO_FORMATTER, ERROR_FORMATTER
+    DEBUG_FORMATTER, INFO_FORMATTER, ERROR_FORMATTER, ICONS
 from auxilium.tools.setup_tools import create_project
 from auxilium.tools.system_tools import module, del_tree
 from auxilium import add_arguments, methods
@@ -36,6 +36,9 @@ def main():
     config = ConfigParser(allow_no_value=True)
     config.read(pathlib.Path.home().joinpath(CONFIG_PATH))
     config.read(CONFIG_PATH)
+
+    if not config.getboolean('DEFAULT', 'icons', fallback=True):
+        ICONS.clear()
 
     # ===========================
     # === add argument parser ===
@@ -127,18 +130,21 @@ def main():
     # check virtual environment
     if args.env \
             and not os.path.exists(args.env) \
-            and args.command != 'create'\
+            and args.command != 'create' \
             and not args.demo:
-        msg = '⛔   did not find a virtual environment at %s. ' % args.env
+        msg = ICONS["warn"] + \
+              'did not find a virtual environment at %s. ' % args.env
         logging.log(logging.WARN, msg)
-        msg = '    consider creating one with ' \
-              '`auxilium create --update --venv=[PATH]` or ' \
-              'use an `-e= ` argument'
+        msg = ICONS[""] + \
+            'consider creating one with ' \
+            '`auxilium create --update --venv=[PATH]` ' \
+            'or use an `-e= ` argument'
         logging.log(logging.WARN, msg)
         sys.exit(1)
 
+    # check demo
     if args.demo:
-        logging.log(logging.INFO, '🍹  starting demo - relax')
+        logging.log(logging.INFO, ICONS["demo"] + 'starting demo - relax')
 
         del_tree(DEMO_PATH)
         v = '-' + 'v' * args.verbosity if args.verbosity else ''
@@ -153,6 +159,7 @@ def main():
               (v, z, e, DEMO_PATH)
         sys.exit(module('auxilium', cmd, level=logging.INFO))
 
+    # check command
     method = getattr(methods, str(args.command), None)
     if method is None:
         print('>>> auxilium -h')
@@ -167,10 +174,12 @@ def main():
 
     if not os.path.exists(full_path) \
             and args.command not in ('create', 'python'):
-        msg = '⛔   no maintainable project found at %s ' % full_path
+        msg = ICONS["warn"] + \
+              'no maintainable project found at %s ' % full_path
         logging.log(logging.WARN, msg)
-        msg = '    consider creating one with `auxilium create` ' \
-              '(or did you mean `auxilium python`?)'
+        msg = ICONS[""] + \
+            'consider creating one with `auxilium create` ' \
+            '(or did you mean `auxilium python`?)'
 
         logging.log(logging.WARN, msg)
         sys.exit(1)

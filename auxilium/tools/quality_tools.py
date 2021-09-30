@@ -14,12 +14,13 @@ from logging import log, INFO
 from os import getcwd
 from os.path import basename
 
-from auxilium.tools.system_tools import module
+from .const import ICONS
+from .system_tools import module
 
 
 def quality(pkg=basename(getcwd()), venv=None):
     """evaluate quality of source code"""
-    log(INFO, '🔍  evaluate quality of source code')
+    log(INFO, ICONS["quality"] + 'evaluate quality of source code')
     return quality_flake8(pkg, venv)
 
 

@@ -12,13 +12,13 @@
 
 from logging import log, INFO
 
-from .const import PROFILE_PATH
+from .const import PROFILE_PATH, ICONS
 from .system_tools import shell, module, del_tree
 
 
 def profile(profile_file=PROFILE_PATH, venv=None):
     """profile performance"""
-    log(INFO, '⏱️  run test profiling')
+    log(INFO, ICONS["profiling"] + 'run test profiling')
     module('cProfile', '-s tottime %s' % profile_file, venv=venv)
     module('cProfile', '-o .cprofile %s' % profile_file, venv=venv)
     module('pstats', '.cprofile stat', venv=venv)
@@ -27,7 +27,7 @@ def profile(profile_file=PROFILE_PATH, venv=None):
 
 def cleanup():
     """remove temporary files"""
-    log(INFO, '🧹  clean profile')
+    log(INFO, ICONS["clean"] + 'clean profile')
     # removed profiling data files
     del_tree(".cprofile")
     return 0

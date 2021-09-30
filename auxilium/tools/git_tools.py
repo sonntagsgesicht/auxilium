@@ -19,6 +19,7 @@ from dulwich import porcelain
 from dulwich.repo import Repo
 from dulwich.errors import NotGitRepository
 
+from .const import ICONS
 from .setup_tools import EXT
 
 
@@ -33,36 +34,36 @@ def commit_git(msg='', path=getcwd()):
     # added, ignored = porcelain.add(repo)
     staged, un_staged, untracked = porcelain.status(repo, False)
     if not any(staged.values()):
-        log(INFO, "🤷  not files found. Did not commit.")
-        log(DEBUG, "    at " + path)
+        log(INFO, ICONS["missing"] + "not files found. Did not commit.")
+        log(DEBUG, ICONS[""] + "at " + path)
         chdir(cwd)
         return 0
 
-    log(INFO, "🚦  file status in `git` repo")
-    log(DEBUG, "    at " + path)
+    log(INFO, ICONS["status"] + "file status in `git` repo")
+    log(DEBUG, ICONS[""] + "at " + path)
 
     if staged['add']:
-        log(INFO, "    add:")
+        log(INFO, ICONS[""] + "add:")
         for p in staged['add']:
-            log(INFO, "      %s" % p.decode())
+            log(INFO, ICONS[""] + "  %s" % p.decode())
     if staged['modify']:
-        log(INFO, "    modify:")
+        log(INFO, ICONS[""] + "modify:")
         for p in staged['modify']:
-            log(INFO, "      %s" % p.decode())
+            log(INFO, ICONS[""] + "  %s" % p.decode())
     if staged['delete']:
-        log(INFO, "    delete:")
+        log(INFO, ICONS[""] + "delete:")
         for p in staged['delete']:
-            log(INFO, "      %s" % p.decode())
+            log(INFO, ICONS[""] + "  %s" % p.decode())
     for p in un_staged:
-        log(INFO, "    unstaged: %s" % p.decode())
+        log(INFO, ICONS[""] + "unstaged: %s" % p.decode())
     for p in untracked:
-        log(INFO, "    untracked : %s" % p)
+        log(INFO, ICONS[""] + "untracked : %s" % p)
     msg = msg if msg else 'Commit'
     msg += EXT
-    log(INFO, "📌  commit changes as `%s`" % msg)
-    log(DEBUG, "    at " + path)
+    log(INFO, ICONS["commit"] + "commit changes as `%s`" % msg)
+    log(DEBUG, ICONS[""] + "at " + path)
     res = porcelain.commit(repo, msg)
-    log(DEBUG, "    as %s" % res.decode())
+    log(DEBUG, ICONS[""] + "as %s" % res.decode())
 
     chdir(cwd)
     return 0
@@ -70,29 +71,29 @@ def commit_git(msg='', path=getcwd()):
 
 def tag_git(tag, msg='', path=getcwd()):
     """tag current branch of local `git` repo"""
-    log(INFO, "🏷️ tag current branch as %s" % tag)
-    log(DEBUG, "    at " + path)
+    log(INFO, ICONS["tag"] + "tag current branch as %s" % tag)
+    log(DEBUG, ICONS[""] + "at " + path)
     if bytearray(tag.encode()) in porcelain.tag_list(Repo(path)):
-        log(ERROR, "🚫  Tag %s exists in current branch "
-                   "of local `git` repo" % tag)
+        log(ERROR, ICONS["error"] +
+            "tag %s exists in current branch of local `git` repo" % tag)
         return 1
 
     if msg:
-        log(DEBUG, "    msg: `%s`" % msg)
+        log(DEBUG, ICONS[""] + "msg: `%s`" % msg)
     porcelain.tag_create(Repo(path), tag, message=msg)
     return 0
 
 
 def push_git(remote='None', path=getcwd()):
     """push current branch of local to remote `git` repo"""
-    log(INFO, "📦  push current branch to remote `git` repo")
+    log(INFO, ICONS["push"] + "push current branch to remote `git` repo")
     http, last = remote.split('//', 1)
     usr_pwd, url = last.split('@', 1)
     usr, _ = usr_pwd.split(':', 1) if ':' in usr_pwd else (usr_pwd, '')
     clean = http + '//' + usr + '@' + url
-    log(DEBUG, "    at " + clean)
+    log(DEBUG, ICONS[""] + "at " + clean)
     if remote:
-        log(DEBUG, "    remote: `%s`" % str(remote))
+        log(DEBUG, ICONS[""] + "remote: `%s`" % str(remote))
     out, err = BytesIO(), BytesIO()
     try:
         porcelain.push(Repo(path), remote, 'master',

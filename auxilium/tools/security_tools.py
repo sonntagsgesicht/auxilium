@@ -14,12 +14,13 @@ from logging import log, INFO
 from os import getcwd
 from os.path import basename
 
-from auxilium.tools.system_tools import module
+from .const import ICONS
+from .system_tools import module
 
 
 def security(pkg=basename(getcwd()), venv=None):
     """evaluate security of source code"""
-    log(INFO, '🚨  evaluate security of source code')
+    log(INFO, ICONS["security"] + 'evaluate security of source code')
     return security_bandit(pkg, venv=venv)
 
 

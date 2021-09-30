@@ -14,13 +14,13 @@ from logging import log, INFO
 from os import getcwd
 from os.path import basename
 
-from .const import TEST_PATH
+from .const import TEST_PATH, ICONS
 from .system_tools import python as _python, module, del_tree
 
 
 def test(test_dir=TEST_PATH, venv=None):
     """test code by running tests"""
-    log(INFO, '⛑️  run test scripts')
+    log(INFO, ICONS["test"] + 'run test scripts')
     return test_unittest(test_dir, venv)
 
 
@@ -39,7 +39,7 @@ def test_pytest(test_dir=TEST_PATH, venv=None):
 
 def doctests(pkg=basename(getcwd()), venv=None):
     """test code in doc string (doctest)"""
-    log(INFO, '🔏  run doctest scripts')
+    log(INFO, ICONS["doctest2"] + 'run doctest scripts')
 #     cmd = '''
 # import doctest, %s as pkg;
 # def _doctest_recursively(pkg, *args, **kwargs):
@@ -57,7 +57,7 @@ def doctests(pkg=basename(getcwd()), venv=None):
 
 def cleanup(test_dir=TEST_PATH):
     """remove temporary files"""
-    log(INFO, '🧹  clean test results')
+    log(INFO, ICONS["clean"] + 'clean test results')
     # removed pytest data files
     del_tree(".pytest_cache")
     return 0

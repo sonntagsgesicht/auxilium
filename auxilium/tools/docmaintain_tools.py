@@ -18,7 +18,7 @@ from os.path import basename, join, getmtime, exists, split
 from sys import path as sys_path
 from textwrap import wrap
 
-from .const import LAST_M_FILE
+from .const import LAST_M_FILE, ICONS
 from .system_tools import linesep, open
 
 
@@ -51,7 +51,7 @@ def set_timestamp(pkg=basename(getcwd()), path=getcwd()):
     file = join(path, pkg, '__init__.py')
     d = date.today().strftime('%A, %d %B %Y')
     a = (pkg, d, file)
-    log(DEBUG, "    set %s.__date__ = %s in %s" % a)
+    log(DEBUG, ICONS[""] + "set %s.__date__ = %s in %s" % a)
     # read file lines into list
     f = open(file)
     lines = list(map(str.rstrip, f.readlines()))
@@ -94,7 +94,7 @@ def replace_headers(pkg=basename(getcwd()), last=None, path=getcwd()):
                     file = join(subdir, file)
                     if last.get(file, '') == str(getmtime(file)):
                         continue
-                    log(DEBUG, '    update file header of %s' % file)
+                    log(DEBUG, ICONS[""] + "update file header of %s" % file)
 
                     # read file lines into list
                     f = open(file)
@@ -130,7 +130,7 @@ def replace_headers(pkg=basename(getcwd()), last=None, path=getcwd()):
 
 def docmaintain(pkg=basename(getcwd()), path=getcwd()):
     """update timestamps and file header of modified files"""
-    log(INFO, '🛠  run header maintenance')
+    log(INFO, ICONS["maintenance"] + 'run header maintenance')
     set_timestamp(pkg, path)
 
     last_m_file = join(path, LAST_M_FILE)

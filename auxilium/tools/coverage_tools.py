@@ -14,13 +14,13 @@ from logging import log, INFO
 from os import getcwd
 from os.path import basename
 
-from .const import TEST_PATH
+from .const import TEST_PATH, ICONS
 from .system_tools import module, del_tree, join
 
 
 def coverage(pkg=basename(getcwd()), test_dir=TEST_PATH, venv=None):
     """check code coverage of tests"""
-    log(INFO, '📑  run test coverage scripts')
+    log(INFO, ICONS["coverage"] + 'run test coverage scripts')
     return coverage_coverage(pkg, test_dir, venv)
 
 
@@ -50,7 +50,7 @@ def coverage_coverage(
 
 def cleanup(test_dir=TEST_PATH):
     """remove temporary files"""
-    log(INFO, '🧹  clean coverage')
+    log(INFO, ICONS["clean"] + 'clean coverage')
     # removed coverage data files incl. files in test dir
     files = ".coverage", "coverage.xml", "htmlcov"
     del_tree(*files)

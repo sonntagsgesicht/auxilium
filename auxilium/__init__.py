@@ -13,10 +13,9 @@
 import logging
 
 from .rst_tools import replacements_str, replacements_from_pkg, \
-    replacements_from_cls, replacements   # noqa: F401
+    replacements_from_cls, replacements  # noqa: F401
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
-
 
 __doc__ = 'Python project for an automated test and deploy toolkit.'
 __version__ = '0.1.5'
