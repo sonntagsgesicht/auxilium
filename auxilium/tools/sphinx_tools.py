@@ -16,7 +16,6 @@ from os.path import exists, basename, normpath, join
 from shutil import rmtree
 
 from .const import ICONS
-from .git_tools import commit_git
 from .system_tools import shell
 
 SPHINX_API_PATH = normpath("doc/sphinx/api")
@@ -34,7 +33,6 @@ def api(pkg=basename(getcwd()), venv=None):
     res = 0
     cmd = "sphinx-apidoc -o %s -f -E %s" % (SPHINX_API_PATH, pkg)
     res += shell(cmd, venv=venv)
-    res += commit_git('added `%s`' % SPHINX_API_PATH)
     return res
 
 

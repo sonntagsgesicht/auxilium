@@ -29,6 +29,7 @@ def do(pkg=basename(getcwd()), commit=None,
     doctest_return_code = html_return_code = -1
     code = False
     if api:
+        code = code or _cleanup(env)
         code = code or _api(pkg, env)
     if doctest:
         doctest_return_code = _doctest(env)
