@@ -11,7 +11,9 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 import os
+import sys
 
+sys.path.append('../..')
 
 if os.getcwd().find('readthedocs') < 0:
     pkg = __import__(os.getcwd().split(os.sep)[-3])
