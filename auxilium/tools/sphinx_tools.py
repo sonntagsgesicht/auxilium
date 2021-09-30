@@ -44,15 +44,17 @@ def html(venv=None):
     # if not exists(SPHINX_API_PATH):
     #     api(venv=venv)
     log(INFO, ICONS["html"] + 'run sphinx html scripts')
-    return shell("sphinx-build -M html %s %s" % SPHINX_IN_OUT_PATHS,
-                 venv=venv)
+    return shell(
+        "sphinx-build -M html -W --keep-going %s %s" % SPHINX_IN_OUT_PATHS,
+        venv=venv)
 
 
 def latexpdf(venv=None):
     """build pdf documentation (using `sphinx` and `LaTeX`)"""
     log(INFO, ICONS["latexpdf"] + 'run sphinx latexpdf scripts')
-    return shell("sphinx-build -M latexpdf %s %s" % SPHINX_IN_OUT_PATHS,
-                 venv=venv)
+    return shell(
+        "sphinx-build -M latexpdf -W --keep-going %s %s" % SPHINX_IN_OUT_PATHS,
+        venv=venv)
 
 
 def doctest(venv=None):
