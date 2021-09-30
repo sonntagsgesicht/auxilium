@@ -60,9 +60,9 @@ def activate_venv(venv_path=VENV_PATH):
 def shell(command, level=DEBUG, path=getcwd(), venv=None,
           capture_output=True):
     log(DEBUG, "    >>> %s" % command)
-    log(DEBUG, "    in %s" % path)
     if venv:
         command = activate_venv(venv) + ' ' + command
+    log(DEBUG, "    in %s" % path)
     return _popen(command, level, path)
 
 
