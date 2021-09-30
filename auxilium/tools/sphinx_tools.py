@@ -40,8 +40,8 @@ def api(pkg=basename(getcwd()), venv=None):
 def html(venv=None):
     """build html documentation (using `sphinx`)"""
     # cleanup(venv)
-    if not exists(SPHINX_API_PATH):
-        api(venv=venv)
+    # if not exists(SPHINX_API_PATH):
+    #     api(venv=venv)
     log(INFO, '📋  run sphinx html scripts')
     return shell("sphinx-build -M html %s %s" % SPHINX_IN_OUT_PATHS,
                  venv=venv)
