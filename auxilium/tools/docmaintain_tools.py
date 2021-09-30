@@ -21,6 +21,7 @@ from textwrap import wrap
 from .const import LAST_M_FILE
 from .system_tools import linesep, open
 
+
 def get_attr(attr, pkg=basename(getcwd()), path=getcwd()):
     default = '<%s>' % attr
     try:
