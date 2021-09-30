@@ -2,59 +2,101 @@
 Python library *auxilium*
 -------------------------
 
-.. image:: https://img.shields.io/codeship/5b8cc2e0-ac1d-0137-31a2-06d5e6117547/master.svg
+|codeship|_
+
+.. |codeship| image:: https://img.shields.io/codeship/5b8cc2e0-ac1d-0137-31a2-06d5e6117547/master.svg
+.. _codeship: https://codeship.com//projects/362165
+
+|readthedocs|_
+
+.. |readthedocs| image:: https://img.shields.io/readthedocs/auxilium
+.. _readthedocs: http://auxilium.readthedocs.io
+
+|license|_
+
+.. |license| image:: https://img.shields.io/github/license/sonntagsgesicht/auxilium
+.. _license: https://github.com/sonntagsgesicht/auxilium/raw/master/LICENSE
+
+|github_version|_
+
+.. |github_version| image:: https://img.shields.io/github/release/sonntagsgesicht/auxilium?label=github
+.. _github_version: https://github.com/sonntagsgesicht/auxilium/releases
+
+|pip_version|_
+
+.. |pip_version| image:: https://img.shields.io/pypi/v/auxilium
+.. _pip_version: https://pypi.org/project/auxilium/
+
+|py_version|_
+
+.. |py_version| image:: https://img.shields.io/pypi/pyversions/auxilium
+.. _py_version: https://pypi.org/project/auxilium/
+
+|pypi|_
+
+.. |pypi| image:: https://img.shields.io/pypi/dm/auxilium
+.. _pypi: https://pypi.org/project/auxilium/
+
+|pypi_downloads|_
+
+.. |pypi_downloads| image:: https://pepy.tech/badge/auxilium
+.. _pypi_downloads: https://pypi.org/project/auxilium/
+
+.. badge issues with twine om windows
+
+.. image https://img.shields.io/codeship/5b8cc2e0-ac1d-0137-31a2-06d5e6117547/master.svg
    :target: https://codeship.com//projects/362165
    :alt: Codeship
 
-.. image:: https://travis-ci.org/sonntagsgesicht/auxilium.svg?branch=master
+.. image https://travis-ci.org/sonntagsgesicht/auxilium.svg?branch=master
    :target: https://travis-ci.org/sonntagsgesicht/auxilium
    :alt: Travis ci
 
-.. image:: https://img.shields.io/readthedocs/auxilium
+.. image https://img.shields.io/readthedocs/auxilium
    :target: http://auxilium.readthedocs.io
    :alt: Read the Docs
 
-.. image:: https://img.shields.io/codefactor/grade/github/sonntagsgesicht/auxilium/master
+.. image https://img.shields.io/codefactor/grade/github/sonntagsgesicht/auxilium/master
    :target: https://www.codefactor.io/repository/github/sonntagsgesicht/auxilium
    :alt: CodeFactor Grade
 
-.. image:: https://img.shields.io/codeclimate/maintainability/sonntagsgesicht/auxilium
+.. image https://img.shields.io/codeclimate/maintainability/sonntagsgesicht/auxilium
    :target: https://codeclimate.com/github/sonntagsgesicht/auxilium/maintainability
    :alt: Code Climate maintainability
 
-.. image:: https://img.shields.io/codecov/c/github/sonntagsgesicht/auxilium
+.. image https://img.shields.io/codecov/c/github/sonntagsgesicht/auxilium
    :target: https://codecov.io/gh/sonntagsgesicht/auxilium
    :alt: Codecov
 
-.. image:: https://img.shields.io/lgtm/grade/python/g/sonntagsgesicht/auxilium.svg
+.. image https://img.shields.io/lgtm/grade/python/g/sonntagsgesicht/auxilium.svg
    :target: https://lgtm.com/projects/g/sonntagsgesicht/auxilium/context:python/
    :alt: lgtm grade
 
-.. image:: https://img.shields.io/lgtm/alerts/g/sonntagsgesicht/auxilium.svg
+.. image https://img.shields.io/lgtm/alerts/g/sonntagsgesicht/auxilium.svg
    :target: https://lgtm.com/projects/g/sonntagsgesicht/auxilium/alerts/
    :alt: total lgtm alerts
 
-.. image:: https://img.shields.io/github/license/sonntagsgesicht/auxilium
+.. image https://img.shields.io/github/license/sonntagsgesicht/auxilium
    :target: https://github.com/sonntagsgesicht/auxilium/raw/master/LICENSE
    :alt: GitHub
 
-.. image:: https://img.shields.io/github/release/sonntagsgesicht/auxilium?label=github
+.. image https://img.shields.io/github/release/sonntagsgesicht/auxilium?label=github
    :target: https://github.com/sonntagsgesicht/auxilium/releases
    :alt: GitHub release
 
-.. image:: https://img.shields.io/pypi/v/auxilium
+.. image https://img.shields.io/pypi/v/auxilium
    :target: https://pypi.org/project/auxilium/
    :alt: PyPI Version
 
-.. image:: https://img.shields.io/pypi/pyversions/auxilium
+.. image https://img.shields.io/pypi/pyversions/auxilium
    :target: https://pypi.org/project/auxilium/
    :alt: PyPI - Python Version
 
-.. image:: https://img.shields.io/pypi/dm/auxilium
+.. image https://img.shields.io/pypi/dm/auxilium
    :target: https://pypi.org/project/auxilium/
    :alt: PyPI Downloads
 
-.. image:: https://pepy.tech/badge/auxilium
+.. image https://pepy.tech/badge/auxilium
    :target: https://pypi.org/project/auxilium/
    :alt: PyPI Downloads
 

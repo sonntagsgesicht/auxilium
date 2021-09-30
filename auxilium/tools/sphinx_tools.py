@@ -21,8 +21,14 @@ from .system_tools import shell
 SPHINX_API_PATH = normpath("doc/sphinx/api")
 SPHINX_INDEX_FILE = normpath("./doc/sphinx/_build/html/intro.html")
 SPHINX_PATH = normpath("./doc/sphinx/")
+
 SPHINX_BUILD_PATH = normpath("./doc/sphinx/_build")
-SPHINX_IN_OUT_PATHS = SPHINX_PATH, SPHINX_BUILD_PATH
+SPHINX_BUILD_HTML_PATH = normpath("./doc/sphinx/_build/html")
+SPHINX_BUILD_LATEX_PATH = normpath("./doc/sphinx/_build/latex")
+
+SPHINX_BUILD_PATHS = SPHINX_PATH, SPHINX_BUILD_PATH
+SPHINX_HTML_PATHS = SPHINX_PATH, SPHINX_BUILD_HTML_PATH
+SPHINX_LATEX_PATHS = SPHINX_PATH, SPHINX_BUILD_LATEX_PATH
 
 
 def api(pkg=basename(getcwd()), venv=None):
@@ -44,7 +50,7 @@ def html(venv=None):
     log(INFO, ICONS["html"] +
         'run sphinx html scripts (only on new or modified files)')
     return shell(
-        "sphinx-build -W --keep-going -b html %s %s" % SPHINX_IN_OUT_PATHS,
+        "sphinx-build -W --keep-going -b html %s %s" % SPHINX_HTML_PATHS,
         venv=venv)
 
 
@@ -53,7 +59,7 @@ def latexpdf(venv=None):
     log(INFO, ICONS["latexpdf"] +
         'run sphinx latexpdf scripts (only on new or modified files)')
     return shell(
-        "sphinx-build -M latexpdf -W --keep-going %s %s" % SPHINX_IN_OUT_PATHS,
+        "sphinx-build -M latexpdf -W --keep-going %s %s" % SPHINX_LATEX_PATHS,
         venv=venv)
 
 
@@ -62,7 +68,7 @@ def doctest(venv=None):
     log(INFO, ICONS["doctest"] +
         'run sphinx doctest scripts (only on new or modified files)')
     return shell(
-        "sphinx-build -W --keep-going -b doctest %s %s " % SPHINX_IN_OUT_PATHS,
+        "sphinx-build -W --keep-going -b doctest %s %s " % SPHINX_BUILD_PATHS,
         venv=venv)
 
 
@@ -80,5 +86,5 @@ def show(venv=None):
 def cleanup(venv=None):
     """remove temporary files"""
     log(INFO, ICONS["clean"] + 'clean environment')
-    return shell("sphinx-build -M clean %s %s" % SPHINX_IN_OUT_PATHS,
+    return shell("sphinx-build -M clean %s %s" % SPHINX_BUILD_PATHS,
                  venv=venv)
