@@ -11,7 +11,7 @@ Python library *auxilium*
 .. _codeship: https://codeship.com//projects/362165
 
 .. |readthedocs| image:: https://img.shields.io/readthedocs/auxilium
-.. _readthedocs: http://auxilium.readthedocs.io
+.. _readthedocs: https://auxilium.readthedocs.io/en/latest/intro.html
 
 .. |license| image:: https://img.shields.io/github/license/sonntagsgesicht/auxilium
 .. _license: https://github.com/sonntagsgesicht/auxilium/raw/master/LICENSE
