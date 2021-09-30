@@ -63,11 +63,11 @@ def doctest(venv=None):
 
 def show(venv=None):
     """show html documentation"""
+    log(INFO, '💡  find docs at %s' % SPHINX_INDEX_FILE)
     if os_name == 'posix':
         return shell("open %s" % SPHINX_INDEX_FILE, venv=venv)
     if os_name == 'nt':
         return shell("start %s" % SPHINX_INDEX_FILE, venv=venv)
-    log(INFO, '💡  find docs at %s' % SPHINX_INDEX_FILE)
     return 1
 
 
