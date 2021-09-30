@@ -47,7 +47,7 @@ def activate_venv(venv_path=VENV_PATH):
     venv_path = venv_path.replace(VENV_TAIL, '')
     if os_name == 'nt':
         log(DEBUG, ICONS[""] + "in virtual environment at %s" % venv_path)
-        return join(venv_path, 'Scripts', 'activate.bat')
+        return "%s && " % join(venv_path, 'Scripts', 'activate.bat')
     elif os_name == 'posix':
         log(DEBUG, ICONS[""] + "in virtual environment at %s" % venv_path)
         return ". %s; " % join(venv_path, 'bin', 'activate')
