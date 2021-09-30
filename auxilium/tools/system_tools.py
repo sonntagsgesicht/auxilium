@@ -50,7 +50,7 @@ def activate_venv(venv_path=VENV_PATH):
         return join(venv_path, 'Scripts', 'activate.bat')
     elif os_name == 'posix':
         log(DEBUG, ICONS[""] + "in virtual environment at %s" % venv_path)
-        return "source %s; " % join(venv_path, 'bin', 'activate')
+        return ". %s; " % join(venv_path, 'bin', 'activate')
     else:
         log(ERROR,
             "    unable to activate virtual environment for os %s" % os_name)
@@ -62,6 +62,7 @@ def shell(command, level=DEBUG, path=getcwd(), venv=None,
     if venv:
         command = activate_venv(venv) + ' ' + command
     log(DEBUG, ICONS[""] + "in %s" % path)
+    log(DEBUG - 1, ICONS[""] + ">>> %s" % command)
     return _popen(command, level, path)
 
 

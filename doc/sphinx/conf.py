@@ -11,9 +11,6 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 import os
-import sys
-
-sys.path.extend(('..', '../..',  '../../auxilium'))
 
 
 if os.getcwd().find('readthedocs') < 0:

@@ -6,3 +6,5 @@ flake8
 Sphinx
 sphinx-math-dollar
 sphinx-rtd-theme
+karma_sphinx_theme
+sphinx-nameko-theme
