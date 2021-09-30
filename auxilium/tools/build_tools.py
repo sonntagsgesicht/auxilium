@@ -23,7 +23,7 @@ def build(venv=None):
     res = 0
     res += _python("setup.py build", venv=venv)
     res += _python("setup.py sdist --formats=zip", venv=venv)
-    res += _python("setup.py sdist bdist_wheel", venv=venv)
+    # res += _python("setup.py sdist bdist_wheel", venv=venv)
     res += module("twine", "check dist/*")
     return res
 

@@ -144,12 +144,12 @@ def main():
         v = '-' + 'v' * args.verbosity if args.verbosity else ''
         z = '-' + 'z' * args.exit_non_zero if args.exit_non_zero else ''
         e = '-e=' + args.env
-        cmd = (" %s %s %s create "
-               "--name=%s "
-               "--slogan='a demo by auxilium'  "
-               "--author=auxilium "
-               "--email='sonntagsgesicht@icould.com' "
-               "--url='https://github.com/sonntagsgesicht/auxilium'") % \
+        cmd = (' %s %s %s create '
+               '--name=%s '
+               '--slogan="a demo by auxilium" '
+               '--author=auxilium '
+               '--email="sonntagsgesicht@icould.com" '
+               '--url="https://github.com/sonntagsgesicht/auxilium"') % \
               (v, z, e, DEMO_PATH)
         sys.exit(module('auxilium', cmd, level=logging.INFO))
 

@@ -42,16 +42,21 @@ class CreateRepoUnitTests(unittest.TestCase):
         self.author = 'dreamer'
         self.email = '<name>@home'
         self.url = 'https://<author>.home/<name>'
-        del_tree(self.wdir)
-        os.mkdir(self.wdir)
+        #del_tree(self.wdir)
+        if not os.path.exists(self.wdir):
+            os.mkdir(self.wdir)
         os.chdir(self.wdir)
 
     def tearDown(self):
-        del_tree(self.wdir)
+        try:
+            del_tree(self.wdir)
+        except:
+            pass
 
     def test_auxilium_demo(self):
-        self.assertEqual(0, auxilium('-z -vv -demo', path=self.wdir))
         path = os.path.join(self.wdir, DEMO_PATH)
+        del_tree(path)
+        self.assertEqual(0, auxilium('-z -vv -demo', path=self.wdir))
         self.assertEqual(0, auxilium('-z -vv update', path=path))
         self.assertEqual(0, auxilium('-z -vv test', path=path))
         self.assertEqual(0, auxilium('-z -vv doc', path=path))
@@ -59,8 +64,11 @@ class CreateRepoUnitTests(unittest.TestCase):
 
         self.assertEqual(0, auxilium('-z -vv deploy --tag', path=path))
         self.assertNotEqual(0, auxilium('-z -vv deploy --tag', path=path))
+        del_tree(path)
 
     def test_unicorn(self):
+        path = os.path.join(self.wdir, self.name)
+        del_tree(path)
         inputs = self.name, self.doc, self.author, self.email, self.url
         file_path = os.path.join(self.wdir, self.name + '_details')
         with open(file_path, "w") as f:
@@ -68,12 +76,12 @@ class CreateRepoUnitTests(unittest.TestCase):
         self.assertEqual(0, auxilium('-z -vv create < %s' % file_path,
                                      path=self.wdir))
 
-        path = os.path.join(self.wdir, self.name)
 
         self.assertEqual(0, auxilium('-z -vv update', path=path))
         self.assertEqual(0, auxilium('-z -vv test', path=path))
         self.assertEqual(0, auxilium('-z -vv doc', path=path))
         self.assertEqual(0, auxilium('-z -vv deploy', path=path))
+        del_tree(path)
 
 
 if __name__ == "__main__":
