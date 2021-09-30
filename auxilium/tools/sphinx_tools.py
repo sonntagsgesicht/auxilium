@@ -12,16 +12,16 @@
 
 from logging import log, INFO
 from os import getcwd, name as os_name
-from os.path import exists, basename
+from os.path import exists, basename, normpath
 from shutil import rmtree
 
 from auxilium.tools.git_tools import commit_git
 from .system_tools import shell
 
-SPHINX_API_PATH = "doc/sphinx/api"
-SPHINX_INDEX_FILE = "./doc/sphinx/_build/html/intro.html"
-SPHINX_PATH = "./doc/sphinx/"
-SPHINX_BUILD_PATH = "./doc/sphinx/_build"
+SPHINX_API_PATH = normpath("doc/sphinx/api")
+SPHINX_INDEX_FILE = normpath("./doc/sphinx/_build/html/intro.html")
+SPHINX_PATH = normpath("./doc/sphinx/")
+SPHINX_BUILD_PATH = normpath("./doc/sphinx/_build")
 SPHINX_IN_OUT_PATHS = SPHINX_PATH, SPHINX_BUILD_PATH
 
 
