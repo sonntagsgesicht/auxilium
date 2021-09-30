@@ -39,7 +39,7 @@ def api(pkg=basename(getcwd()), venv=None):
 
 def html(venv=None):
     """build html documentation (using `sphinx`)"""
-    cleanup(venv)
+    # cleanup(venv)
     if not exists(SPHINX_API_PATH):
         api(venv=venv)
     log(INFO, '📋  run sphinx html scripts')
