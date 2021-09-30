@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Thursday, 30 September 2021
+# Version:  0.1.7, copyright Thursday, 30 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -14,7 +14,7 @@ from datetime import date
 from json import load, dump
 from logging import log, INFO, DEBUG
 from os import walk, sep, getcwd, linesep as _linesep, mkdir
-from os.path import basename, join, getmtime, exists, split
+from os.path import basename, join, getmtime, exists, split, normpath
 from sys import path as sys_path
 from textwrap import wrap
 
@@ -87,12 +87,14 @@ def replace_headers(pkg=basename(getcwd()), last=None, path=getcwd()):
     new_header += ['# ' + line for line in new_lines]
     new_header = [line.strip() for line in new_header]
 
+    this = dict()
     for subdir, dirs, files in walk(root):
         if sep + '.' not in subdir:
             for file in files:
                 if file.endswith('.py'):
                     file = join(subdir, file)
                     if last.get(file, '') == str(getmtime(file)):
+                        this[file] = str(getmtime(file))
                         continue
                     log(DEBUG, ICONS[""] + "update file header of %s" % file)
 
@@ -124,8 +126,8 @@ def replace_headers(pkg=basename(getcwd()), last=None, path=getcwd()):
                     if new_lines[-1].strip():
                         f.write(linesep)  # last empty line
                     f.close()
-                    last[file] = str(getmtime(file))
-    return last
+                    this[file] = str(getmtime(file))
+    return this
 
 
 def docmaintain(pkg=basename(getcwd()), path=getcwd()):
@@ -136,10 +138,15 @@ def docmaintain(pkg=basename(getcwd()), path=getcwd()):
     last_m_file = join(path, LAST_M_FILE)
     if exists(last_m_file):
         last_mtimes = load(open(last_m_file, 'r'))
+        # add cwd
+        last_mtimes = \
+            dict((normpath(join(path, k)), v) for k, v in last_mtimes.items())
     else:
         last_mtimes = dict()
     last_mtimes = replace_headers(pkg, last_mtimes, path)
     if not exists(join(path, '.aux')):
         mkdir(join(path, '.aux'))
+    last_mtimes = \
+        dict((k.replace(path + sep, ''), v) for k, v in last_mtimes.items())
     dump(last_mtimes, open(last_m_file, 'w'), indent=2)
     return 0

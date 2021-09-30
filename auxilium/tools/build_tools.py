@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.6, copyright Thursday, 30 September 2021
+# Version:  0.1.7, copyright Friday, 01 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -18,19 +18,22 @@ from auxilium.tools.const import ICONS
 from auxilium.tools.system_tools import python as _python, module, del_tree
 
 
-def build(venv=None):
+def build(path=getcwd(), venv=None):
     """build package distribution"""
     log(INFO, ICONS["build"] + 'build package distribution')
     code = 0
-    code = code or _python("setup.py build", venv=venv)
-    code = code or _python("setup.py sdist --formats=zip", venv=venv)
-    code = code or module("twine", "check --strict dist/*", venv=venv)
+    code = code or _python("setup.py build",
+                           path=path, venv=venv)
+    code = code or _python("setup.py sdist --formats=zip",
+                           path=path, venv=venv)
+    code = code or module("twine", "check --strict dist/*",
+                          path=path, venv=venv)
     return code
 
 
 def cleanup(pkg=basename(getcwd())):
     """remove temporary files"""
-    log(INFO, ICONS["clean"] + 'clean environment')
+    log(INFO, ICONS["clean"] + 'cleanup build')
     # remove setuptools release files
     del_tree("build", "dist")
     return 0
