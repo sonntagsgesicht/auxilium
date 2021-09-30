@@ -45,7 +45,7 @@ def html(venv=None):
     #     api(venv=venv)
     log(INFO, ICONS["html"] + 'run sphinx html scripts')
     return shell(
-        "sphinx-build -M html -W --keep-going %s %s" % SPHINX_IN_OUT_PATHS,
+        "sphinx-build -M html -W %s %s" % SPHINX_IN_OUT_PATHS,
         venv=venv)
 
 
