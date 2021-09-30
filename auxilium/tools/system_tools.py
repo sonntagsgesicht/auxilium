@@ -47,10 +47,10 @@ def activate_venv(venv_path=VENV_PATH):
     # strip potential executable from venv_path
     venv_path = venv_path.replace(VENV_TAIL, '')
     if os_name == 'nt':
-        log(DEBUG, "    activate virtual environment at %s" % venv_path)
+        log(DEBUG, "    in virtual environment at %s" % venv_path)
         return join(venv_path, 'Scripts', 'activate.bat')
     elif os_name == 'posix':
-        log(DEBUG, "    activate virtual environment at %s" % venv_path)
+        log(DEBUG, "    in virtual environment at %s" % venv_path)
         return "source %s; " % join(venv_path, 'bin', 'activate')
     else:
         log(ERROR,
