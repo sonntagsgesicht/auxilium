@@ -1,5 +1,5 @@
 
-.. image:: ../pix/logo.png
+.. image:: https://raw.githubusercontent.com/sonntagsgesicht/auxilium/master/doc/pix/logo.png
 
 Python library *auxilium*
 -------------------------
@@ -97,7 +97,7 @@ Code, Documentation and Tests
 
 Modern software development comes as a triple of
 
-.. image:: ../pix/code-test-doc.png
+.. image:: https://raw.githubusercontent.com/sonntagsgesicht/auxilium/master/doc/pix/code-test-doc.png
 
 .. :alt: **code is for machines** // **tests links docs and code** // **docs are for humans**
 
