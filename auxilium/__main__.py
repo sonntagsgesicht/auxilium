@@ -39,6 +39,7 @@ def main():
 
     if not config.getboolean('DEFAULT', 'icons', fallback=True):
         ICONS.clear()
+        ICONS.update({'error': '!!', 'warn': '!'})
 
     # ===========================
     # === add argument parser ===
@@ -148,7 +149,7 @@ def main():
 
         del_tree(DEMO_PATH)
         v = '-' + 'v' * args.verbosity if args.verbosity else ''
-        z = '-' + 'z' * args.exit_non_zero if args.exit_non_zero else ''
+        z = '-' + 'x' * args.exit_status if args.exit_status else ''
         e = '-e=' + args.env
         cmd = (' %s %s %s create '
                '--name=%s '

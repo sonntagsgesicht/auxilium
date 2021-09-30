@@ -43,5 +43,5 @@ def do(pkg=basename(getcwd()), commit=None,
             code = code or commit_git(commit)
         else:
             log(ERROR, ICONS["error"] +
-                'doctest or build missing or failed. Did not commit.')
+                'doctest or build missing or failed . did not commit.')
     return code

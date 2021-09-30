@@ -42,7 +42,6 @@ class CreateRepoUnitTests(unittest.TestCase):
         self.author = 'dreamer'
         self.email = '<name>@home'
         self.url = 'https://<author>.home/<name>'
-        #del_tree(self.wdir)
         if not os.path.exists(self.wdir):
             os.mkdir(self.wdir)
         os.chdir(self.wdir)
@@ -59,7 +58,7 @@ class CreateRepoUnitTests(unittest.TestCase):
         self.assertEqual(0, auxilium('-vv -demo', path=self.wdir))
         self.assertEqual(0, auxilium('-vv update', path=path))
         self.assertEqual(0, auxilium('-vv test', path=path))
-        self.assertEqual(0, auxilium('-vv doc', path=path))
+        self.assertEqual(0, auxilium('-vv doc --api', path=path))
         self.assertEqual(0, auxilium('-vv deploy', path=path))
 
         self.assertEqual(0, auxilium('-vv deploy --tag', path=path))
@@ -76,11 +75,10 @@ class CreateRepoUnitTests(unittest.TestCase):
         self.assertEqual(0, auxilium('-vv create < %s' % file_path,
                                      path=self.wdir))
 
-
-        self.assertEqual(0, auxilium('-z -vv update', path=path))
-        self.assertEqual(0, auxilium('-z -vv test', path=path))
-        self.assertEqual(0, auxilium('-z -vv doc', path=path))
-        self.assertEqual(0, auxilium('-z -vv deploy', path=path))
+        self.assertEqual(0, auxilium('-vv update', path=path))
+        self.assertEqual(0, auxilium('-vv test', path=path))
+        self.assertEqual(0, auxilium('-vv doc --api', path=path))
+        self.assertEqual(0, auxilium('-vv deploy', path=path))
         del_tree(path)
 
 

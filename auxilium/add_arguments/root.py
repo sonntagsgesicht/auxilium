@@ -41,9 +41,9 @@ def add_arguments(parser=None, config=ConfigParser()):
         action='count',
         default=0,
         help='exit status in case of failure '
-             '(-z for zero,'
-             ' -zz for non-zero,'
-             ' -zz for raise exception)'
+             '(-x for zero,'
+             ' -xx for non-zero,'
+             ' -xxx for raise exception)'
              ' (default: non-zero')
 
     parser.add_argument(

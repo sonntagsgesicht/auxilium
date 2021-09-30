@@ -45,14 +45,14 @@ def do(pkg=basename(getcwd()), commit=None, tag=None, header=None,
             code = code or commit_git(commit)
         else:
             log(ERROR, ICONS["error"] +
-                'build missing or failed. Did not commit.')
+                'build missing or failed . did not commit.')
 
     if tag:
         if build_return_code == 0:
             code = code or tag_git(tag, path=path)
         else:
             log(ERROR, ICONS["error"] +
-                'build missing or failed. Did not tag.')
+                'build missing or failed . did not tag.')
 
     if push:
         if build_return_code == 0:
@@ -63,13 +63,13 @@ def do(pkg=basename(getcwd()), commit=None, tag=None, header=None,
             code = code or push_git(remote, path)
         else:
             log(ERROR, ICONS["error"] +
-                'build missing or failed. Did not push.')
+                'build missing or failed . did not push.')
 
     if deploy:
         if build_return_code == 0:
             code = code or _deploy(pypi_usr, pypi_pwd)
         else:
             log(ERROR, ICONS["error"] +
-                'build missing or failed. Did not deploy.')
+                'build missing or failed . did not deploy.')
 
     return code
