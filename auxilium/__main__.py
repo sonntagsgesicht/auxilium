@@ -19,7 +19,8 @@ from argparse import ArgumentParser
 from configparser import ConfigParser
 
 from auxilium.add_arguments import ArgumentDefaultsAndConstsHelpFormatter
-from auxilium.tools.const import CONFIG_PATH, DEMO_PATH, VERBOSITY_LEVELS, ICONS
+from auxilium.tools.const import CONFIG_PATH, DEMO_PATH, VERBOSITY_LEVELS, \
+    ICONS
 from auxilium.tools.setup_tools import create_project
 from auxilium.tools.system_tools import module, del_tree
 from auxilium import add_arguments, methods
@@ -36,7 +37,7 @@ def main():
     config.read(pathlib.Path.home().joinpath(CONFIG_PATH))
     config.read(CONFIG_PATH)
 
-    if not config.getboolean('DEFAULT', 'icons', fallback=os.name=='posix'):
+    if not config.getboolean('DEFAULT', 'icons', fallback=os.name == 'posix'):
         ICONS.clear()
         ICONS.update({'error': '!!', 'warn': '!'})
 
