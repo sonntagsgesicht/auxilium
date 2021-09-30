@@ -9,6 +9,7 @@
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
+
 from os import name as os_name
 from os.path import basename, join, normpath
 from sys import executable

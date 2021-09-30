@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.5, copyright Wednesday, 29 September 2021
+# Version:  0.1.5, copyright Thursday, 30 September 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -37,11 +37,14 @@ def add_arguments(parser=None, config=ConfigParser()):
              'to use system interpreter just set empty flag `-e=`')
 
     parser.add_argument(
-        '-z', '--exit-non-zero',
+        '-x', '--exit-status',
         action='count',
         default=0,
-        help='exit with non zero return code of failure '
-             '(-z for non zero return code, -zz for raising exceptions)')
+        help='exit status in case of failure '
+             '(-z for zero,'
+             ' -zz for non-zero,'
+             ' -zz for raise exception)'
+             ' (default: non-zero')
 
     parser.add_argument(
         '-demo',

@@ -43,15 +43,17 @@ def html(venv=None):
     # cleanup(venv)
     # if not exists(SPHINX_API_PATH):
     #     api(venv=venv)
-    log(INFO, ICONS["html"] + 'run sphinx html scripts')
+    log(INFO, ICONS["html"] +
+        'run sphinx html scripts (only on new or modified files)')
     return shell(
-        "sphinx-build -W -M html %s %s" % SPHINX_IN_OUT_PATHS,
+        "sphinx-build -W --keep-going -b html %s %s" % SPHINX_IN_OUT_PATHS,
         venv=venv)
 
 
 def latexpdf(venv=None):
     """build pdf documentation (using `sphinx` and `LaTeX`)"""
-    log(INFO, ICONS["latexpdf"] + 'run sphinx latexpdf scripts')
+    log(INFO, ICONS["latexpdf"] +
+        'run sphinx latexpdf scripts (only on new or modified files)')
     return shell(
         "sphinx-build -M latexpdf -W --keep-going %s %s" % SPHINX_IN_OUT_PATHS,
         venv=venv)
@@ -59,9 +61,11 @@ def latexpdf(venv=None):
 
 def doctest(venv=None):
     """run `sphinx` doctest"""
-    log(INFO, ICONS["doctest"] + 'run sphinx doctest scripts')
-    return shell("sphinx-build -M doctest %s %s " % SPHINX_IN_OUT_PATHS,
-                 venv=venv)
+    log(INFO, ICONS["doctest"] +
+        'run sphinx doctest scripts (only on new or modified files)')
+    return shell(
+        "sphinx-build -W --keep-going -b doctest %s %s " % SPHINX_IN_OUT_PATHS,
+        venv=venv)
 
 
 def show(venv=None):

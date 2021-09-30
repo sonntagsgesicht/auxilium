@@ -56,14 +56,14 @@ class CreateRepoUnitTests(unittest.TestCase):
     def test_auxilium_demo(self):
         path = os.path.join(self.wdir, DEMO_PATH)
         del_tree(path)
-        self.assertEqual(0, auxilium('-z -vv -demo', path=self.wdir))
-        self.assertEqual(0, auxilium('-z -vv update', path=path))
-        self.assertEqual(0, auxilium('-z -vv test', path=path))
-        self.assertEqual(0, auxilium('-z -vv doc', path=path))
-        self.assertEqual(0, auxilium('-z -vv deploy', path=path))
+        self.assertEqual(0, auxilium('-vv -demo', path=self.wdir))
+        self.assertEqual(0, auxilium('-vv update', path=path))
+        self.assertEqual(0, auxilium('-vv test', path=path))
+        self.assertEqual(0, auxilium('-vv doc', path=path))
+        self.assertEqual(0, auxilium('-vv deploy', path=path))
 
-        self.assertEqual(0, auxilium('-z -vv deploy --tag', path=path))
-        self.assertNotEqual(0, auxilium('-z -vv deploy --tag', path=path))
+        self.assertEqual(0, auxilium('-vv deploy --tag', path=path))
+        self.assertNotEqual(0, auxilium('-vv deploy --tag', path=path))
         del_tree(path)
 
     def test_unicorn(self):
@@ -73,7 +73,7 @@ class CreateRepoUnitTests(unittest.TestCase):
         file_path = os.path.join(self.wdir, self.name + '_details')
         with open(file_path, "w") as f:
             f.write(os.linesep.join(inputs))
-        self.assertEqual(0, auxilium('-z -vv create < %s' % file_path,
+        self.assertEqual(0, auxilium('-vv create < %s' % file_path,
                                      path=self.wdir))
 
 

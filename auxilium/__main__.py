@@ -188,16 +188,20 @@ def main():
     kwargs['path'] = kwargs.get('path', path)
     kwargs['pkg'] = kwargs.get('name', pkg)
 
-    # path/project/project
-
     if path not in sys.path:
         sys.path.append(path)
 
     code = method(**kwargs) if method else 1
     if code:
-        if args.exit_non_zero == 2:
-            raise Failure('failure in %s' % args.command)
-        if args.exit_non_zero == 1:
+        msg = 'non-zero exit status (failure in `%s`)' % args.command
+        logging.log(logging.ERROR, ICONS['error'] + msg)
+        if args.exit_status == 3:
+            raise Failure(msg)
+        if args.exit_status == 2:
+            sys.exit(1)
+        if args.exit_status == 1:
+            sys.exit(0)
+        if args.exit_status == 0:
             sys.exit(1)
     sys.exit()
 
