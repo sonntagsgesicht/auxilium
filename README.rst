@@ -2,42 +2,36 @@
 Python library *auxilium*
 -------------------------
 
-|codeship|_
+|codeship|_ |readthedocs|_ |license|_ |github_version|_ |pip_version|_
+|py_version|_ |pypi_frequency|_ |pypi_downloads|_
+
 
 .. |codeship| image:: https://img.shields.io/codeship/5b8cc2e0-ac1d-0137-31a2-06d5e6117547/master.svg
 .. _codeship: https://codeship.com//projects/362165
 
-|readthedocs|_
+
 
 .. |readthedocs| image:: https://img.shields.io/readthedocs/auxilium
 .. _readthedocs: http://auxilium.readthedocs.io
 
-|license|_
 
 .. |license| image:: https://img.shields.io/github/license/sonntagsgesicht/auxilium
 .. _license: https://github.com/sonntagsgesicht/auxilium/raw/master/LICENSE
 
-|github_version|_
+
 
 .. |github_version| image:: https://img.shields.io/github/release/sonntagsgesicht/auxilium?label=github
 .. _github_version: https://github.com/sonntagsgesicht/auxilium/releases
 
-|pip_version|_
-
 .. |pip_version| image:: https://img.shields.io/pypi/v/auxilium
 .. _pip_version: https://pypi.org/project/auxilium/
 
-|py_version|_
 
 .. |py_version| image:: https://img.shields.io/pypi/pyversions/auxilium
 .. _py_version: https://pypi.org/project/auxilium/
 
-|pypi|_
-
-.. |pypi| image:: https://img.shields.io/pypi/dm/auxilium
-.. _pypi: https://pypi.org/project/auxilium/
-
-|pypi_downloads|_
+.. |pypi_frequency| image:: https://img.shields.io/pypi/dm/auxilium
+.. _pypi_frequency: https://pypi.org/project/auxilium/
 
 .. |pypi_downloads| image:: https://pepy.tech/badge/auxilium
 .. _pypi_downloads: https://pypi.org/project/auxilium/
