@@ -19,8 +19,7 @@ from argparse import ArgumentParser
 from configparser import ConfigParser
 
 from auxilium.add_arguments import ArgumentDefaultsAndConstsHelpFormatter
-from auxilium.tools.const import CONFIG_PATH, DEMO_PATH, VERBOSITY_LEVELS, \
-    DEBUG_FORMATTER, INFO_FORMATTER, ERROR_FORMATTER, ICONS
+from auxilium.tools.const import CONFIG_PATH, DEMO_PATH, VERBOSITY_LEVELS, ICONS
 from auxilium.tools.setup_tools import create_project
 from auxilium.tools.system_tools import module, del_tree
 from auxilium import add_arguments, methods
@@ -37,7 +36,7 @@ def main():
     config.read(pathlib.Path.home().joinpath(CONFIG_PATH))
     config.read(CONFIG_PATH)
 
-    if not config.getboolean('DEFAULT', 'icons', fallback=True):
+    if not config.getboolean('DEFAULT', 'icons', fallback=os.name=='posix'):
         ICONS.clear()
         ICONS.update({'error': '!!', 'warn': '!'})
 
@@ -116,15 +115,8 @@ def main():
 
     args = parser.parse_args()
 
-    verbosity = VERBOSITY_LEVELS[
+    verbosity, formatter = VERBOSITY_LEVELS[
         min(args.verbosity, len(VERBOSITY_LEVELS) - 1)]
-
-    formatter = DEBUG_FORMATTER
-    if verbosity > logging.DEBUG:
-        formatter = INFO_FORMATTER
-    if verbosity > logging.INFO:
-        formatter = ERROR_FORMATTER
-
     logging.basicConfig(level=verbosity, format=formatter)
     logging.log(1, args)
 
@@ -168,6 +160,7 @@ def main():
         for key, choice in sub_parser.choices.items():
             print('\n>>> auxilium ' + key + ' -h')
             choice.print_help()
+        sys.exit()
 
     path = os.getcwd()
     pkg = os.path.basename(os.getcwd())

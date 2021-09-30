@@ -109,7 +109,8 @@ Code, Documentation and Tests
 Modern software development comes as a triple of
 
    .. image:: ../pix/code-test-doc.png
-      :alt: **code is for machines** // **tests links docs and code** // **docs are for humans**
+
+   .. :alt: **code is for machines** // **tests links docs and code** // **docs are for humans**
 
    * The **code** is the actual software program or library which can executed or invoked.
 
