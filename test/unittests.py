@@ -59,10 +59,10 @@ class CreateRepoUnitTests(unittest.TestCase):
         self.assertEqual(0, auxilium('-vv update', path=path))
         self.assertEqual(0, auxilium('-vv test', path=path))
         self.assertEqual(0, auxilium('-vv doc --api', path=path))
-        self.assertEqual(0, auxilium('-vv deploy', path=path))
+        self.assertEqual(0, auxilium('-vv build', path=path))
 
-        self.assertEqual(0, auxilium('-vv deploy --tag', path=path))
-        self.assertNotEqual(0, auxilium('-vv deploy --tag', path=path))
+        self.assertEqual(0, auxilium('-vv build --tag', path=path))
+        self.assertNotEqual(0, auxilium('-vv build --tag', path=path))
         del_tree(path)
 
     def test_unicorn(self):
@@ -78,7 +78,7 @@ class CreateRepoUnitTests(unittest.TestCase):
         self.assertEqual(0, auxilium('-vv update', path=path))
         self.assertEqual(0, auxilium('-vv test', path=path))
         self.assertEqual(0, auxilium('-vv doc --api', path=path))
-        self.assertEqual(0, auxilium('-vv deploy', path=path))
+        self.assertEqual(0, auxilium('-vv build', path=path))
         del_tree(path)
 
 

@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.7, copyright Thursday, 30 September 2021
+# Version:  0.1.7, copyright Friday, 01 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -82,6 +82,13 @@ def tag_git(tag, msg='', path=getcwd()):
         log(DEBUG, ICONS[""] + "msg: `%s`" % msg)
     porcelain.tag_create(Repo(path), tag, message=msg)
     return 0
+
+
+def build_url(url, usr='', pwd='None'):
+    pwd = ':' + str(pwd) if pwd and pwd != 'None' else ''
+    usr = str(usr) if usr else 'token-user' if pwd else ''
+    remote = 'https://' + usr + pwd + '@' + url.replace('https://', '')
+    return remote
 
 
 def push_git(remote='None', path=getcwd()):

@@ -5,16 +5,17 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.7, copyright Thursday, 30 September 2021
+# Version:  0.1.7, copyright Friday, 01 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from argparse import ArgumentDefaultsHelpFormatter, \
-    SUPPRESS, OPTIONAL, ZERO_OR_MORE
+from argparse import SUPPRESS, OPTIONAL, ZERO_OR_MORE, \
+    ArgumentDefaultsHelpFormatter, RawDescriptionHelpFormatter
 
 
-class ArgumentDefaultsAndConstsHelpFormatter(ArgumentDefaultsHelpFormatter):
+class ArgumentDefaultsAndConstsHelpFormatter(ArgumentDefaultsHelpFormatter,
+                                             RawDescriptionHelpFormatter):
 
     def _get_help_string(self, action):
         action_help = action.help

@@ -21,7 +21,7 @@ from auxilium.tools.system_tools import python as _python, module, del_tree
 def build(path=getcwd(), venv=None):
     """build package distribution"""
     log(INFO, ICONS["build"] + 'build package distribution')
-    code = 0
+    code = False
     code = code or _python("setup.py build",
                            path=path, venv=venv)
     code = code or _python("setup.py sdist --formats=zip",

@@ -17,56 +17,34 @@ from logging import log, ERROR
 from ..tools.build_tools import build as _build, cleanup as _cleanup
 from ..tools.const import ICONS
 from ..tools.docmaintain_tools import docmaintain
-from ..tools.git_tools import commit_git, tag_git, push_git
+from ..tools.git_tools import commit_git, tag_git, push_git, build_url
 from ..tools.pip_tools import install
 from ..tools.pypi_tools import deploy as _deploy
 
 
 def do(pkg=basename(getcwd()), commit=None, tag=None, header=None,
-       build=None, push=None, remote=None, remote_usr=None, remote_pwd=None,
+       push=None, remote=None, remote_usr=None, remote_pwd=None,
        deploy=None, pypi_usr=None, pypi_pwd=None, cleanup=None,
        path=None, env=None, **kwargs):
     """run deploy process"""
 
+    _cleanup()
     if cleanup:
-        return _cleanup()
+        return
 
-    build_return_code = -1
     code = False
-
     if header:
         code = code or docmaintain(pkg, path=path)
 
-    if build:
-        _cleanup()
-        build_return_code = _build(path=path, venv=env)
-        code = code or build_return_code
-
-    if build_return_code and any((commit, tag, push, deploy)):
-        log(ERROR, ICONS["error"] +
-            'build missing or failed . '
-            'will neither commit, tag, push nor deploy.')
-        return 1
-
+    code = code or _build(path=path, venv=env)
     if commit:
         code = code or commit_git(commit, path=path)
-
     if tag:
         code = code or tag_git(tag, path=path)
-
     if push:
-        url = remote.replace('https://', '')
-        usr = remote_usr
-        pwd = '' if remote_pwd == 'None' else ':' + remote_pwd  # nosec
-        remote = 'https://' + usr + pwd + '@' + url
+        remote = build_url(remote, remote_usr, remote_pwd)
         code = code or push_git(remote, path)
-
     if deploy:
-        if build_return_code == 0:
-            code = code or install(path=path, venv=env)
-            code = code or _deploy(pypi_usr, pypi_pwd, path=path, venv=env)
-        else:
-            log(ERROR, ICONS["error"] +
-                'build missing or failed . did not deploy.')
-
+        code = code or install(path=path, venv=env)
+        code = code or _deploy(pypi_usr, pypi_pwd, path=path, venv=env)
     return code

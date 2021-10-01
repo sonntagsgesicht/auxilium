@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.7, copyright Thursday, 30 September 2021
+# Version:  0.1.7, copyright Friday, 01 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -46,13 +46,31 @@ def main():
     # ===========================
 
     epilog = \
-        "if (default: True) a given flag turns its value to False. " + \
-        "default behavior may depend on current path and project. " + \
+        "if (default: True) a given flag turns its value to False. " \
+        "default behavior may depend on current path and project. " \
         "set default behavior in `~/%s` and `./%s`." % \
         (CONFIG_PATH, CONFIG_PATH)
 
+    description = """\
+Creates and manages boilerplate python development workflow.
+ [ create > code > test > build > deploy ]
+"""
+
+    s = """
+    It provides project templates which have already set-up \
+an efficient development workflow.
+   `auxilium` creates and manages automatically
+      a `git` repository for tracking source code changes
+      python `venv` virtual environment to run and test projects in isolated \
+setup
+     `unittest` suite of tests to ensure the project works as intended
+      minimal but full functioning documentation structure build for `sphinx`
+     `doctests` to check example code in documentation
+"""
     parser = ArgumentParser(
-        epilog=epilog, formatter_class=ArgumentDefaultsAndConstsHelpFormatter)
+        epilog=epilog,
+        description=description,
+        formatter_class=ArgumentDefaultsAndConstsHelpFormatter)
 
     sub_parser = parser.add_subparsers(dest='command')
 
@@ -60,6 +78,7 @@ def main():
     sub_parser.add_parser(
         'create',
         epilog=epilog,
+        description=description,
         formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
         help=create_project.__doc__)
 
@@ -67,6 +86,7 @@ def main():
     sub_parser.add_parser(
         'update',
         epilog=epilog,
+        description=description,
         formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
         help="keep project, repo and dependencies up-to-date")
 
@@ -74,30 +94,33 @@ def main():
     sub_parser.add_parser(
         'test',
         epilog=epilog,
+        description=description,
         formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
-        help="check project integrity by testing using `pytest`")
+        help="check project integrity by testing using `unittest` framework")
 
     # === documentation ==
     sub_parser.add_parser(
         'doc',
         epilog=epilog,
         formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
-        help="update project documentation using `sphinx`")
+        help="build project documentation using `sphinx`")
 
     # === deploy ==
     sub_parser.add_parser(
-        'deploy',
+        'build',
         epilog=epilog,
+        description=description,
         formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
-        help="manage project deployment")
+        help="build project distribution and deploy releases to `pypi.org`")
 
     # === invoke python ==
     sub_parser.add_parser(
         'python',
         epilog='Call python interpreter of virtual environment '
-               '(Note: only some options are implemented)',
+               '(Note: only some standard optional arguments are implemented)',
+        description=description,
         formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
-        help="invoke (virtual environment) python")
+        help="invoke virtual environment")
 
     # ===============================
     # === add arguments to parser ===
