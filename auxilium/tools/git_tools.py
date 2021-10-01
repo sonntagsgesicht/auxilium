@@ -107,7 +107,7 @@ def push_git(remote='None', path=getcwd()):
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
 
     out, err = BytesIO(), BytesIO()
-    porcelain.push(Repo(path), remote, BRANCH, out, err)
+    porcelain.push(Repo(path), remote, BRANCH)
     for line in out.readlines() + err.readlines():
         log(INFO, ICONS[""] + line)
     return 0
