@@ -10,12 +10,9 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from contextlib import redirect_stdout, redirect_stderr
-from io import StringIO, BytesIO, FileIO, TextIOWrapper
 from logging import log, DEBUG, INFO, ERROR
-from os import getcwd, linesep, chdir
+from os import getcwd, chdir
 from os.path import exists, join
-from sys import stderr, stdout
 
 from dulwich import porcelain
 from dulwich.repo import Repo
