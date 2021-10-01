@@ -101,8 +101,6 @@ def push_git(remote='None', path=getcwd()):
     clean = http + '//' + usr + '@' + url
     log(DEBUG, ICONS[""] + "at " + clean)
     out, err = BytesIO(), BytesIO()
-    porcelain.push(Repo(path), remote, 'master',
-                   outstream=out, errstream=err)
     try:
         porcelain.push(Repo(path), remote, 'master',
                        outstream=out, errstream=err)
