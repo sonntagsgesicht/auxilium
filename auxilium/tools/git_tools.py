@@ -110,7 +110,7 @@ def push_git(remote='None', path=getcwd()):
     if out:
         for line in out.read().decode("utf-8").split(linesep):
             if line:
-                log(DEBUG, line)
+                log(INFO, line)
     if err:
         for line in err.read().decode("utf-8").split(linesep):
             if line:
