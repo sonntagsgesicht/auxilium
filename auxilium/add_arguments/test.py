@@ -29,16 +29,23 @@ def add_arguments(parser=None, config=ConfigParser()):
         default=config.get('test', 'path', fallback=TEST_PATH),
         help='path to directory where test are found')
     parser.add_argument(
+        '-ff', '--fail-fast',
+        action='store_const',
+        const=not config.getboolean('test', 'fail-fast', fallback=False),
+        default=config.getboolean('test', 'fail-fast', fallback=False),
+        help='stop on first fail or error')
+    parser.add_argument(
         '--commit',
         nargs='?',
         const=config.get('test', 'commit', fallback='commit tested'),
         help='auto commit on successful test run')
     parser.add_argument(
         '--coverage',
-        action='store_const',
-        const=not config.getboolean('test', 'coverage', fallback=True),
-        default=config.getboolean('test', 'coverage', fallback=True),
-        help=coverage.__doc__)
+        nargs='?',
+        metavar='MIN',
+        const=config.getboolean('test', 'coverage', fallback='0'),
+        default=config.getboolean('test', 'coverage', fallback='0'),
+        help=coverage.__doc__ + ' - fail on total coverage less than MIN')
     parser.add_argument(
         '--quality',
         action='store_const',

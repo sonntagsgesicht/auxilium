@@ -26,15 +26,15 @@ def quality(pkg=basename(getcwd()), venv=None):
 
 def quality_pylint(pkg=basename(getcwd()), venv=None):
     """evaluate quality of source code with pylint"""
-    return module('pylint', pkg, level=INFO, venv=venv)
+    return module('pylint', pkg, venv=venv)
 
 
 def quality_flake8(pkg=basename(getcwd()), venv=None):
     """evaluate quality of source code with flake8"""
-    return module('flake8', pkg, level=INFO, venv=venv)
+    return module('flake8', '%s' % pkg, venv=venv)
 
 
 def quality_pep8(pkg=basename(getcwd()), venv=None):
     """evaluate quality of source code with pep8/pep257"""
-    res = module('pycodestyle', pkg, level=INFO, venv=venv)
-    return res or module('pydocstyle', pkg, level=INFO, venv=venv)
+    exit_status = module('pycodestyle', pkg, venv=venv)
+    return exit_status or module('pydocstyle', pkg, venv=venv)

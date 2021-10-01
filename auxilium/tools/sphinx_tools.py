@@ -18,73 +18,63 @@ from shutil import rmtree
 from .const import ICONS
 from .system_tools import shell
 
-SPHINX_API_PATH = normpath("doc/sphinx/api")
-SPHINX_INDEX_FILE = normpath("./doc/sphinx/_build/html/intro.html")
-SPHINX_PATH = normpath("./doc/sphinx/")
-
-SPHINX_BUILD_PATH = normpath("./doc/sphinx/_build")
-SPHINX_BUILD_HTML_PATH = normpath("./doc/sphinx/_build/html")
-SPHINX_BUILD_LATEX_PATH = normpath("./doc/sphinx/_build/latex")
-
-SPHINX_BUILD_PATHS = SPHINX_PATH, SPHINX_BUILD_PATH
-SPHINX_HTML_PATHS = SPHINX_PATH, SPHINX_BUILD_HTML_PATH
-SPHINX_LATEX_PATHS = SPHINX_PATH, SPHINX_BUILD_LATEX_PATH
+PATH = normpath("doc/sphinx/")
+API_PATH = join(PATH, "api")
+BUILD_PATH = join(PATH, "_build")
+HTML_PATH = join(BUILD_PATH, "html")
+LATEX_PATH = join(BUILD_PATH, "latex")
+INDEX_FILE = join(HTML_PATH, "intro.html")
 
 
 def api(pkg=basename(getcwd()), venv=None):
     """add api entries to `sphinx` docs"""
     log(INFO, ICONS["commit"] + 'run sphinx apidoc scripts')
-    if exists(SPHINX_API_PATH):
-        rmtree(SPHINX_API_PATH)
-    res = 0
-    cmd = "sphinx-apidoc -o %s -f -E %s" % (SPHINX_API_PATH, pkg)
-    res += shell(cmd, venv=venv)
-    return res
+    if exists(API_PATH):
+        rmtree(API_PATH)
+    cmd = "sphinx-apidoc -o %s -f -E %s" % (API_PATH, pkg)
+    return shell(cmd, venv=venv)
 
 
-def html(venv=None):
+def html(fail_fast=False, venv=None):
     """build html documentation (using `sphinx`)"""
-    # cleanup(venv)
-    # if not exists(SPHINX_API_PATH):
-    #     api(venv=venv)
     log(INFO, ICONS["html"] +
         'run sphinx html scripts (only on new or modified files)')
-    return shell(
-        "sphinx-build -W --keep-going -b html %s %s" % SPHINX_HTML_PATHS,
-        venv=venv)
+    ff = '' if fail_fast else " --keep-going"
+    cmd = "sphinx-build -W %s -b html %s %s" % (ff, PATH, HTML_PATH)
+    return shell(cmd, venv=venv)
 
 
-def latexpdf(venv=None):
+def latexpdf(fail_fast=False, venv=None):
     """build pdf documentation (using `sphinx` and `LaTeX`)"""
     log(INFO, ICONS["latexpdf"] +
         'run sphinx latexpdf scripts (only on new or modified files)')
-    return shell(
-        "sphinx-build -M latexpdf -W --keep-going %s %s" % SPHINX_LATEX_PATHS,
-        venv=venv)
+    ff = '' if fail_fast else " --keep-going"
+    cmd = "sphinx-build -W %s -b latexpdf %s %s" % (ff, PATH, LATEX_PATH)
+    return shell(cmd, venv=venv)
 
 
-def doctest(venv=None):
+def doctest(fail_fast=False, venv=None):
     """run `sphinx` doctest"""
     log(INFO, ICONS["doctest"] +
         'run sphinx doctest scripts (only on new or modified files)')
-    return shell(
-        "sphinx-build -W --keep-going -b doctest %s %s " % SPHINX_BUILD_PATHS,
-        venv=venv)
+    ff = '' if fail_fast else " --keep-going"
+    cmd = "sphinx-build -W %s -b doctest %s %s " % (ff, PATH, BUILD_PATH)
+    return shell(cmd, venv=venv)
 
 
 def show(venv=None):
     """show html documentation"""
     log(INFO, ICONS["show"] +
-        'find docs at %s' % join(getcwd(), SPHINX_INDEX_FILE))
+        'find docs at %s' % join(getcwd(), INDEX_FILE))
     if os_name == 'posix':
-        return shell("open %s" % SPHINX_INDEX_FILE, venv=venv)
+        return shell("open %s" % INDEX_FILE, venv=venv)
     if os_name == 'nt':
-        return shell("start %s" % SPHINX_INDEX_FILE, venv=venv)
+        return shell("start %s" % INDEX_FILE, venv=venv)
     return 1
 
 
 def cleanup(venv=None):
     """remove temporary files"""
     log(INFO, ICONS["clean"] + 'clean environment')
-    return shell("sphinx-build -M clean %s %s" % SPHINX_BUILD_PATHS,
-                 venv=venv)
+    cmd = "sphinx-build -M clean %s %s" % (PATH, BUILD_PATH)
+    return shell(cmd, venv=venv)

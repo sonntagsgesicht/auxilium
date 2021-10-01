@@ -26,4 +26,4 @@ def security(pkg=basename(getcwd()), venv=None):
 
 def security_bandit(pkg=basename(getcwd()), venv=None):
     """run `bandit` on source code """
-    return module('bandit', '-r -q %s' % pkg, level=INFO, venv=venv)
+    return module('bandit', '-r -q %s' % pkg, venv=venv)

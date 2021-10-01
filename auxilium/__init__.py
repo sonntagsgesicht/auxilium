@@ -35,9 +35,6 @@ __scripts__ = ('auxilium/scripts/auxilium',)
 
 # todo: make full run before deploy new release:
 #  install->maintain->test->doc->build->commit->tag->push->deploy->release
-#  and separate build from deploy module incl. --test option
 
-# todo: add -ff --fail-fast option
-# todo: capture log in shell in case of an error
 # todo: picture link to github
 # todo: update tutorial

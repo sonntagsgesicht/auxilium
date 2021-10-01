@@ -17,26 +17,27 @@ from os.path import basename
 from ..tools.git_tools import commit_git
 from ..tools.const import ICONS
 from ..tools.sphinx_tools import api as _api, doctest as _doctest, \
-    html as _html, show as _show, cleanup as _cleanup
+    html as _html, latexpdf as _latexpdf, show as _show, cleanup as _cleanup
 
 DID_NOT_COMMIT = 'doctest or build missing - did not commit'
 
 
-def do(pkg=basename(getcwd()), commit=None,
+def do(pkg=basename(getcwd()), commit=None, fail_fast=None, pdf=None,
        api=None, doctest=None, html=None, show=None, cleanup=None,
        path=None, env=None, **kwargs):
     if cleanup:
         return _cleanup(env)
 
-    doctest_return_code = html_return_code = -1
     code = False
     if api:
-        code = code or _cleanup(env)
-        code = code or _api(pkg, env)
+        code = code or _cleanup(venv=env)
+        code = code or _api(pkg=pkg, venv=env)
     if doctest:
-        code = code or _doctest(env)
+        code = code or _doctest(fail_fast=fail_fast, venv=env)
     if html:
-        code = code or _html(env)
+        code = code or _html(fail_fast=fail_fast, venv=env)
+    if pdf:
+        code = code or _latexpdf(fail_fast=fail_fast, venv=env)
     if commit:
         if doctest and html:
             code = code or commit_git(commit)

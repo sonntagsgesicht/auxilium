@@ -18,41 +18,30 @@ from .const import TEST_PATH, ICONS
 from .system_tools import python as _python, module, del_tree
 
 
-def test(test_dir=TEST_PATH, venv=None):
+def test(test_dir=TEST_PATH, fail_fast=False, venv=None):
     """test code by running tests"""
     log(INFO, ICONS["test"] + 'run test scripts')
-    return test_unittest(test_dir, venv)
+    return test_unittest(test_dir, fail_fast=fail_fast, venv=venv)
 
 
-def test_unittest(test_dir=TEST_PATH, venv=None):
+def test_unittest(test_dir=TEST_PATH, fail_fast=False, venv=None):
     """test code by running unittest"""
-    return module(
-        'unittest', 'discover %s -v -p "*.py"' % test_dir,
-        level=INFO, venv=venv)
+    ff = ' --failfast' if fail_fast else ''
+    cmd = 'discover %s%s -v -p "*.py"' % (test_dir, ff)
+    return module('unittest', cmd, venv=venv)
 
 
-def test_pytest(test_dir=TEST_PATH, venv=None):
+def test_pytest(test_dir=TEST_PATH, fail_fast=False, venv=None):
     """test code by running pytest"""
-    return module('pytest', test_dir + ' unittests.py',
-                  level=INFO, venv=venv)
+    ff = " --exitfirst" if fail_fast else ''
+    return module('pytest', '%s%s' % (test_dir, ff), venv=venv)
 
 
-def doctests(pkg=basename(getcwd()), venv=None):
+def doctests(pkg=basename(getcwd()), fail_fast=False, venv=None):
     """test code in doc string (doctest)"""
     log(INFO, ICONS["doctest2"] + 'run doctest scripts')
-#     cmd = '''
-# import doctest, %s as pkg;
-# def _doctest_recursively(pkg, *args, **kwargs):
-#     import doctest
-#     import inspect
-#     pkg = __import__(pkg) if isinstance(pkg, str) else pkg
-#     if inspect.ismodule(pkg):
-#         print(pkg.__name__)
-#         return (doctest.testmod(pkg, *args, **kwargs),) + tuple(
-#         _doctest_recursively(p) for p in dir(pkg))
-# doctest.testmod(pkg, verbose=True)''' % pkg
     cmd = 'import doctest, %s as pkg; doctest.testmod(pkg, verbose=True)' % pkg
-    return _python('-c "%s"' % cmd, level=INFO, venv=venv)
+    return _python('-c "%s"' % cmd, venv=venv)
 
 
 def cleanup(test_dir=TEST_PATH):

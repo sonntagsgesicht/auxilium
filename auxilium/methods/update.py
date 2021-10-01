@@ -28,19 +28,14 @@ def do(pkg=basename(getcwd()), commit=None, add=None, upgrade=None,
         return code or uninstall(pkg, venv=env)
 
     code = False
-
     if upgrade:
         code = code or _upgrade(upgrade, path=path, venv=env)
-
     if install:
         code = code or _install(path=path, venv=env)
-
     if requirements:
         code = code or _requirements(path=path, venv=env)
-
     if header:
         code = code or docmaintain(pkg, path=path)
-
     if commit:
         code = code or commit_git(commit, path=path)
 

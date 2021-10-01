@@ -31,8 +31,6 @@ def create_venv(pkg=basename(getcwd()),
                 path=getcwd(),
                 venv=None):
     """create virtual python environment"""
-    # check if venv exists
-    venv = venv if venv and exists(venv) else None
     # strip potential executable from venv_path
     venv_path = venv_path.replace(VENV_TAIL, '')
     log(INFO, ICONS["venv"] + "create virtual environment")
@@ -63,26 +61,35 @@ def shell(command, level=DEBUG, path=getcwd(), venv=None,
         command = activate_venv(venv) + ' ' + command
     log(DEBUG, ICONS[""] + "in %s" % path)
     log(DEBUG - 1, ICONS[""] + ">>> %s" % command)
-    return _popen(command, level, path)
+    return _popen(command, level, path, capture_output)
 
 
-def _popen(command, level=DEBUG, path=getcwd()):
+def _popen(command, level=DEBUG, path=getcwd(), capture_output=True):  # nosec
+    if not capture_output:
+        return _run(command, level, path, capture_output)
     proc = Popen(
         command,
         stdout=PIPE,
         stderr=STDOUT,
         universal_newlines=True,
-        cwd=path, shell=True, text=True)  # nosec
+        cwd=path, shell=True, text=True)
+    stderr = list()
     for stdout_line in iter(proc.stdout.readline, ""):
+        stderr.append(stdout_line)
         log(level, ICONS[""] +
             SUB_FORMATTER_PREFIX + ' ' + stdout_line.rstrip())
     proc.stdout.close()
-    return proc.wait()
+    exit_status = proc.wait()
+    if exit_status:
+        for stderr_line in stderr:
+            log(ERROR, ICONS["error"] +
+                SUB_FORMATTER_PREFIX + ' ' + stderr_line.rstrip())
+    return exit_status
 
 
-def _run(command, level=DEBUG, path=getcwd()):
-    proc = run(
-        command, cwd=path, shell=True, capture_output=True, text=True)  # nosec
+def _run(command, level=DEBUG, path=getcwd(), capture_output=False):  # nosec
+    proc = run(command, cwd=path, shell=True,
+               capture_output=capture_output, text=True)
     log_level = ERROR if proc.returncode else level
     if proc.stdout:
         for line in str(proc.stdout).split(_linesep):

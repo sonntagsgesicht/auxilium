@@ -11,7 +11,7 @@
 
 
 from os import getcwd, chdir
-from os.path import basename, join
+from os.path import basename, join, exists
 from sys import path as sys_path
 
 from ..tools.setup_tools import create_project, create_finish
@@ -27,13 +27,13 @@ def do(name=None, slogan=None, author=None, email=None, url=None,
     if update:
         project_path = join(path, name) if name else path
         pkg = basename(project_path)
-        code = 0
+        code = False
     else:
         # creat project
         project_path = \
             create_project(name, slogan, author, email, url, path=path)
         pkg = basename(project_path)
-        code = int(not project_path.endswith(name)) if name else 0
+        code = not project_path.endswith(name) if name else False
 
         chdir(project_path)
         sys_path.append(project_path)
@@ -47,6 +47,8 @@ def do(name=None, slogan=None, author=None, email=None, url=None,
         # create virtual environment
         # venv = venv.replace('bin/python3')
         del_tree(venv)
+        # check if env exists
+        env = env if env and exists(env) else ''
         env = create_venv(pkg, venv_path=venv, path=project_path, venv=env)
 
         # run default update command

@@ -45,28 +45,17 @@ def main():
     # === add argument parser ===
     # ===========================
 
-    epilog = \
-        "if (default: True) a given flag turns its value to False. " \
-        "default behavior may depend on current path and project. " \
-        "set default behavior in `~/%s` and `./%s`." % \
-        (CONFIG_PATH, CONFIG_PATH)
+    epilog = """
+if (default: True) a given flag turns its value to False. \
+default behavior may depend on current path and project.
+set default behavior in `~/%s` and `./%s`."
+""" % (CONFIG_PATH, CONFIG_PATH)
 
-    description = """\
+    description = """
 Creates and manages boilerplate python development workflow.
  [ create > code > test > build > deploy ]
 """
 
-    _ = """
-    It provides project templates which have already set-up \
-an efficient development workflow.
-   `auxilium` creates and manages automatically
-      a `git` repository for tracking source code changes
-      python `venv` virtual environment to run and test projects in isolated \
-setup
-     `unittest` suite of tests to ensure the project works as intended
-      minimal but full functioning documentation structure build for `sphinx`
-     `doctests` to check example code in documentation
-"""
     parser = ArgumentParser(
         epilog=epilog,
         description=description,
@@ -75,6 +64,15 @@ setup
     sub_parser = parser.add_subparsers(dest='command')
 
     # === create ===
+
+    description = """
+Creates project file structure from templates which have already set-up
+ `venv` virtual python environment to run and test projects isolated
+ `git` source code repository for tracking source code changes
+ `unittest` suite of tests to ensure the project works as intended
+  already-to-use documentation structure build for `sphinx`
+"""
+
     sub_parser.add_parser(
         'create',
         epilog=epilog,

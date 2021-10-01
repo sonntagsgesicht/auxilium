@@ -12,10 +12,8 @@
 
 from os import getcwd
 from os.path import basename
-from logging import log, ERROR
 
 from ..tools.build_tools import build as _build, cleanup as _cleanup
-from ..tools.const import ICONS
 from ..tools.docmaintain_tools import docmaintain
 from ..tools.git_tools import commit_git, tag_git, push_git, build_url
 from ..tools.pip_tools import install

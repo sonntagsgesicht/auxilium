@@ -5,13 +5,13 @@ Submodules
 ----------
 
 
-.. automodule:: auxilium.methods.create
+.. automodule:: auxilium.methods.build
    :members:
    :undoc-members:
    :show-inheritance:
 
 
-.. automodule:: auxilium.methods.deploy
+.. automodule:: auxilium.methods.create
    :members:
    :undoc-members:
    :show-inheritance:

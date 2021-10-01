@@ -13,12 +13,18 @@
 from argparse import ArgumentParser
 from configparser import ConfigParser
 
-from auxilium.tools.sphinx_tools import api, html, doctest, show, \
+from auxilium.tools.sphinx_tools import api, html, doctest, show, latexpdf, \
     cleanup as cleanup_doc
 
 
 def add_arguments(parser=None, config=ConfigParser()):
     parser = ArgumentParser() if parser is None else parser
+    parser.add_argument(
+        '-ff', '--fail-fast',
+        action='store_const',
+        const=not config.getboolean('doc', 'fail-fast', fallback=False),
+        default=config.getboolean('doc', 'fail-fast', fallback=False),
+        help='stop on first fail or error')
     parser.add_argument(
         '--commit',
         nargs='?',
@@ -39,9 +45,15 @@ def add_arguments(parser=None, config=ConfigParser()):
     parser.add_argument(
         '--html',
         action='store_const',
-        const=not config.getboolean('doc', 'doctest', fallback=True),
-        default=config.getboolean('doc', 'doctest', fallback=True),
+        const=not config.getboolean('doc', 'html', fallback=True),
+        default=config.getboolean('doc', 'html', fallback=True),
         help=html.__doc__)
+    parser.add_argument(
+        '--pdf',
+        action='store_const',
+        const=not config.getboolean('doc', 'pdf', fallback=False),
+        default=config.getboolean('doc', 'pdf', fallback=False),
+        help=latexpdf.__doc__)
     parser.add_argument(
         '--show',
         action='store_const',

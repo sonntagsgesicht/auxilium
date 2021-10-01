@@ -84,10 +84,11 @@ def tag_git(tag, msg='', path=getcwd()):
     return 0
 
 
-def build_url(url, usr='', pwd='None'):
+def build_url(url, usr='', pwd='None'):   # nosec
     pwd = ':' + str(pwd) if pwd and pwd != 'None' else ''
     usr = str(usr) if usr else 'token-user' if pwd else ''
-    remote = 'https://' + usr + pwd + '@' + url.replace('https://', '')
+    remote = \
+        'https://' + usr + pwd + '@' + url.replace('https://', '')
     return remote
 
 

@@ -26,7 +26,7 @@ from ..tools.test_tools import test as _test, cleanup as cleanup_test
 DID_NOT_COMMIT = 'test missing - did not commit'
 
 
-def do(pkg=basename(getcwd()), commit=None,
+def do(pkg=basename(getcwd()), commit=None, fail_fast=None,
        quality=None, security=None, coverage=None, cleanup=None,
        path=None, env=None, **kwargs):
     """run test process"""
@@ -40,10 +40,10 @@ def do(pkg=basename(getcwd()), commit=None,
     if security:
         code = code or _security(pkg, venv=env)
     if path:
-        test_return_code = _test(path, venv=env)
+        test_return_code = _test(path, fail_fast=fail_fast, venv=env)
         code = code or test_return_code
         if coverage:
-            code = code or _coverage(pkg, path, venv=env)
+            code = code or _coverage(pkg, path, fail_fast=fail_fast, venv=env)
         code = code or commit_git(commit)
     elif commit:
         log(ERROR, ICONS["error"] + DID_NOT_COMMIT)
