@@ -112,5 +112,6 @@ def push_git(remote='None', path=getcwd()):
     print(lines)
     print("jweh")
     for line in lines.split(linesep):
-        log(INFO, ICONS['error'] + line)
+        # log(INFO, ICONS['error'] + line)
+        pass
     return 0
