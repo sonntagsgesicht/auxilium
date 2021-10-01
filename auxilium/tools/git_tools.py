@@ -10,7 +10,7 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from io import BytesIO
+from io import BufferedWriter
 from logging import log, DEBUG, INFO, ERROR
 from os import getcwd, linesep, chdir
 from os.path import exists, join
@@ -105,7 +105,7 @@ def push_git(remote='None', path=getcwd()):
     """push current branch of local to remote `git` repo"""
     log(INFO, ICONS["push"] + "push current branch to remote `git` repo")
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
-    out, err = BytesIO(), BytesIO()
+    out, err = BufferedWriter(), BufferedWriter()
     try:
         porcelain.push(Repo(path), remote, BRANCH,
                        outstream=out, errstream=err)
