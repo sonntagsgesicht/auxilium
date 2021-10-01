@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.7, copyright Friday, 01 October 2021
+# Version:  0.1.8, copyright Friday, 01 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -18,6 +18,7 @@ from ..tools.const import VENV, DEMO_PATH
 
 def add_arguments(parser=None, config=ConfigParser()):
     parser = ArgumentParser() if parser is None else parser
+
     parser.add_argument(
         '-v', '--verbosity',
         action='count',
@@ -25,6 +26,11 @@ def add_arguments(parser=None, config=ConfigParser()):
         help='set logging level '
              '(-v=ALL, -vv=DEBUG, -vvv=INFO, -vvvv=WARNING, -vvvvv=ERROR) '
              '(default: INFO)')
+
+    parser.add_argument(
+        '-V', '--version',
+        action='store_true',
+        help='show version and exit')
 
     env = config.get('DEFAULT', 'env', fallback=VENV)
     parser.add_argument(

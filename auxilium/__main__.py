@@ -5,38 +5,37 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.7, copyright Friday, 01 October 2021
+# Version:  0.1.8, copyright Friday, 01 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-import datetime
-import logging
-import os
-import pathlib
-import sys
+from logging import log, basicConfig
+from os import getcwd, name as os_name
+from os.path import basename
+from pathlib import Path
+from sys import exit
 
 from argparse import ArgumentParser
 from configparser import ConfigParser
 
+from auxilium import add_arguments
 from auxilium.add_arguments import ArgumentDefaultsAndConstsHelpFormatter
+from auxilium.methods.root import do
 from auxilium.tools.const import CONFIG_PATH, VERBOSITY_LEVELS, ICONS
-from auxilium.tools.system_tools import module, del_tree
-from auxilium import add_arguments, methods
-
-Failure = Exception
 
 
 def main():
+
     # ==========================
     # === init config parser ===
     # ==========================
 
     config = ConfigParser(allow_no_value=True)
-    config.read(pathlib.Path.home().joinpath(CONFIG_PATH))
+    config.read(Path.home().joinpath(CONFIG_PATH))
     config.read(CONFIG_PATH)
 
-    if not config.getboolean('DEFAULT', 'icons', fallback=os.name == 'posix'):
+    if not config.getboolean('DEFAULT', 'icons', fallback=os_name == 'posix'):
         ICONS.clear()
         ICONS.update({'error': '!!', 'warn': '!'})
 
@@ -52,7 +51,7 @@ set default behavior in `~/%s` and `./%s`."
 
     description = """
 creates and manages boilerplate python development workflow.
- [ create > code > test > build > deploy ]
+ [ create > exit_status > test > build > deploy ]
 """
 
     parser = ArgumentParser(
@@ -63,12 +62,11 @@ creates and manages boilerplate python development workflow.
     sub_parser = parser.add_subparsers(dest='command')
 
     # === create ===
-
     help = "creates a new project, repo and virtual environment"
     description = help + """ \
 with project file structure from templates which has already set-up
  `venv` virtual python environment to run and test projects isolated
- `git` source code repository for tracking source code changes
+ `git` source exit_status repository for tracking source exit_status changes
  `unittest` suite of tests to ensure the project works as intended
   already-to-use documentation structure build for `sphinx`
 """
@@ -143,96 +141,32 @@ with project file structure from templates which has already set-up
     # === invoke parsed arguments ===
     # ===============================
 
+    # pars arguments
     args = parser.parse_args()
-
-    verbosity, formatter = VERBOSITY_LEVELS[
-        min(args.verbosity, len(VERBOSITY_LEVELS) - 1)]
-    logging.basicConfig(level=verbosity, format=formatter)
-    logging.log(1, args)
-
-    # check virtual environment
-    if args.env \
-            and not os.path.exists(args.env) \
-            and args.command != 'create' \
-            and not args.demo:
-        msg = ICONS["warn"] + \
-              'did not find a virtual environment at %s. ' % args.env
-        logging.log(logging.WARN, msg)
-        msg = ICONS[""] + \
-            'consider creating one with ' \
-            '`auxilium create --update` ' \
-            'or use `auxilium -e command [options]`'
-        logging.log(logging.WARN, msg)
-        sys.exit(1)
-
-    # check demo
-    if args.demo:
-        logging.log(logging.INFO, ICONS["demo"] +
-                    'relax, just starting a demo')
-
-        del_tree(args.demo)
-        v = '-' + 'v' * args.verbosity if args.verbosity else ''
-        z = '-' + 'x' * args.exit_status if args.exit_status else ''
-        e = '-e=' + args.env
-        cmd = (' %s %s %s create '
-               '--name=%s '
-               '--slogan="a demo by auxilium" '
-               '--author=auxilium '
-               '--email="sonntagsgesicht@icould.com" '
-               '--url="https://github.com/sonntagsgesicht/auxilium"') % \
-              (v, z, e, args.demo)
-        sys.exit(module('auxilium', cmd, level=logging.INFO))
-
-    # check command or print help
-    method = getattr(methods, str(args.command), None)
-    if method is None:
-        print('>>> auxilium -h')
-        parser.print_help()
-        for key, choice in sub_parser.choices.items():
-            print('\n>>> auxilium ' + key + ' -h')
-            choice.print_help()
-        sys.exit()
-
-    # check project path
-    path = os.getcwd()
-    pkg = os.path.basename(os.getcwd())
-    full_path = os.path.join(path, pkg)
-
-    if not os.path.exists(full_path) \
-            and args.command not in ('create', 'python'):
-        msg = ICONS["warn"] + \
-              'no maintainable project found at %s ' % full_path
-        logging.log(logging.WARN, msg)
-        msg = ICONS[""] + \
-            'consider creating one with `auxilium create` ' \
-            '(or did you mean `auxilium python`?)'
-        logging.log(logging.WARN, msg)
-        sys.exit(1)
-
     kwargs = vars(args)
-    kwargs['path'] = kwargs.get('path', path)
-    kwargs['pkg'] = kwargs.get('name', pkg)
 
-    if path not in sys.path:
-        sys.path.append(path)
+    # add pkg and path to kwargs
+    kwargs['cwd'] = kwargs.get('cwd', getcwd())
+    kwargs['path'] = kwargs.get('path', getcwd())
+    kwargs['pkg'] = kwargs.get('name', basename(getcwd()))
 
-    start = datetime.datetime.now()
-    code = method(**kwargs) if method else 1
-    if code:
-        msg = 'non-zero exit status (failure in `%s`)' % args.command
-        logging.log(logging.ERROR, ICONS['error'] + msg)
-        if args.exit_status > 2:
-            raise Failure(msg)
-        if args.exit_status == 2:
-            sys.exit(1)
-        if args.exit_status == 1:
-            sys.exit(0)
-        if args.exit_status == 0:
-            sys.exit(1)
-    exec_time = (datetime.datetime.now() - start)
-    logging.log(logging.ERROR, ICONS['OK'] + 'finished in %0.3fs' %
-                exec_time.total_seconds())
-    sys.exit()
+    # init logging
+    item = min(args.verbosity, len(VERBOSITY_LEVELS) - 1)
+    verbosity, formatter = VERBOSITY_LEVELS[item]
+    basicConfig(level=verbosity, format=formatter)
+    log(1, ICONS['inspect'] + '(parsed) arguments:')
+    for item in kwargs.items():
+        log(1, ICONS[''] + "  %-12s : %r" % item)
+
+    # print help in case of no command
+    if args.command is None and not args.demo:
+        parser.print_help()
+        for p in sub_parser.choices.values():
+            p.print_help()
+        exit()
+
+    # call command/method
+    do(**kwargs)
 
 
 if __name__ == '__main__':

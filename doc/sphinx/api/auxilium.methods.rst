@@ -29,6 +29,12 @@ Submodules
    :show-inheritance:
 
 
+.. automodule:: auxilium.methods.root
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 .. automodule:: auxilium.methods.test
    :members:
    :undoc-members:
