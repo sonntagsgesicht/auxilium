@@ -108,6 +108,6 @@ def push_git(remote='None', path=getcwd()):
 
     with StringIO() as out, redirect_stdout(out):
         porcelain.push(Repo(path), remote, BRANCH)
-        while out:
-            log(INFO, ICONS[''] + out.readline())
+        for line in out.read().split(linesep):
+            log(INFO, ICONS[''] + line)
     return 0
