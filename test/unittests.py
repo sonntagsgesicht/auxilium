@@ -17,7 +17,7 @@ import os
 import sys
 import unittest
 
-from auxilium.tools.const import DEMO_PATH, TEST_LOG_FORMATTER
+from auxilium.tools.const import DEMO_PATH, TEST_LOG_FORMATTER, ICONS
 from auxilium.tools.system_tools import module, del_tree
 
 sys.path.append('..')
@@ -27,13 +27,14 @@ CWD, _ = os.path.split(__file__)
 logging.basicConfig(level=logging.INFO, format=TEST_LOG_FORMATTER)
 
 
-def auxilium(command, path=None):
-    return module('auxilium', command, path=path)
+def auxilium(command, level=logging.INFO, path=None):
+    return module('auxilium', command, level=level, path=path)
 
 
 class CreateRepoUnitTests(unittest.TestCase):
     def setUp(self):
-        logging.log(logging.DEBUG, 'start unittests')
+        logging.log(logging.INFO, '')
+        logging.log(logging.INFO, ICONS['test'] + 'start unittests')
         self.wdir = os.path.join(CWD, 'working_dir')
         self.level = ''  # '-vv'
         if not os.path.exists(self.wdir):
