@@ -104,13 +104,13 @@ class Buffer(list):
         self.append(b)
 
 
-def push_git(remote='None', path=getcwd()):
+def push_git(remote='None', branch=BRANCH, path=getcwd()):
     """push current branch of local to remote `git` repo"""
     log(INFO, ICONS["push"] + "push current branch to remote `git` repo")
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
 
     out = Buffer()
-    porcelain.push(Repo(path), remote, BRANCH, out, out)
+    porcelain.push(Repo(path), remote, branch, out, out)
     for line in out:
         log(INFO, ICONS[""] + line.decode().strip())
     return 0
