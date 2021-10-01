@@ -34,7 +34,7 @@ def commit_git(msg='', path=getcwd()):
     # added, ignored = porcelain.add(repo)
     staged, un_staged, untracked = porcelain.status(repo, False)
     if not any(staged.values()):
-        log(INFO, ICONS["missing"] + "not files found. did not commit.")
+        log(INFO, ICONS["missing"] + "not files found - did not commit")
         log(DEBUG, ICONS[""] + "at " + path)
         chdir(cwd)
         return 0
