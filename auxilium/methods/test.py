@@ -43,7 +43,8 @@ def do(pkg=basename(getcwd()), commit=None, fail_fast=None,
         test_return_code = _test(path, fail_fast=fail_fast, venv=env)
         code = code or test_return_code
         if coverage:
-            code = code or _coverage(pkg, path, fail_fast=fail_fast, venv=env)
+            code = code or _coverage(pkg, path, min_cov=coverage,
+                                     fail_fast=fail_fast, venv=env)
         code = code or commit_git(commit)
     elif commit:
         log(ERROR, ICONS["error"] + DID_NOT_COMMIT)

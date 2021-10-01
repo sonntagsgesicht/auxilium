@@ -10,10 +10,11 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
+import datetime
 import logging
+import os
 import pathlib
 import sys
-import os
 
 from argparse import ArgumentParser
 from configparser import ConfigParser
@@ -206,6 +207,7 @@ Creates project file structure from templates which have already set-up
     if path not in sys.path:
         sys.path.append(path)
 
+    start = datetime.datetime.now()
     code = method(**kwargs) if method else 1
     if code:
         msg = 'non-zero exit status (failure in `%s`)' % args.command
@@ -218,6 +220,9 @@ Creates project file structure from templates which have already set-up
             sys.exit(0)
         if args.exit_status == 0:
             sys.exit(1)
+    exec_time = (datetime.datetime.now() - start)
+    logging.log(logging.ERROR, ICONS['OK'] + 'finished in %0.3fs' %
+                exec_time.total_seconds())
     sys.exit()
 
 

@@ -17,15 +17,14 @@ import os
 import sys
 import unittest
 
-from auxilium.tools.const import DEMO_PATH
+from auxilium.tools.const import DEMO_PATH, TEST_LOG_FORMATTER
 from auxilium.tools.system_tools import module, del_tree
 
 sys.path.append('..')
 
 CWD, _ = os.path.split(__file__)
 
-log_format = "• %(message)s"
-logging.basicConfig(level=logging.DEBUG, format=log_format)
+logging.basicConfig(level=logging.DEBUG, format=TEST_LOG_FORMATTER)
 
 
 def auxilium(command, path=None):
@@ -56,6 +55,10 @@ class CreateRepoUnitTests(unittest.TestCase):
         self.assertEqual(0, auxilium('%s update' % self.level, path=path))
         self.assertEqual(0, auxilium('%s test --fail-fast' % self.level,
                                      path=path))
+
+        self.assertNotEqual(0, auxilium('%s test --fail-fast --coverage=99'
+                                        % self.level, path=path))
+
         self.assertEqual(0, auxilium('%s doc --api --fail-fast' % self.level,
                                      path=path))
         self.assertEqual(0, auxilium('%s build' % self.level, path=path))

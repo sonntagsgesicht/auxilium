@@ -36,6 +36,7 @@ else:
 
 DETAIL_FORMATTER = '%(levelname)-7.7s  %(message)s'
 MINIMAL_FORMATTER = ' %(message)s'
+TEST_LOG_FORMATTER = '•' + MINIMAL_FORMATTER
 
 VERBOSITY_LEVELS = (
     (20, MINIMAL_FORMATTER),
@@ -50,6 +51,7 @@ VERBOSITY_LEVELS = (
 SUB_FORMATTER_PREFIX = '|'
 
 _ICONS = {
+    'ok': '✅',
     'warn': '⛔',
     'error': '🚫',
     'demo': '🍹',
@@ -63,7 +65,7 @@ _ICONS = {
     'tag': '🏷',
     'push': '📦',
     'upgrade': '🏅',
-    'setup': '⚙',
+    'setup': '⚙️',
     'install': '🗜',
     'uninstall': '💔',
     'profiling': '⏱',
@@ -90,6 +92,7 @@ class IconContainer(dict):
     length = 3, 1
 
     def __getitem__(self, item):
+        item = item.lower()
         if super(IconContainer, self).__contains__(item):
             value = super(IconContainer, self).__getitem__(item)
             if value is None:
