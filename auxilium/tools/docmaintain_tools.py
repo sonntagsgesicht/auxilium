@@ -18,7 +18,7 @@ from os.path import basename, join, getmtime, exists, split, normpath
 from sys import path as sys_path
 from textwrap import wrap
 
-from .const import LAST_M_FILE, ICONS
+from .const import LAST_M_FILE, ICONS, AUX_PATH
 from .system_tools import linesep, open
 
 
@@ -144,8 +144,8 @@ def docmaintain(pkg=basename(getcwd()), path=getcwd()):
     else:
         last_mtimes = dict()
     last_mtimes = replace_headers(pkg, last_mtimes, path)
-    if not exists(join(path, '.aux')):
-        mkdir(join(path, '.aux'))
+    if not exists(join(path, AUX_PATH)):
+        mkdir(join(path, AUX_PATH))
     last_mtimes = \
         dict((k.replace(path + sep, ''), v) for k, v in last_mtimes.items())
     dump(last_mtimes, open(last_m_file, 'w'), indent=2)

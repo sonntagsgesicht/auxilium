@@ -15,7 +15,8 @@ from configparser import ConfigParser
 
 
 from ..tools.git_tools import commit_git
-from ..tools.pip_tools import requirements, install, rollback, upgrade
+from ..tools.pip_tools import requirements, install, rollback, upgrade, \
+    uninstall
 from ..tools.docmaintain_tools import docmaintain
 
 
@@ -48,13 +49,15 @@ def add_arguments(parser=None, config=ConfigParser()):
     parser.add_argument(
         '--commit',
         nargs='?',
-        const=config.get('update', 'commit', fallback='commit'),
-        default=config.get('update', 'commit', fallback='commit'),
+        metavar='MSG',
+        const=config.get('update', 'commit', fallback='Commit'),
+        default=config.get('update', 'commit', fallback='Commit'),
         help=commit_git.__doc__)
+    ignore = ' (ignores other input)'
     parser.add_argument(
         '--cleanup',
         action='store_const',
         const=not config.getboolean('update', 'cleanup', fallback=False),
         default=config.getboolean('update', 'cleanup', fallback=False),
-        help=rollback.__doc__ + ' (ignores other input)')
+        help=uninstall.__doc__ + ' and ' + rollback.__doc__ + ignore)
     return parser

@@ -33,8 +33,5 @@ __data__ = ('data/pkg.zip',)
 __scripts__ = ('auxilium/scripts/auxilium',)
 
 
-# todo: make full run before deploy new release:
-#  install->maintain->test->doc->build->commit->tag->push->deploy->release
-
 # todo: picture link to github
 # todo: update tutorial

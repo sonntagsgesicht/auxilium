@@ -46,17 +46,21 @@ def do(name=None, slogan=None, author=None, email=None, url=None,
             # init git repo with initial commit
             code = code or commit_git(commit, path=project_path)
 
+    chdir(project_path)
+    # check if env exists (else use system interpreter)
+    env = env if env and exists(env) else None
     if venv:
-        chdir(project_path)
-        # create virtual environment
-        # venv = venv.replace('bin/python3')
+        # clear virtual environment folder
         del_tree(venv)
-        # check if env exists
-        env = env if env and exists(env) else ''
+        # create virtual environment
         env = create_venv(pkg, venv_path=venv, path=project_path, venv=env)
-
         # run default update command
         code = code or upgrade(path=project_path, venv=env)
+        code = code or install(path=project_path, venv=env)
+        code = code or requirements(
+            path=project_path, freeze_file='', venv=env)
+    else:
+        # run default update command (without pip upgrade with .freeze)
         code = code or install(path=project_path, venv=env)
         code = code or requirements(path=project_path, venv=env)
 

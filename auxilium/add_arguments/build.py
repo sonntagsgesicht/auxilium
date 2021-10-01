@@ -31,7 +31,8 @@ def add_arguments(parser=None, config=ConfigParser()):
     parser.add_argument(
         '--commit',
         nargs='?',
-        const=config.get('deploy', 'commit', fallback='commit build'),
+        metavar='MSG',
+        const=config.get('deploy', 'commit', fallback='Commit build'),
         help='auto commit on successful build')
     ver = 'v' + get_version()
     parser.add_argument(

@@ -44,6 +44,7 @@ def coverage_pytest(test_dir=TEST_PATH,
 def coverage_coverage(pkg=basename(getcwd()), test_dir=TEST_PATH,
                       min_cov='', fail_fast=False, venv=None):
     """check code coverage of tests with coverage"""
+    # COVERAGE_FILE = join(AUX_PATH, '.coverage')
     ff = ' --failfast' if fail_fast else ''
     cmd = 'run --include="%s*"  --module' \
           ' unittest discover %s%s -v -p "*.py"' % (pkg, test_dir, ff)

@@ -37,7 +37,8 @@ def add_arguments(parser=None, config=ConfigParser()):
     parser.add_argument(
         '--commit',
         nargs='?',
-        const=config.get('test', 'commit', fallback='commit tested'),
+        metavar='MSG',
+        const=config.get('test', 'commit', fallback='Commit tested'),
         help='auto commit on successful test run')
     parser.add_argument(
         '--coverage',

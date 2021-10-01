@@ -20,9 +20,13 @@ DEMO_PATH = "auxilium_demo"
 PROFILE_PATH = "dev.py"
 TEST_PATH = normpath('test/')
 
-LAST_M_FILE = normpath('.aux/last.json')
-CONFIG_PATH = normpath('.aux/config')
-VENV_PATH = join('.', normpath('.aux/venv/'))
+AUX_PATH = '.aux'
+LAST_M_FILE = join(AUX_PATH, 'last.json')
+CONFIG_PATH = join(AUX_PATH, 'config')
+VENV_PATH = join(AUX_PATH, 'venv/')
+
+FREEZE_FILE = join(AUX_PATH, '.freeze')
+TEMP_REMOVE_FILE = join(AUX_PATH, '.site_packages_to_remove')
 
 if os_name == 'nt':
     VENV_TAIL = join('Scripts', PYTHON)

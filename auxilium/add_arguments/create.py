@@ -43,19 +43,20 @@ def add_arguments(parser=None, config=ConfigParser()):
         '--venv',
         metavar='PATH',
         nargs='?',
-        const=config.get('create', 'venv', fallback=VENV_PATH),
+        const=config.get('create', 'venv', fallback=None),
         default=config.get('create', 'venv', fallback=VENV_PATH),
-        help=create_venv.__doc__)
+        help='PATH to ' + create_venv.__doc__)
     parser.add_argument(
         '--update',
         action='store_const',
-        const=not config.get('create', 'venv-only', fallback=False),
-        default=config.get('create', 'venv-only', fallback=False),
+        const=not config.get('create', 'update', fallback=False),
+        default=config.get('create', 'update', fallback=False),
         help='just (re)install/update virtual environment '
-             '(skip commit as well as to create project)')
+             '(skip to create project as well as commit)')
     parser.add_argument(
         '--commit',
         nargs='?',
+        metavar='MSG',
         const=config.get('create', 'commit', fallback='Initial commit'),
         default=config.get('create', 'commit', fallback='Initial commit'),
         help='commit on successful creation')

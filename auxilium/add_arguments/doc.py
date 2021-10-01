@@ -28,7 +28,8 @@ def add_arguments(parser=None, config=ConfigParser()):
     parser.add_argument(
         '--commit',
         nargs='?',
-        const=config.get('doc', 'commit', fallback='commit doc build'),
+        metavar='MSG',
+        const=config.get('doc', 'commit', fallback='Commit doc build'),
         help='auto commit on successful doc build run')
     parser.add_argument(
         '--api',

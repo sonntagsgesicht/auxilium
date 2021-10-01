@@ -34,7 +34,7 @@ def add_arguments(parser=None, config=ConfigParser()):
         const=config.get('DEFAULT', 'python', fallback=None),
         default=config.get('DEFAULT', 'env', fallback=env),
         help='set path to python executable or virtual environment. '
-             'to use system interpreter just set empty flag `-e=`')
+             'to use system interpreter just set empty flag `-e`')
 
     parser.add_argument(
         '-x', '--exit-status',
