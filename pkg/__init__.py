@@ -14,7 +14,7 @@ __url__ = '<url>'
 
 __date__ = '<date>'
 __version__ = '0.1'
-__dev_status__ = '3 - Alpha'
+__dev_status__ = '3 - Alpha'  # '4 - Beta'  or '5 - Production/Stable'
 
 __dependencies__ = ()
 __dependency_links__ = ()
