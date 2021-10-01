@@ -107,18 +107,17 @@ def push_git(remote='None', path=getcwd()):
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
     out, err = BytesIO(), BytesIO()
     try:
-        porcelain.push(Repo(path), remote, BRANCH),
-#                       outstream=out, errstream=err)
+        porcelain.push(Repo(path), remote, BRANCH,
+                       outstream=out, errstream=err)
     except NotGitRepository as e:
         log(ERROR, ICONS["error"] + str(e))
         return 1
-    if out:
-        for line in out.read().decode("utf-8").split(linesep):
-            if line:
-                log(INFO, ICONS[''] + line)
-    if err:
-        for line in err.read().decode("utf-8").split(linesep):
-            if line:
-                log(ERROR, ICONS['error'] + line)
-        return 1
-    return 0
+    for line in out.read().decode("utf-8").split(linesep):
+        if line:
+            log(INFO, ICONS[''] + line)
+    had_err = False
+    for line in err.read().decode("utf-8").split(linesep):
+        if line:
+            had_err = True
+            log(ERROR, ICONS['error'] + line)
+    return had_err
