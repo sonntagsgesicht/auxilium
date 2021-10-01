@@ -20,8 +20,7 @@ from argparse import ArgumentParser
 from configparser import ConfigParser
 
 from auxilium.add_arguments import ArgumentDefaultsAndConstsHelpFormatter
-from auxilium.tools.const import CONFIG_PATH, DEMO_PATH, VERBOSITY_LEVELS, \
-    ICONS
+from auxilium.tools.const import CONFIG_PATH, VERBOSITY_LEVELS, ICONS
 from auxilium.tools.setup_tools import create_project
 from auxilium.tools.system_tools import module, del_tree
 from auxilium import add_arguments, methods
@@ -160,9 +159,10 @@ Creates project file structure from templates which have already set-up
 
     # check demo
     if args.demo:
-        logging.log(logging.INFO, ICONS["demo"] + 'starting demo - relax')
+        logging.log(logging.INFO, ICONS["demo"] +
+                    'relax, just starting a demo')
 
-        del_tree(DEMO_PATH)
+        del_tree(args.demo)
         v = '-' + 'v' * args.verbosity if args.verbosity else ''
         z = '-' + 'x' * args.exit_status if args.exit_status else ''
         e = '-e=' + args.env
@@ -172,7 +172,7 @@ Creates project file structure from templates which have already set-up
                '--author=auxilium '
                '--email="sonntagsgesicht@icould.com" '
                '--url="https://github.com/sonntagsgesicht/auxilium"') % \
-              (v, z, e, DEMO_PATH)
+              (v, z, e, args.demo)
         sys.exit(module('auxilium', cmd, level=logging.INFO))
 
     # check command

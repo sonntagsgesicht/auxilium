@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.7, copyright Thursday, 30 September 2021
+# Version:  0.1.7, copyright Friday, 01 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -13,7 +13,7 @@
 from argparse import ArgumentParser
 from configparser import ConfigParser
 
-from ..tools.const import VENV
+from ..tools.const import VENV, DEMO_PATH
 
 
 def add_arguments(parser=None, config=ConfigParser()):
@@ -31,7 +31,7 @@ def add_arguments(parser=None, config=ConfigParser()):
         '-e', '--env',
         metavar='PATH',
         nargs='?',
-        const=config.get('DEFAULT', 'python', fallback=None),
+        const=None,
         default=config.get('DEFAULT', 'env', fallback=env),
         help='set path to python executable or virtual environment. '
              'to use system interpreter just set empty flag `-e`')
@@ -47,8 +47,10 @@ def add_arguments(parser=None, config=ConfigParser()):
              ' (default: non-zero')
 
     parser.add_argument(
-        '-demo',
-        action='store_true',
-        help='start demo to creating a repo')
+        '-d', '--demo',
+        metavar='NAME',
+        nargs='?',
+        const=config.get('DEFAULT', 'demo', fallback=DEMO_PATH),
+        help='starts a demo in creating a repo')
 
     return parser

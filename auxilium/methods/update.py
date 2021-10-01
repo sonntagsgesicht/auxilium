@@ -19,7 +19,7 @@ from ..tools.git_tools import commit_git
 from ..tools.docmaintain_tools import docmaintain
 
 
-def do(pkg=basename(getcwd()), commit=None, add=None, upgrade=None,
+def do(pkg=basename(getcwd()), commit=None, upgrade=None,
        install=None, requirements=None, header=None, cleanup=None,
        path=getcwd(), env=None, **kwargs):
 
@@ -27,15 +27,15 @@ def do(pkg=basename(getcwd()), commit=None, add=None, upgrade=None,
         return uninstall(pkg, venv=env) or rollback(path=path, venv=env)
 
     code = False
+    if header:
+        code = code or docmaintain(pkg, path=path)
+    if commit:
+        code = code or commit_git(commit, path=path)
     if upgrade:
         code = code or _upgrade(upgrade, path=path, venv=env)
     if install:
         code = code or _install(path=path, venv=env)
     if requirements:
         code = code or _requirements(path=path, venv=env)
-    if header:
-        code = code or docmaintain(pkg, path=path)
-    if commit:
-        code = code or commit_git(commit, path=path)
 
     return code

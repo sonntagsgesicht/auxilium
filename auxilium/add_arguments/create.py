@@ -43,7 +43,7 @@ def add_arguments(parser=None, config=ConfigParser()):
         '--venv',
         metavar='PATH',
         nargs='?',
-        const=config.get('create', 'venv', fallback=None),
+        const=None,
         default=config.get('create', 'venv', fallback=VENV_PATH),
         help='PATH to ' + create_venv.__doc__)
     parser.add_argument(
@@ -57,7 +57,7 @@ def add_arguments(parser=None, config=ConfigParser()):
         '--commit',
         nargs='?',
         metavar='MSG',
-        const=config.get('create', 'commit', fallback='Initial commit'),
+        const=None,
         default=config.get('create', 'commit', fallback='Initial commit'),
         help='commit on successful creation')
     ignore = ' (ignores other input)'

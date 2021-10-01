@@ -44,8 +44,8 @@ def add_arguments(parser=None, config=ConfigParser()):
         '--coverage',
         nargs='?',
         metavar='MIN',
-        const=config.getboolean('test', 'coverage', fallback=''),
-        default=config.getboolean('test', 'coverage', fallback='0'),
+        const=config.get('test', 'coverage', fallback=''),
+        default=config.get('test', 'coverage', fallback='0'),
         help=coverage.__doc__ + ' - fail on total coverage less than MIN')
     parser.add_argument(
         '--quality',

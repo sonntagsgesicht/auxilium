@@ -50,7 +50,7 @@ class CreateRepoUnitTests(unittest.TestCase):
     def test_auxilium_demo(self):
         path = os.path.join(self.wdir, DEMO_PATH)
         del_tree(path)
-        self.assertEqual(0, auxilium('%s -demo' % self.level, path=self.wdir))
+        self.assertEqual(0, auxilium('%s --demo' % self.level, path=self.wdir))
 
         self.assertEqual(0, auxilium('%s update' % self.level, path=path))
         self.assertEqual(0, auxilium('%s test --fail-fast' % self.level,

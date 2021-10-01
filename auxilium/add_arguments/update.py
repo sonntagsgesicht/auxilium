@@ -50,7 +50,7 @@ def add_arguments(parser=None, config=ConfigParser()):
         '--commit',
         nargs='?',
         metavar='MSG',
-        const=config.get('update', 'commit', fallback='Commit'),
+        const=None,
         default=config.get('update', 'commit', fallback='Commit'),
         help=commit_git.__doc__)
     ignore = ' (ignores other input)'
