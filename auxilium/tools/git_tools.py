@@ -104,12 +104,13 @@ def push_git(remote='None', path=getcwd()):
     """push current branch of local to remote `git` repo"""
     log(INFO, ICONS["push"] + "push current branch to remote `git` repo")
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
-    from sys import stdout, stderr
 
     out = StringIO()
     with redirect_stdout(out), redirect_stderr(out):
         porcelain.push(Repo(path), remote, BRANCH)
-    print(ICONS[''], ICONS[''] + out)
-    for line in out.read().split(linesep):
-        log(INFO, ICONS[''] + line)
+    lines = out.read()
+    print(lines)
+    print("jweh")
+    for line in lines.split(linesep):
+        log(INFO, ICONS['error'] + line)
     return 0
