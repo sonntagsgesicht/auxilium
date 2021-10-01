@@ -15,7 +15,7 @@ from io import StringIO, BytesIO
 from logging import log, DEBUG, INFO, ERROR
 from os import getcwd, linesep, chdir
 from os.path import exists, join
-from sys import stderr
+from sys import stderr, stdout
 
 from dulwich import porcelain
 from dulwich.repo import Repo
@@ -108,6 +108,6 @@ def push_git(remote='None', path=getcwd()):
 
     out, err = BytesIO(), BytesIO()
     porcelain.push(Repo(path), remote, BRANCH)
-    for line in out.readlines() + err.readlines():
+    for line in stderr.readlines() + stdout.readlines():
         log(INFO, ICONS[""] + line)
     return 0
