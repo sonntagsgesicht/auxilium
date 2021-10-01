@@ -22,6 +22,8 @@ from dulwich.errors import NotGitRepository
 from .const import ICONS
 from .setup_tools import EXT
 
+BRANCH = 'master'
+
 
 def commit_git(msg='', path=getcwd()):
     """add and commit changes to local `git` repo"""
@@ -105,8 +107,8 @@ def push_git(remote='None', path=getcwd()):
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
     out, err = BytesIO(), BytesIO()
     try:
-        porcelain.push(Repo(path), remote, 'master',
-                       outstream=out, errstream=err)
+        porcelain.push(Repo(path), remote, BRANCH),
+#                       outstream=out, errstream=err)
     except NotGitRepository as e:
         log(ERROR, ICONS["error"] + str(e))
         return 1
