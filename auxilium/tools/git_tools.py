@@ -105,14 +105,15 @@ def push_git(remote='None', path=getcwd()):
         porcelain.push(Repo(path), remote, 'master',
                        outstream=out, errstream=err)
     except NotGitRepository as e:
-        log(ERROR, e)
+        log(ERROR, ICONS["error"] + str(e))
         return 1
     if out:
         for line in out.read().decode("utf-8").split(linesep):
             if line:
-                log(INFO, line)
+                log(INFO, ICONS[''] + line)
     if err:
         for line in err.read().decode("utf-8").split(linesep):
             if line:
-                log(ERROR, line)
+                log(ERROR, ICONS['error'] + line)
+        return 1
     return 0
