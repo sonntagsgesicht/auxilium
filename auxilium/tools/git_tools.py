@@ -101,14 +101,20 @@ def clean_url(url):
     return http + '//' + usr + '@' + url
 
 
+class Buffer(list):
+
+    def write(self, b):
+        self.append(b)
+
+
 def push_git(remote='None', path=getcwd()):
     """push current branch of local to remote `git` repo"""
     log(INFO, ICONS["push"] + "push current branch to remote `git` repo")
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
 
-    out, err = BytesIO(), BytesIO()
-    porcelain.push(Repo(path), remote, BRANCH, None, None)
-    print(TextIOWrapper(out).read())
-    for line in TextIOWrapper(out).readlines():
+    out = Buffer()
+    porcelain.push(Repo(path), remote, BRANCH, out, out)
+    print(out)
+    for line in out:
         log(INFO, ICONS[""] + line)
     return 0
