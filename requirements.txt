@@ -10,5 +10,5 @@ pytest-cov
 Sphinx
 sphinx-math-dollar
 sphinx-rtd-theme
-karma_sphinx_theme
+karma-sphinx-theme
 sphinx-nameko-theme

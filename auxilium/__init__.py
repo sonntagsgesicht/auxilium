@@ -26,8 +26,8 @@ __email__ = __author__ + '@icloud.com'
 __url__ = 'https://github.com/' + __author__ + '/' + __name__
 __license__ = 'Apache License 2.0'
 __dependencies__ = 'pip', 'dulwich', 'flake8', 'bandit', 'coverage', \
-                   'sphinx', 'sphinx_rtd_theme', 'sphinx_math_dollar', \
-                   'twine',
+                   'sphinx', 'sphinx-rtd-theme', 'sphinx-math-dollar', \
+                   'twine', 'karma-sphinx-theme', 'sphinx-nameko-theme'
 __dependency_links__ = ()
 __data__ = ('data/pkg.zip',)
 __scripts__ = ('auxilium/scripts/auxilium',)
