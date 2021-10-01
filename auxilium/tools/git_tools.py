@@ -11,7 +11,7 @@
 
 
 from contextlib import redirect_stdout, redirect_stderr
-from io import StringIO, BytesIO, FileIO
+from io import StringIO, BytesIO, FileIO, TextIOWrapper
 from logging import log, DEBUG, INFO, ERROR
 from os import getcwd, linesep, chdir
 from os.path import exists, join
@@ -106,8 +106,8 @@ def push_git(remote='None', path=getcwd()):
     log(INFO, ICONS["push"] + "push current branch to remote `git` repo")
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
 
-    out, err = FileIO('out.txt', 'w'), FileIO('err.txt', 'w')
+    out, err = BytesIO(), BytesIO()
     porcelain.push(Repo(path), remote, BRANCH, stdout, stdout)
-    for line in stderr.readlines() + stdout.readlines():
+    for line in TextIOWrapper(stderr).readlines():
         log(INFO, ICONS[""] + line)
     return 0
