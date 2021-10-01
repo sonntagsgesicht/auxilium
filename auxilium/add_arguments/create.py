@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.7, copyright Thursday, 30 September 2021
+# Version:  0.1.7, copyright Friday, 01 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -13,6 +13,7 @@
 from argparse import ArgumentParser
 from configparser import ConfigParser
 
+from ..tools.pip_tools import rollback, uninstall
 from ..tools.system_tools import create_venv, VENV_PATH
 
 
@@ -58,4 +59,11 @@ def add_arguments(parser=None, config=ConfigParser()):
         const=config.get('create', 'commit', fallback='Initial commit'),
         default=config.get('create', 'commit', fallback='Initial commit'),
         help='commit on successful creation')
+    ignore = ' (ignores other input)'
+    parser.add_argument(
+        '--cleanup',
+        action='store_const',
+        const=not config.getboolean('update', 'cleanup', fallback=False),
+        default=config.getboolean('update', 'cleanup', fallback=False),
+        help=uninstall.__doc__ + ' and ' + rollback.__doc__ + ignore)
     return parser

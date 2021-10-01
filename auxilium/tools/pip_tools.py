@@ -5,13 +5,13 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.7, copyright Thursday, 30 September 2021
+# Version:  0.1.7, copyright Friday, 01 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
 
 from logging import log, INFO, WARN
-from os import remove, getcwd
+from os import getcwd
 from os.path import basename, exists, join
 
 from auxilium.tools.const import ICONS
@@ -61,22 +61,22 @@ def install(path=getcwd(), venv=None):
 def uninstall(pkg=basename(getcwd()), path=getcwd(), venv=None):
     """uninstall current project via `pip uninstall`"""
     log(INFO, ICONS["uninstall"] + 'uninstall project via pip uninstall')
+    # code = code or del_tree(basename(path) + ".egg-info", ".eggs")
     return module(PIP, "uninstall -y %s" % pkg, path=path, venv=venv)
 
 
-def cleanup(path=getcwd(), venv=None):
-    """remove temporary files"""
-    log(INFO, ICONS["clean"] + 'clean environment')
-    res = 0
+def rollback(path=getcwd(), venv=None):
+    """rollback site-packages"""
+    log(INFO, ICONS["clean"] + 'rollback site-packages')
+    code = False
     if exists(join(path, FREEZE_FILE)):
-        res += module(PIP, "freeze --exclude-editable > %s" % TEMP_REMOVE_FILE,
-                      path=path, venv=venv)
-        res += module(PIP, "uninstall -r %s -y" % TEMP_REMOVE_FILE,
-                      path=path, venv=venv)
-        remove(TEMP_REMOVE_FILE)
+        code = code or module(PIP, "freeze --exclude-editable > %s" %
+                              TEMP_REMOVE_FILE, path=path, venv=venv)
+        code = code or module(PIP, "uninstall -r %s -y" % TEMP_REMOVE_FILE,
+                              path=path, venv=venv)
+        del_tree(TEMP_REMOVE_FILE)
 
-        res += module(PIP, "install --upgrade -r %s" % FREEZE_FILE,
-                      path=path, venv=venv)
-        remove(join(path, FREEZE_FILE))
-    res += del_tree(basename(path) + ".egg-info", ".eggs")
-    return res
+        code = code or module(PIP, "install --upgrade -r %s" % FREEZE_FILE,
+                              path=path, venv=venv)
+        del_tree(join(path, FREEZE_FILE))
+    return code

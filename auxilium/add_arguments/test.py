@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.7, copyright Thursday, 30 September 2021
+# Version:  0.1.7, copyright Friday, 01 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -13,12 +13,12 @@
 from argparse import ArgumentParser
 from configparser import ConfigParser
 
-from auxilium.tools.test_tools import cleanup as cleanup_test
-from auxilium.tools.security_tools import security
-from auxilium.tools.quality_tools import quality
-from auxilium.tools.coverage_tools import coverage
+from ..tools.test_tools import cleanup as cleanup_test
+from ..tools.security_tools import security
+from ..tools.quality_tools import quality
+from ..tools.coverage_tools import coverage
 
-from auxilium.tools.const import TEST_PATH
+from ..tools.const import TEST_PATH
 
 
 def add_arguments(parser=None, config=ConfigParser()):
