@@ -11,7 +11,7 @@
 
 
 from contextlib import redirect_stdout, redirect_stderr
-from io import StringIO
+from io import StringIO, BytesIO
 from logging import log, DEBUG, INFO, ERROR
 from os import getcwd, linesep, chdir
 from os.path import exists, join
@@ -105,13 +105,8 @@ def push_git(remote='None', path=getcwd()):
     log(INFO, ICONS["push"] + "push current branch to remote `git` repo")
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
 
-    out = StringIO()
-    with redirect_stdout(out), redirect_stderr(out):
-        porcelain.push(Repo(path), remote, BRANCH)
-    lines = out.readline()
-    print(lines)
-    print("jweh")
-    for line in lines.split(linesep):
-        # log(INFO, ICONS['error'] + line)
-        pass
+    out, err = BytesIO(), BytesIO()
+    porcelain.push(Repo(path), remote, BRANCH, out, err)
+    print("---")
+    print(err.read())
     return 0
