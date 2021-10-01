@@ -92,14 +92,17 @@ def build_url(url, usr='', pwd='None'):   # nosec
     return remote
 
 
+def clean_url(url):
+    http, last = url.split('//', 1)
+    usr_pwd, url = last.split('@', 1)
+    usr, _ = usr_pwd.split(':', 1) if ':' in usr_pwd else (usr_pwd, '')
+    return http + '//' + usr + '@' + url
+
+
 def push_git(remote='None', path=getcwd()):
     """push current branch of local to remote `git` repo"""
     log(INFO, ICONS["push"] + "push current branch to remote `git` repo")
-    http, last = remote.split('//', 1)
-    usr_pwd, url = last.split('@', 1)
-    usr, _ = usr_pwd.split(':', 1) if ':' in usr_pwd else (usr_pwd, '')
-    clean = http + '//' + usr + '@' + url
-    log(DEBUG, ICONS[""] + "at " + clean)
+    log(DEBUG, ICONS[""] + "at " + clean_url(remote))
     out, err = BytesIO(), BytesIO()
     try:
         porcelain.push(Repo(path), remote, 'master',
