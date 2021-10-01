@@ -65,7 +65,7 @@ _ICONS = {
     'tag': '🏷',
     'push': '📦',
     'upgrade': '🏅',
-    'setup': '⚙️',
+    'setup': '🧰',  # '⚙️',
     'install': '🗜',
     'uninstall': '💔',
     'profiling': '⏱',

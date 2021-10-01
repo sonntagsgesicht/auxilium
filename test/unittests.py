@@ -24,7 +24,7 @@ sys.path.append('..')
 
 CWD, _ = os.path.split(__file__)
 
-logging.basicConfig(level=logging.DEBUG, format=TEST_LOG_FORMATTER)
+logging.basicConfig(level=logging.INFO, format=TEST_LOG_FORMATTER)
 
 
 def auxilium(command, path=None):
@@ -33,7 +33,6 @@ def auxilium(command, path=None):
 
 class CreateRepoUnitTests(unittest.TestCase):
     def setUp(self):
-        logging.log(logging.INFO, '')
         logging.log(logging.DEBUG, 'start unittests')
         self.wdir = os.path.join(CWD, 'working_dir')
         self.level = ''  # '-vv'
@@ -56,9 +55,6 @@ class CreateRepoUnitTests(unittest.TestCase):
         self.assertEqual(0, auxilium('%s test --fail-fast' % self.level,
                                      path=path))
 
-        self.assertNotEqual(0, auxilium('%s test --fail-fast --coverage=99'
-                                        % self.level, path=path))
-
         self.assertEqual(0, auxilium('%s doc --api --fail-fast' % self.level,
                                      path=path))
         self.assertEqual(0, auxilium('%s build' % self.level, path=path))
@@ -66,6 +62,9 @@ class CreateRepoUnitTests(unittest.TestCase):
         self.assertEqual(0, auxilium('%s build --tag' % self.level, path=path))
         self.assertNotEqual(0, auxilium('%s build --tag' % self.level,
                                         path=path))
+        self.assertNotEqual(0, auxilium('%s test --fail-fast --coverage=99'
+                                        % self.level, path=path))
+
         del_tree(path)
 
     def test_unicorn(self):

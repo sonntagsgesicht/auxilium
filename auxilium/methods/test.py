@@ -40,8 +40,7 @@ def do(pkg=basename(getcwd()), commit=None, fail_fast=None,
     if security:
         code = code or _security(pkg, venv=env)
     if path:
-        test_return_code = _test(path, fail_fast=fail_fast, venv=env)
-        code = code or test_return_code
+        code = code or  _test(path, fail_fast=fail_fast, venv=env)
         if coverage:
             code = code or _coverage(pkg, path, min_cov=coverage,
                                      fail_fast=fail_fast, venv=env)
