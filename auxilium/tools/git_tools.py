@@ -109,6 +109,6 @@ def push_git(remote='None', path=getcwd()):
     out, err = BytesIO(), BytesIO()
     porcelain.push(Repo(path), remote, BRANCH, out, err)
     print("---")
-    print(getattr(stderr, "buffer", None).read())
+    print(getattr(stderr, "buffer", None))
     print(out.read())
     return 0
