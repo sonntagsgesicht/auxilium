@@ -10,7 +10,8 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from io import BytesIO
+from contextlib import redirect_stdout
+from io import BytesIO, StringIO
 from logging import log, DEBUG, INFO, ERROR
 from os import getcwd, linesep, chdir
 from os.path import exists, join
@@ -104,19 +105,9 @@ def push_git(remote='None', path=getcwd()):
     """push current branch of local to remote `git` repo"""
     log(INFO, ICONS["push"] + "push current branch to remote `git` repo")
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
-    out, err = BytesIO(), BytesIO()
-    try:
-        porcelain.push(Repo(path), remote, BRANCH,
-                       outstream=out, errstream=err)
-    except NotGitRepository as e:
-        log(ERROR, ICONS["error"] + str(e))
-        return 1
-    for line in out.read().decode("utf-8").split(linesep):
-        if line:
-            log(INFO, ICONS[''] + line)
-    had_err = False
-    for line in err.readline():
-        if line:
-            had_err = True
-            log(ERROR, ICONS['error'] + line)
-    return had_err
+
+    with StringIO() as out, redirect_stdout(out):
+        porcelain.push(Repo(path), remote, BRANCH)
+        while out:
+            log(INFO, ICONS[''] + out.readline())
+    return 0
