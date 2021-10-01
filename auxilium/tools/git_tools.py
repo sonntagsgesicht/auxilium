@@ -105,6 +105,7 @@ def push_git(remote='None', path=getcwd()):
     """push current branch of local to remote `git` repo"""
     log(INFO, ICONS["push"] + "push current branch to remote `git` repo")
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
+    from sys import stdout, stderr
 
     sys_stderr = stderr
     stderr = stdout
