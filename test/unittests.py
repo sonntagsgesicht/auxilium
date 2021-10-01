@@ -36,7 +36,7 @@ class CreateRepoUnitTests(unittest.TestCase):
         logging.log(logging.INFO, '')
         logging.log(logging.INFO, ICONS['test'] + 'start unittests')
         self.wdir = os.path.join(CWD, 'working_dir')
-        self.level = ''  # '-vv'
+        self.level = ''
         if not os.path.exists(self.wdir):
             os.mkdir(self.wdir)
         os.chdir(self.wdir)

@@ -47,12 +47,11 @@ def do(name=None, slogan=None, author=None, email=None, url=None,
             code = code or commit_git(commit, path=project_path)
 
     chdir(project_path)
-    # check if env exists (else use system interpreter)
-    env = env if env and exists(env) else None
     if venv:
         # clear virtual environment folder
         del_tree(venv)
         # create virtual environment
+        env = env if env and exists(env) else None
         env = create_venv(pkg, venv_path=venv, path=project_path, venv=env)
         # run default update command
         code = code or upgrade(path=project_path, venv=env)

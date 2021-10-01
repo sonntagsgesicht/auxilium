@@ -21,7 +21,6 @@ from configparser import ConfigParser
 
 from auxilium.add_arguments import ArgumentDefaultsAndConstsHelpFormatter
 from auxilium.tools.const import CONFIG_PATH, VERBOSITY_LEVELS, ICONS
-from auxilium.tools.setup_tools import create_project
 from auxilium.tools.system_tools import module, del_tree
 from auxilium import add_arguments, methods
 
@@ -52,7 +51,7 @@ set default behavior in `~/%s` and `./%s`."
 """ % (CONFIG_PATH, CONFIG_PATH)
 
     description = """
-Creates and manages boilerplate python development workflow.
+creates and manages boilerplate python development workflow.
  [ create > code > test > build > deploy ]
 """
 
@@ -65,8 +64,9 @@ Creates and manages boilerplate python development workflow.
 
     # === create ===
 
-    description = """
-Creates project file structure from templates which have already set-up
+    help = "creates a new project, repo and virtual environment"
+    description = help + """ \
+with project file structure from templates which has already set-up
  `venv` virtual python environment to run and test projects isolated
  `git` source code repository for tracking source code changes
  `unittest` suite of tests to ensure the project works as intended
@@ -78,47 +78,55 @@ Creates project file structure from templates which have already set-up
         epilog=epilog,
         description=description,
         formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
-        help=create_project.__doc__)
+        help=description)
 
     # === update ===
+    description = "keeps project, repo and dependencies up-to-date"
     sub_parser.add_parser(
         'update',
         epilog=epilog,
         description=description,
         formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
-        help="keep project, repo and dependencies up-to-date")
+        help=description)
 
     # === test ==
+    description = "checks project integrity " \
+                  "by testing using `unittest` framework"
     sub_parser.add_parser(
         'test',
         epilog=epilog,
         description=description,
         formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
-        help="check project integrity by testing using `unittest` framework")
+        help=description)
 
     # === documentation ==
+    description = "builds project documentation using `sphinx`"
     sub_parser.add_parser(
         'doc',
         epilog=epilog,
+        description=description,
         formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
-        help="build project documentation using `sphinx`")
+        help=description)
 
     # === deploy ==
+    description = "builds project distribution " \
+                  "and deploy releases to `pypi.org`"
     sub_parser.add_parser(
         'build',
         epilog=epilog,
         description=description,
         formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
-        help="build project distribution and deploy releases to `pypi.org`")
+        help=description)
 
     # === invoke python ==
+    description = "invokes python in virtual environment"
     sub_parser.add_parser(
         'python',
         epilog='Call python interpreter of virtual environment '
                '(Note: only some standard optional arguments are implemented)',
         description=description,
         formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
-        help="invoke virtual environment")
+        help=description)
 
     # ===============================
     # === add arguments to parser ===
@@ -152,8 +160,8 @@ Creates project file structure from templates which have already set-up
         logging.log(logging.WARN, msg)
         msg = ICONS[""] + \
             'consider creating one with ' \
-            '`auxilium create --update --venv=[PATH]` ' \
-            'or use an `-e= ` argument'
+            '`auxilium create --update` ' \
+            'or use `auxilium -e command [options]`'
         logging.log(logging.WARN, msg)
         sys.exit(1)
 
@@ -175,7 +183,7 @@ Creates project file structure from templates which have already set-up
               (v, z, e, args.demo)
         sys.exit(module('auxilium', cmd, level=logging.INFO))
 
-    # check command
+    # check command or print help
     method = getattr(methods, str(args.command), None)
     if method is None:
         print('>>> auxilium -h')
@@ -185,6 +193,7 @@ Creates project file structure from templates which have already set-up
             choice.print_help()
         sys.exit()
 
+    # check project path
     path = os.getcwd()
     pkg = os.path.basename(os.getcwd())
     full_path = os.path.join(path, pkg)

@@ -27,7 +27,7 @@ PKG_ZIP_FILE = \
 
 def create_project(name=None, slogan=None, author=None, email=None, url=None,
                    pkg_zip_file=PKG_ZIP_FILE, path=getcwd()):
-    """create a new project, repo and environment"""
+    """create a new project"""
 
     if not any((name, slogan, author, email)):
         log(INFO, '')
