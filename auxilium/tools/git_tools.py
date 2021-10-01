@@ -10,12 +10,11 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from contextlib import redirect_stdout
+from contextlib import redirect_stdout, redirect_stderr
 from io import StringIO
 from logging import log, DEBUG, INFO, ERROR
 from os import getcwd, linesep, chdir
 from os.path import exists, join
-from sys import stdout, stderr
 
 from dulwich import porcelain
 from dulwich.repo import Repo
@@ -107,11 +106,10 @@ def push_git(remote='None', path=getcwd()):
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
     from sys import stdout, stderr
 
-    sys_stderr = stderr
-    stderr = stdout
-    with StringIO() as out, redirect_stdout(out):
+    out = StringIO()
+    with redirect_stdout(out), redirect_stderr(out):
         porcelain.push(Repo(path), remote, BRANCH)
-        for line in out.read().split(linesep):
-            log(INFO, ICONS[''] + line)
-    stderr = sys_stderr
+    print(out)
+    for line in out.read().split(linesep):
+        log(INFO, ICONS[''] + line)
     return 0
