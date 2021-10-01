@@ -35,4 +35,3 @@ __scripts__ = ('auxilium/scripts/auxilium',)
 
 # todo: picture link to github
 # todo: update tutorial
-# fixme: update __version__ causes import error if install -e .

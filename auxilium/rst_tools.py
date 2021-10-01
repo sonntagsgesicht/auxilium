@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.7, copyright Thursday, 30 September 2021
+# Version:  0.1.8, copyright Friday, 01 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -15,6 +15,7 @@ import inspect
 import types
 
 replacements = dict()
+replacements['image'] = {}
 replacements['mod'] = {}
 replacements['const'] = {}
 replacements['func'] = {}
@@ -102,4 +103,9 @@ def replacements_str(replacements_in):
         for k, v in d.items():
             s = k if v is None else v
             _lines.append(".. |%s| replace:: :%s:`%s`" % (k, c, s))
-    return """   x""".replace('x', (os.linesep + '   ').join(_lines))
+    return """   %s""" % (os.linesep + '   ').join(_lines)
+
+
+def rst_replace(pkg):
+    _replacements = replacements_from_pkg(replacements, pkg)
+    return replacements_str(_replacements)

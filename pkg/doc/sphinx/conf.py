@@ -11,22 +11,25 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
+import auxilium
+import sys
 import os
-from auxilium import replacements_from_pkg, replacements, replacements_str
 
-pkg = __import__(__file__.split(os.sep)[-4])
+sys.path.append('../..')
+
+if os.getcwd().find('readthedocs') < 0:
+    pkg = __import__(os.getcwd().split(os.sep)[-3])
+else:
+    pkg = __import__(__file__.split(os.sep)[-6])
+
 
 # -- General configuration ------------------------------------------------
-
-# If your documentation needs a minimal Sphinx version, state it here.
-#
-# needs_sphinx = '1.0'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx_rtd_theme',
+    # 'sphinx_rtd_theme',
     'sphinx_math_dollar',
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
@@ -44,23 +47,11 @@ autodoc_default_options = {
     'show-inheritance': 1,
     'members': True,  # 'var1, var2',
     'member-order': 'bysource',
-    # 'inherited-members': False,
-    # 'special-members': '__call__',
     'undoc-members': True,
-    # 'exclude-members': '__weakref__',
-    # 'autosummary': True,
     'inherit_docstrings': True
 }
 numpydoc_show_class_members=True
 autoclass_content = 'both'
-#autosummary_generate = True
-
-# needed for version 1.8.5 (python 2.7)
-autodoc_default_flags = [ 'members', 'show-inheritance']
-autodoc_member_order = 'bysource' #'groupwise'
-autodoc_inherit_docstrings = True
-
-#source_suffix = ['.rst', '.md']
 source_suffix = '.rst'
 
 # The master toctree document.
@@ -100,18 +91,19 @@ pygments_style = 'sphinx'
 # If true, `to_do` and `to_do_List` produce output, else they produce nothing.
 todo_include_todos = False
 
-# A boolean that decides whether module names are prepended to all object names.
+# A boolean that decides whether module names are prepended
+# to all object names.
 add_module_names = True
 
 # Read rst_prolog and rst_epilog from file
 rst_prolog, rst_epilog = '', ''
-
+# for prolog (beginning of documents)
 rst_prolog_file = '_static' + os.sep + 'rst_prolog.rst'
 if os.path.exists(rst_prolog_file):
     f = open(rst_prolog_file, 'r')
     rst_prolog += os.linesep + f.read()
     f.close()
-
+# for epilog (end of documents)
 rst_epilog_file = '_static' + os.sep + 'rst_epilog.rst'
 if os.path.exists(rst_epilog_file):
     f = open(rst_epilog_file, 'r')
@@ -119,24 +111,22 @@ if os.path.exists(rst_epilog_file):
     f.close()
 
 # extend rst_prolog with pkg items
-_replacements = replacements_from_pkg(replacements, pkg)
-rst_prolog += os.linesep + replacements_str(_replacements)
-
-# print(rst_prolog)
-# print(rst_epilog)
+rst_prolog = auxilium.rst_tools.rst_replace(pkg)
 
 
 # -- Options for HTML output ----------------------------------------------
 
-html_theme = 'sphinx_rtd_theme'
-html_logo = 'logo.png'
-# html_theme_options = {}
-# html_static_path = ['_static']
+# To use different theme, first add it to extensions.
+# html_theme = ''sphinx_rtd_theme''
+
+# Some themes have a logo.
+# html_logo = ''
 
 
 # -- Options for LaTeX output ---------------------------------------------
 
-latex_logo = 'logo.png'
+# LaTeX uses a logo if present.
+# latex_logo = 'logo.png'
 latex_elements = {
     'papersize': 'a4paper',
     'pointsize': '10pt',
