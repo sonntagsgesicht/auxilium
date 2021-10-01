@@ -10,7 +10,7 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from io import BufferedWriter
+from io import BytesIO
 from logging import log, DEBUG, INFO, ERROR
 from os import getcwd, linesep, chdir
 from os.path import exists, join
@@ -79,7 +79,6 @@ def tag_git(tag, msg='', path=getcwd()):
         log(ERROR, ICONS["error"] +
             "tag %s exists in current branch of local `git` repo" % tag)
         return 1
-
     if msg:
         log(DEBUG, ICONS[""] + "msg: `%s`" % msg)
     porcelain.tag_create(Repo(path), tag, message=msg)
@@ -105,7 +104,7 @@ def push_git(remote='None', path=getcwd()):
     """push current branch of local to remote `git` repo"""
     log(INFO, ICONS["push"] + "push current branch to remote `git` repo")
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
-    out, err = BufferedWriter(), BufferedWriter()
+    out, err = BytesIO(), BytesIO()
     try:
         porcelain.push(Repo(path), remote, BRANCH,
                        outstream=out, errstream=err)
@@ -116,7 +115,7 @@ def push_git(remote='None', path=getcwd()):
         if line:
             log(INFO, ICONS[''] + line)
     had_err = False
-    for line in err.read().decode("utf-8").split(linesep):
+    for line in err.readline():
         if line:
             had_err = True
             log(ERROR, ICONS['error'] + line)
