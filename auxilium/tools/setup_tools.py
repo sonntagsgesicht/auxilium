@@ -107,7 +107,7 @@ def create_finish(name=basename(getcwd())):
     log(INFO, '  > cd %s' % name)
     log(INFO, '  > auxilium test')
     log(INFO, '  > auxilium doc --api')
-    log(INFO, '  > auxilium deploy')
+    log(INFO, '  > auxilium build')
     log(INFO, '  > auxilium doc --show')
     log(INFO, '')
     return 0

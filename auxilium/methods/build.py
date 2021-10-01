@@ -21,6 +21,8 @@ from ..tools.git_tools import commit_git, tag_git, push_git, build_url
 from ..tools.pip_tools import install
 from ..tools.pypi_tools import deploy as _deploy
 
+DID_NOT_COMMIT = 'build missing or failed - did not commit'
+
 
 def do(pkg=basename(getcwd()), commit=None, tag=None, header=None,
        push=None, remote=None, remote_usr=None, remote_pwd=None,

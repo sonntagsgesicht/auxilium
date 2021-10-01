@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.7, copyright Thursday, 30 September 2021
+# Version:  0.1.7, copyright Friday, 01 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -22,7 +22,7 @@ def add_arguments(parser=None, config=ConfigParser()):
     parser.add_argument(
         '--commit',
         nargs='?',
-        const=config.get('doc', 'commit', fallback='commit docs'),
+        const=config.get('doc', 'commit', fallback='commit doc build'),
         help='auto commit on successful doc build run')
     parser.add_argument(
         '--api',
@@ -42,12 +42,6 @@ def add_arguments(parser=None, config=ConfigParser()):
         const=not config.getboolean('doc', 'doctest', fallback=True),
         default=config.getboolean('doc', 'doctest', fallback=True),
         help=html.__doc__)
-    # parser.add_argument(
-    #     '--latexpdf',
-    #     action='store_const',
-    #     const=not config.getboolean('doc', 'latexpdf', fallback=False),
-    #     default=config.getboolean('doc', 'latexpdf', fallback=False),
-    #     help=latexpdf.__doc__)
     parser.add_argument(
         '--show',
         action='store_const',

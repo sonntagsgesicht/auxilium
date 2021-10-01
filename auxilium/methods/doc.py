@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.7, copyright Thursday, 30 September 2021
+# Version:  0.1.7, copyright Friday, 01 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -18,6 +18,8 @@ from ..tools.git_tools import commit_git
 from ..tools.const import ICONS
 from ..tools.sphinx_tools import api as _api, doctest as _doctest, \
     html as _html, show as _show, cleanup as _cleanup
+
+DID_NOT_COMMIT = 'doctest or build missing - did not commit'
 
 
 def do(pkg=basename(getcwd()), commit=None,
@@ -32,17 +34,15 @@ def do(pkg=basename(getcwd()), commit=None,
         code = code or _cleanup(env)
         code = code or _api(pkg, env)
     if doctest:
-        doctest_return_code = _doctest(env)
-        code = code or doctest_return_code
+        code = code or _doctest(env)
     if html:
-        html_return_code = _html(env)
-        code = code or html_return_code
-    if show:
-        _show(env)
+        code = code or _html(env)
     if commit:
-        if doctest_return_code == 0 and html_return_code == 0:
+        if doctest and html:
             code = code or commit_git(commit)
         else:
-            log(ERROR, ICONS["error"] +
-                'doctest or build missing or failed . did not commit.')
+            log(ERROR, ICONS["error"] + DID_NOT_COMMIT)
+            code = True
+    if show:
+        code = code or _show(env)
     return code

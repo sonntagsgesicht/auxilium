@@ -28,12 +28,6 @@ def add_arguments(parser=None, config=ConfigParser()):
         const=not config.getboolean('deployment', 'header', fallback=True),
         default=config.getboolean('deployment', 'header', fallback=True),
         help=docmaintain.__doc__)
-    # parser.add_argument(
-    #     '--build',
-    #     action='store_const',
-    #     const=not config.getboolean('deploy', 'build', fallback=True),
-    #     default=config.getboolean('deploy', 'build', fallback=True),
-    #     help=build.__doc__)
     parser.add_argument(
         '--commit',
         nargs='?',

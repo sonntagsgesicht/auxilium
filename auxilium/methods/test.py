@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.7, copyright Thursday, 30 September 2021
+# Version:  0.1.7, copyright Friday, 01 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -23,6 +23,9 @@ from ..tools.security_tools import security as _security
 from ..tools.test_tools import test as _test, cleanup as cleanup_test
 
 
+DID_NOT_COMMIT = 'test missing - did not commit'
+
+
 def do(pkg=basename(getcwd()), commit=None,
        quality=None, security=None, coverage=None, cleanup=None,
        path=None, env=None, **kwargs):
@@ -31,27 +34,18 @@ def do(pkg=basename(getcwd()), commit=None,
     if cleanup:
         return cleanup_test(path) or cleanup_coverage(path)
 
-    test_return_code = -1
     code = False
-
     if quality:
         code = code or _quality(pkg, venv=env)
-
     if security:
         code = code or _security(pkg, venv=env)
-
     if path:
         test_return_code = _test(path, venv=env)
         code = code or test_return_code
-
-    if coverage and path:
-        code = code or _coverage(pkg, path, venv=env)
-
-    if commit:
-        if test_return_code == 0:
-            code = code or commit_git(commit)
-        else:
-            log(ERROR, ICONS["error"] +
-                'Test missing or failed . did not commit.')
-
+        if coverage:
+            code = code or _coverage(pkg, path, venv=env)
+        code = code or commit_git(commit)
+    elif commit:
+        log(ERROR, ICONS["error"] + DID_NOT_COMMIT)
+        code = True
     return code

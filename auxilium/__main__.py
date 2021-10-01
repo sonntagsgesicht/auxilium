@@ -56,7 +56,7 @@ Creates and manages boilerplate python development workflow.
  [ create > code > test > build > deploy ]
 """
 
-    s = """
+    _ = """
     It provides project templates which have already set-up \
 an efficient development workflow.
    `auxilium` creates and manages automatically

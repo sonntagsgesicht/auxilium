@@ -14,5 +14,5 @@ from .create import do as create  # noqa: F401
 from .update import do as update  # noqa: F401
 from .test import do as test  # noqa: F401
 from .doc import do as doc  # noqa: F401
-from .deploy import do as build  # noqa: F401
+from .build import do as build  # noqa: F401
 from .python import do as python  # noqa: F401

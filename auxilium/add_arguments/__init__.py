@@ -15,7 +15,7 @@ from .create import add_arguments as create  # noqa: F401
 from .update import add_arguments as update  # noqa: F401
 from .test import add_arguments as test  # noqa: F401
 from .doc import add_arguments as doc  # noqa: F401
-from .deploy import add_arguments as build  # noqa: F401
+from .build import add_arguments as build  # noqa: F401
 from .python import add_arguments as python  # noqa: F401
 
 from .formatter import ArgumentDefaultsAndConstsHelpFormatter  # noqa: F401
