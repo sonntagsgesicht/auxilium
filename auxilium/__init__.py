@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.7, copyright Friday, 01 October 2021
+# Version:  0.1.8, copyright Friday, 01 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -18,7 +18,7 @@ from .rst_tools import replacements_str, replacements_from_pkg, \
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 __doc__ = 'Python project for an automated test and deploy toolkit.'
-__version__ = '0.1.7'
+__version__ = '0.1.8'
 __dev_status__ = '4 - Beta'
 __date__ = 'Friday, 01 October 2021'
 __author__ = 'sonntagsgesicht'
@@ -35,3 +35,4 @@ __scripts__ = ('auxilium/scripts/auxilium',)
 
 # todo: picture link to github
 # todo: update tutorial
+# fixme: update __version__ causes import error if install -e .

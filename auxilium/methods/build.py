@@ -37,6 +37,7 @@ def do(pkg=basename(getcwd()), commit=None, tag=None, header=None,
         code = code or docmaintain(pkg, path=path)
 
     code = code or _build(path=path, venv=env)
+    code = code or install(path=path, venv=env)
     if commit:
         code = code or commit_git(commit, path=path)
     if tag:
@@ -45,6 +46,5 @@ def do(pkg=basename(getcwd()), commit=None, tag=None, header=None,
         remote = build_url(remote, remote_usr, remote_pwd)
         code = code or push_git(remote, path)
     if deploy:
-        code = code or install(path=path, venv=env)
         code = code or _deploy(pypi_usr, pypi_pwd, path=path, venv=env)
     return code
