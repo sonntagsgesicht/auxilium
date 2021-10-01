@@ -37,11 +37,7 @@ class CreateRepoUnitTests(unittest.TestCase):
         logging.log(logging.INFO, '')
         logging.log(logging.DEBUG, 'start unittests')
         self.wdir = os.path.join(CWD, 'working_dir')
-        self.name = 'unicorn'
-        self.doc = 'Always be a unicorn.'
-        self.author = 'dreamer'
-        self.email = '<name>@home'
-        self.url = 'https://<author>.home/<name>'
+        self.level = ''  # '-vv'
         if not os.path.exists(self.wdir):
             os.mkdir(self.wdir)
         os.chdir(self.wdir)
@@ -55,30 +51,39 @@ class CreateRepoUnitTests(unittest.TestCase):
     def test_auxilium_demo(self):
         path = os.path.join(self.wdir, DEMO_PATH)
         del_tree(path)
-        self.assertEqual(0, auxilium('-vv -demo', path=self.wdir))
-        self.assertEqual(0, auxilium('-vv update', path=path))
-        self.assertEqual(0, auxilium('-vv test', path=path))
-        self.assertEqual(0, auxilium('-vv doc --api', path=path))
-        self.assertEqual(0, auxilium('-vv build', path=path))
+        self.assertEqual(0, auxilium('%s -demo' % self.level, path=self.wdir))
 
-        self.assertEqual(0, auxilium('-vv build --tag', path=path))
-        self.assertNotEqual(0, auxilium('-vv build --tag', path=path))
+        self.assertEqual(0, auxilium('%s update' % self.level, path=path))
+        self.assertEqual(0, auxilium('%s test --fail-fast' % self.level,
+                                     path=path))
+        self.assertEqual(0, auxilium('%s doc --api --fail-fast' % self.level,
+                                     path=path))
+        self.assertEqual(0, auxilium('%s build' % self.level, path=path))
+
+        self.assertEqual(0, auxilium('%s build --tag' % self.level, path=path))
+        self.assertNotEqual(0, auxilium('%s build --tag' % self.level,
+                                        path=path))
         del_tree(path)
 
     def test_unicorn(self):
-        path = os.path.join(self.wdir, self.name)
+        name, doc, author = 'unicorn', 'Always be a unicorn.', 'dreamer'
+        email, url = '<name>@home', 'https://<author>.home/<name>'
+        inputs = name, doc, author, email, url
+
+        path = os.path.join(self.wdir, name)
         del_tree(path)
-        inputs = self.name, self.doc, self.author, self.email, self.url
-        file_path = os.path.join(self.wdir, self.name + '_details')
+
+        file_path = os.path.join(self.wdir, name + '_details')
         with open(file_path, "w") as f:
             f.write(os.linesep.join(inputs))
-        self.assertEqual(0, auxilium('-vv create < %s' % file_path,
-                                     path=self.wdir))
-
-        self.assertEqual(0, auxilium('-vv update', path=path))
-        self.assertEqual(0, auxilium('-vv test', path=path))
-        self.assertEqual(0, auxilium('-vv doc --api', path=path))
-        self.assertEqual(0, auxilium('-vv build', path=path))
+        self.assertEqual(0, auxilium('%s create < %s' %
+                                     (self.level, file_path), path=self.wdir))
+        self.assertEqual(0, auxilium('%s update' % self.level, path=path))
+        self.assertEqual(0, auxilium('%s test --fail-fast' % self.level,
+                                     path=path))
+        self.assertEqual(0, auxilium('%s doc --fail-fast --api' % self.level,
+                                     path=path))
+        self.assertEqual(0, auxilium('%s build' % self.level, path=path))
         del_tree(path)
 
 
