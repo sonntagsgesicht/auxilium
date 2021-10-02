@@ -23,7 +23,7 @@ TEST_PATH = normpath('test/')
 AUX_PATH = '.aux'
 LAST_M_FILE = join(AUX_PATH, 'last.json')
 CONFIG_PATH = join(AUX_PATH, 'config')
-VENV_PATH = join(AUX_PATH, 'venv/')
+VENV_PATH = join(AUX_PATH, 'venv')
 
 FREEZE_FILE = join(AUX_PATH, '.freeze')
 TEMP_REMOVE_FILE = join(AUX_PATH, '.site_packages_to_remove')
