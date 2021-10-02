@@ -84,8 +84,8 @@ creates and manages boilerplate python development workflow.
     sub_parser = parser.add_subparsers(dest='command')
 
     # === create ===
-    help = "creates a new project, repo and virtual environment"
-    description = help + """ \
+    _help = "creates a new project, repo and virtual environment"
+    description = _help + """ \
 with project file structure from templates which has already set-up
  `venv` virtual python environment to run and test projects isolated
  `git` source exit_status repository for tracking source exit_status changes
@@ -98,7 +98,7 @@ with project file structure from templates which has already set-up
         epilog=epilog,
         description=description,
         formatter_class=ArgumentDefaultsAndConstsHelpFormatter,
-        help=description)
+        help=_help)
 
     # === update ===
     description = "keeps project, repo and dependencies up-to-date"
