@@ -29,6 +29,12 @@ Submodules
    :show-inheritance:
 
 
+.. automodule:: auxilium.add_arguments.parsers
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 .. automodule:: auxilium.add_arguments.python
    :members:
    :undoc-members:

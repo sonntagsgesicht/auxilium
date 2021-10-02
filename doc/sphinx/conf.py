@@ -22,7 +22,6 @@ if os.getcwd().find('readthedocs') < 0:
 else:
     pkg = __import__(__file__.split(os.sep)[-6])
 
-rst_prolog = auxilium.rst_tools.rst_replace(pkg)
 
 # -- General configuration ------------------------------------------------
 
