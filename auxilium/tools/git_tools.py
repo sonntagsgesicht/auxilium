@@ -29,7 +29,6 @@ except ImportError as e:
         log(ERROR, ICONS["error"] + dulwich_msg)
 
     Repo = porcelain
-    del dulwich_msg
 
 
 BRANCH = 'master'
