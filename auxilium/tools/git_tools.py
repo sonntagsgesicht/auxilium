@@ -119,7 +119,7 @@ def push_git(remote='None', branch=BRANCH, path=getcwd()):
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
 
     out = Buffer()
-    
+
     try:
         porcelain.push(Repo(path), remote, branch, out, out)
     except Exception as e:
