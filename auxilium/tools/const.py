@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.8, copyright Friday, 01 October 2021
+# Version:  0.1.8, copyright Saturday, 02 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -23,7 +23,7 @@ TEST_PATH = normpath('test/')
 AUX_PATH = '.aux'
 LAST_M_FILE = join(AUX_PATH, 'last.json')
 CONFIG_PATH = join(AUX_PATH, 'config')
-VENV_PATH = join(AUX_PATH, 'venv/')
+VENV_PATH = join(AUX_PATH, 'venv')
 
 FREEZE_FILE = join(AUX_PATH, '.freeze')
 TEMP_REMOVE_FILE = join(AUX_PATH, '.site_packages_to_remove')
