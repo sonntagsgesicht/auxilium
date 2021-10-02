@@ -32,54 +32,54 @@ def add_arguments(parser=None, config=ConfigParser()):
         '--commit',
         nargs='?',
         metavar='MSG',
-        const=config.get('deploy', 'commit', fallback='Commit build'),
+        const=config.get('build', 'commit', fallback='Commit build'),
         help='auto commit on successful build')
     ver = 'v' + get_version()
     parser.add_argument(
         '--tag',
         nargs='?',
-        const=config.getboolean('deploy', 'tag', fallback=ver),
+        const=config.getboolean('build', 'tag', fallback=ver),
         help='auto tag on successful build')
     parser.add_argument(
         '--push',
         action='store_const',
-        const=not config.getboolean('deploy', 'push', fallback=False),
-        default=config.getboolean('deploy', 'push', fallback=False),
+        const=not config.getboolean('build', 'push', fallback=False),
+        default=config.getboolean('build', 'push', fallback=False),
         help=push_git.__doc__ + ' - requires REMOTE')
     parser.add_argument(
         '--remote',
-        default=config.get('deploy', 'remote', fallback=get_url()),
+        default=config.get('build', 'remote', fallback=get_url()),
         help='remote `git` repo')
     parser.add_argument(
         '--remote_usr',
         metavar='USR',
-        default=config.get('deploy', 'remote_usr', fallback=get_author()),
+        default=config.get('build', 'remote_usr', fallback=get_author()),
         help='user on remote `git` repo')
     parser.add_argument(
         '--remote_pwd',
         metavar='PWD',
-        default=config.get('deploy', 'remote_pwd', fallback='None'),
+        default=config.get('build', 'remote_pwd', fallback='None'),
         help='password/token on remote `git` repo')
     parser.add_argument(
         '--deploy',
         action='store_const',
-        const=not config.getboolean('deploy', 'deploy', fallback=False),
-        default=config.getboolean('deploy', 'deploy', fallback=False),
+        const=not config.getboolean('build', 'deploy', fallback=False),
+        default=config.getboolean('build', 'deploy', fallback=False),
         help=deploy.__doc__ + ' - requires USR and PWD')
     parser.add_argument(
         '--pypi_usr',
         metavar='USR',
-        default=config.get('deploy', 'pypi_usr', fallback='None'),
+        default=config.get('build', 'pypi_usr', fallback='None'),
         help='user on `pypi.org`')
     parser.add_argument(
         '--pypi_pwd',
         metavar='PWD',
-        default=config.get('deploy', 'pypi_pwd', fallback='None'),
+        default=config.get('build', 'pypi_pwd', fallback='None'),
         help='password/token on `pypi.org`')
     parser.add_argument(
         '--cleanup',
         action='store_const',
-        const=not config.getboolean('deploy', 'cleanup', fallback=False),
-        default=config.getboolean('deploy', 'cleanup', fallback=False),
+        const=not config.getboolean('build', 'cleanup', fallback=False),
+        default=config.getboolean('build', 'cleanup', fallback=False),
         help=cleanup_build.__doc__)
     return parser
