@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.8, copyright Saturday, 02 October 2021
+# Version:  0.1.9, copyright Saturday, 02 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -17,9 +17,9 @@ from datetime import datetime
 from os import getcwd
 from os.path import basename, join, exists
 
-from auxilium import methods
-from auxilium.tools.const import VERBOSITY_LEVELS, ICONS, DEMO_PATH
-from auxilium.tools.system_tools import module, del_tree
+from .. import methods
+from ..tools.const import VERBOSITY_LEVELS, ICONS, DEMO_PATH
+from ..tools.system_tools import module, del_tree
 
 Failure = Exception
 
@@ -88,7 +88,8 @@ def failure_exit(exit_status, command='unknown', **kwargs):
 
 
 def do(command=None, demo=None, verbosity=None, exit_status=None, env=None,
-        **kwargs):
+       **kwargs):
+
     # check demo
     if demo:
         if start_demo(demo, verbosity, exit_status, env):
