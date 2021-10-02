@@ -26,7 +26,7 @@ setup(
     license=pkg.__license__,
     packages=find_packages(),
     package_data={pkg.__name__: list(pkg.__data__)},
-    entry_points={'console_scripts': pkg.__console_scripts__},
+    entry_points={'console_scripts': pkg.__scripts__},
     install_requires=pkg.__dependencies__,
     dependency_links=pkg.__dependency_links__,
     long_description='\n' + open('README.rst', encoding='utf-8').read(),

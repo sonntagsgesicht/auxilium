@@ -41,7 +41,7 @@ __dependencies__ = 'pip', 'dulwich', 'flake8', 'bandit', 'coverage', \
                    'twine', 'karma-sphinx-theme', 'sphinx-nameko-theme'
 __dependency_links__ = ()
 __data__ = ('data/pkg.zip',)
-__console_scripts__ = ('auxilium=auxilium:main',)
+__scripts__ = ('auxilium=auxilium:main',)
 
 
 def main():

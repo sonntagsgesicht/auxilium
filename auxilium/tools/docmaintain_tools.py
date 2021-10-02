@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.8, copyright Saturday, 02 October 2021
+# Version:  0.1.9, copyright Saturday, 02 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -88,7 +88,7 @@ def replace_headers(pkg=basename(getcwd()), last=None, path=getcwd()):
     new_header = [line.strip() for line in new_header]
 
     this = dict()
-    for subdir, dirs, files in walk(root):
+    for subdir, _, files in walk(root):
         if sep + '.' not in subdir:
             for file in files:
                 if file.endswith('.py'):

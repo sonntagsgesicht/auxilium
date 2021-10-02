@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.8, copyright Saturday, 02 October 2021
+# Version:  0.1.9, copyright Saturday, 02 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -13,7 +13,7 @@
 from datetime import date
 from logging import log, INFO
 from os import getcwd, sep, walk, makedirs
-from os.path import exists, join, basename
+from os.path import exists, join, basename, splitext
 from shutil import move
 from zipfile import ZipFile
 
@@ -23,6 +23,7 @@ from .system_tools import open
 EXT = ' (created by auxilium)'
 PKG_ZIP_FILE = \
     __file__.replace(join(*__file__.split(sep)[-2:]), join('data', 'pkg.zip'))
+FILE_EXT = '.py', '.rst', '.in'
 
 
 def create_project(name=None, slogan=None, author=None, email=None, url=None,
@@ -78,23 +79,21 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
         f = open(pth, 'w')
         f.write(c)
         f.close()
+        return pth
 
-    rp(pkg_path + sep + '__init__.py')
-    rp(project_path + sep + 'setup.py')
-    rp(project_path + sep + 'README.rst')
-    rp(project_path + sep + 'HOWTO.rst')
-    rp(project_path + sep + 'CHANGES.rst')
-    rp(project_path + sep + 'doc' + sep + 'sphinx' + sep + 'doc.rst')
-    rp(project_path + sep + 'doc' + sep + 'sphinx' + sep + 'conf.py')
+    for subdir, _, files in walk(name):
+        for file in files:
+            if splitext(file)[1] in FILE_EXT:
+                rp(join(subdir, file))
 
     log(INFO, '')
     log(INFO, ICONS["create"] +
         'created project %s with these files:' % name)
-    log(INFO, '    in %s' % path)
-    for subdir, dirs, files in walk(name):
+    log(INFO, ICONS[""] + 'in %s' % path)
+    for subdir, _, files in walk(name):
         log(INFO, '')
-        for file in files:
-            log(INFO, '      ' + join(subdir, file))
+        for file in sorted(files):
+            log(INFO, ICONS[""] + '  ' + join(subdir, file))
     log(INFO, '')
     return project_path
 

@@ -12,7 +12,7 @@
 
 from logging import log, DEBUG, INFO, ERROR
 from os import getcwd, chdir
-from os.path import exists, join
+from os.path import exists, join, sep
 
 from dulwich import porcelain
 from dulwich.repo import Repo
@@ -42,21 +42,26 @@ def commit_git(msg='', path=getcwd()):
     log(INFO, ICONS["status"] + "file status in `git` repo")
     log(DEBUG, ICONS[""] + "at " + path)
 
+    def paths_sorted(paths):
+        sorted_file_paths = sorted(x for x in paths if sep not in str(x))
+        sorted_sub_path = sorted(x for x in paths if sep in str(x))
+        return sorted_file_paths + sorted_sub_path
+
     if staged['add']:
         log(INFO, ICONS[""] + "add:")
-        for p in staged['add']:
+        for p in paths_sorted(staged['add']):
             log(INFO, ICONS[""] + "  %s" % p.decode())
     if staged['modify']:
         log(INFO, ICONS[""] + "modify:")
-        for p in staged['modify']:
+        for p in paths_sorted(staged['modify']):
             log(INFO, ICONS[""] + "  %s" % p.decode())
-    if staged['delete']:
+    if sorted(staged['delete']):
         log(INFO, ICONS[""] + "delete:")
-        for p in staged['delete']:
+        for p in paths_sorted(staged['delete']):
             log(INFO, ICONS[""] + "  %s" % p.decode())
-    for p in un_staged:
+    for p in paths_sorted(un_staged):
         log(INFO, ICONS[""] + "unstaged: %s" % p.decode())
-    for p in untracked:
+    for p in paths_sorted(untracked):
         log(INFO, ICONS[""] + "untracked : %s" % p)
     msg = msg if msg else 'Commit'
     msg += EXT
