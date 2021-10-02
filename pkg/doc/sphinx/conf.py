@@ -20,11 +20,11 @@ if os.getcwd().find('readthedocs') < 0:
 else:
     pkg = __import__(__file__.split(os.sep)[-6])
 
-from auxilium import replacements_from_pkg, replacements, replacements_str
+from auxilium.rst_tools import rst_replace
 
-_replacements = replacements_from_pkg(replacements, pkg)
-rst_prolog = replacements_str(_replacements)
-# print(rst_prolog)
+# -- add auxilium replacement strings -------------------------------------
+
+rst_prolog = rst_replace(pkg)
 
 # -- General configuration ------------------------------------------------
 

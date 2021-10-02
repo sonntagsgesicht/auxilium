@@ -21,8 +21,6 @@ from configparser import ConfigParser
 from .add_arguments import add_parser
 from .methods.root import do
 from .tools.const import CONFIG_PATH, VERBOSITY_LEVELS, ICONS
-from .rst_tools import replacements_str, replacements_from_pkg, \
-    replacements_from_cls, replacements, rst_replace  # noqa: F401
 
 
 getLogger(__name__).addHandler(NullHandler())

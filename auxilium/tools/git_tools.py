@@ -14,11 +14,23 @@ from logging import log, DEBUG, INFO, ERROR
 from os import getcwd, chdir
 from os.path import exists, join, sep
 
-from dulwich import porcelain
-from dulwich.repo import Repo
-
 from .const import ICONS
 from .setup_tools import EXT
+
+try:
+    from dulwich import porcelain
+    from dulwich.repo import Repo
+except ImportError as e:
+    dulwich_msg = 'import dulwich failed - git will not work'
+    log(ERROR, ICONS["error"] + dulwich_msg)
+    log(ERROR, ICONS[""] + str(e))
+
+    def porcelain(*args, **kwargs):
+        log(ERROR, ICONS["error"] + dulwich_msg)
+
+    Repo = porcelain
+    del dulwich_msg
+
 
 BRANCH = 'master'
 
