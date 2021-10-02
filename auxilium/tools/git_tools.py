@@ -62,9 +62,13 @@ def commit_git(msg='', path=getcwd()):
     msg += EXT
     log(INFO, ICONS["commit"] + "commit changes as `%s`" % msg)
     log(DEBUG, ICONS[""] + "at " + path)
-    res = porcelain.commit(repo, msg)
-    log(DEBUG, ICONS[""] + "as %s" % res.decode())
-
+    try:
+        res = porcelain.commit(repo, msg)
+        log(DEBUG, ICONS[""] + "as %s" % res.decode())
+    except Exception as e:
+        log(ERROR, ICONS['error'] + str(e))
+        chdir(cwd)
+        return 1
     chdir(cwd)
     return 0
 
@@ -73,13 +77,18 @@ def tag_git(tag, msg='', path=getcwd()):
     """tag current branch of local `git` repo"""
     log(INFO, ICONS["tag"] + "tag current branch as %s" % tag)
     log(DEBUG, ICONS[""] + "at " + path)
-    if bytearray(tag.encode()) in porcelain.tag_list(Repo(path)):
+    tag_list = porcelain.tag_list(Repo(path))
+    if bytearray(tag.encode()) in tag_list:
         log(ERROR, ICONS["error"] +
             "tag %s exists in current branch of local `git` repo" % tag)
         return 1
     if msg:
         log(DEBUG, ICONS[""] + "msg: `%s`" % msg)
-    porcelain.tag_create(Repo(path), tag, message=msg)
+    try:
+        porcelain.tag_create(Repo(path), tag, message=msg)
+    except Exception as e:
+        log(ERROR, ICONS['error'] + str(e))
+        return 1
     return 0
 
 
@@ -110,7 +119,11 @@ def push_git(remote='None', branch=BRANCH, path=getcwd()):
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
 
     out = Buffer()
-    porcelain.push(Repo(path), remote, branch, out, out)
+    try:
+        porcelain.push(Repo(path), remote, branch, out, out)
+    except Exception as e:
+        log(ERROR, ICONS['error'] + str(e))
+        return 1
     for line in out:
         log(INFO, ICONS[""] + line.decode().strip())
     return 0
