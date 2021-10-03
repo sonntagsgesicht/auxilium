@@ -53,7 +53,7 @@ def git_print(cmd):
 
 def add_git(path=getcwd(), venv=None):
     """add files to local `git` repo"""
-    script("print('adding ' + ', '.join(p.decode() for p in status().unstaged))",
+    script("print('add       : ' + ', '.join(p.decode() for p in status().unstaged))",
            imports=IMP, level=INFO, path=path, venv=venv)
     return script("exit(Repo('.').stage(status().unstaged))",
                   imports=IMP, level=INFO, path=path, venv=venv)
@@ -63,9 +63,8 @@ def status_git(path=getcwd(), venv=None):
     """get status of local `git` repo"""
     log(INFO, ICONS["status"] + "file status in local `git` repo")
     log(DEBUG, ICONS[""] + "at " + path)
-    script(
-        "print('add       : ' + ', '.join(p.decode() for p in status().staged['add']))",
-        imports=IMP, level=INFO, path=path, venv=venv)
+    script("print('add       : ' + ', '.join(p.decode() for p in status().staged['add']))",
+           imports=IMP, level=INFO, path=path, venv=venv)
     script(
         "print('delete    : ' + ', '.join(p.decode() for p in status().staged['delete']))",
         imports=IMP, level=INFO, path=path, venv=venv)
@@ -80,8 +79,8 @@ def status_git(path=getcwd(), venv=None):
 
 def commit_git(msg='', path=getcwd(), venv=None):
     """commit changes to local `git` repo"""
-    status_git(path=path, venv=venv)
     add_git(path=path, venv=venv)
+    status_git(path=path, venv=venv)
     msg = (msg if msg else 'Commit') + EXT
     log(INFO, ICONS["commit"] + "commit changes to local `git` repo")
     log(DEBUG, ICONS[""] + "at " + path)
