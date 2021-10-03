@@ -53,6 +53,7 @@ def git_print(cmd):
 
 def add_git(path=getcwd(), venv=None):
     """add files to local `git` repo"""
+    log(INFO, ICONS["status"] + "add/stage files to local `git` repo")
     script("print('add       : ' + ', '.join(p.decode() for p in status().unstaged))",
            imports=IMP, level=INFO, path=path, venv=venv)
     return script("exit(Repo('.').stage(status().unstaged))",
