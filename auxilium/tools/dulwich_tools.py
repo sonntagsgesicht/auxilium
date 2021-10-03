@@ -11,44 +11,18 @@
 
 
 from logging import log, DEBUG, INFO, ERROR
-from os import getcwd, chdir
-from os.path import exists, join, sep
+from os import getcwd
 
 from .const import ICONS
 from .setup_tools import EXT
 from .system_tools import script
 
-try:
-    from dulwich import porcelain
-    from dulwich.repo import Repo
-except ImportError as e:
-    dulwich_msg = 'import dulwich failed - git will not work'
-    log(ERROR, ICONS["error"] + dulwich_msg)
-    log(ERROR, ICONS[""] + str(e))
-
-
-    def porcelain(*args, **kwargs):
-        log(ERROR, ICONS["error"] + dulwich_msg)
-
-
-    Repo = porcelain
 
 BRANCH = 'master'
 IMP = "from sys import exit", \
       "from dulwich.repo import Repo", \
-      "from dulwich.porcelain import add, commit, status, tag_list, tag_create, push, log"
-
-
-def git_cmd(cmd):
-    return '"%s %s"' % (IMP, cmd)
-
-
-def git_exit(cmd):
-    return git_cmd("exit(%s)" % cmd)
-
-
-def git_print(cmd):
-    return git_cmd("print(%s)" % cmd)
+      "from dulwich.porcelain import " \
+      "add, commit, status, tag_list, tag_create, push, log"
 
 
 def add_git(path=getcwd(), venv=None):
@@ -56,9 +30,9 @@ def add_git(path=getcwd(), venv=None):
     log(INFO, ICONS["add"] + "add/stage files to local `git` repo")
     script("print('add       : ' + "
            "', '.join(p.decode() for p in status().unstaged))",
-           imports=IMP, level=INFO, path=path, venv=venv)
+           imports=IMP, path=path, venv=venv)
     return script("exit(Repo('.').stage(status().unstaged))",
-                  imports=IMP, level=INFO, path=path, venv=venv)
+                  imports=IMP, path=path, venv=venv)
 
 
 def status_git(path=getcwd(), venv=None):
@@ -67,21 +41,21 @@ def status_git(path=getcwd(), venv=None):
     log(DEBUG, ICONS[""] + "at " + path)
     script("print('add       : ' + "
            "', '.join(p.decode() for p in status().staged['add']))",
-           imports=IMP, level=INFO, path=path, venv=venv)
+           imports=IMP, path=path, venv=venv)
     script(
         "print('delete    : ' + "
         "', '.join(p.decode() for p in status().staged['delete']))",
-        imports=IMP, level=INFO, path=path, venv=venv)
+        imports=IMP, path=path, venv=venv)
     script(
         "print('modify    : ' + "
         "', '.join(p.decode() for p in status().staged['modify']))",
-        imports=IMP, level=INFO, path=path, venv=venv)
+        imports=IMP, path=path, venv=venv)
     script("print('unstaged  : ' + "
            "', '.join(p.decode() for p in  status().unstaged))",
-           imports=IMP, level=INFO, path=path, venv=venv)
+           imports=IMP, path=path, venv=venv)
     script("print('untracked : ' + "
            "', '.join(p.decode() for p in  status().untracked))",
-           imports=IMP, level=INFO, path=path, venv=venv)
+           imports=IMP, path=path, venv=venv)
 
 
 def commit_git(msg='', path=getcwd(), venv=None):
@@ -90,13 +64,13 @@ def commit_git(msg='', path=getcwd(), venv=None):
     log(INFO, ICONS["commit"] + "commit changes to local `git` repo")
     log(DEBUG, ICONS[""] + "at " + path)
     return script("print('[' + (commit(message=%r)).decode()[:6] + '] ' + %r)"
-                  % (msg, msg), imports=IMP, level=INFO, path=path, venv=venv)
+                  % (msg, msg), imports=IMP, path=path, venv=venv)
 
 
 def tag_git(tag, msg='few', path=getcwd(), venv=None):
     """tag current branch of local `git` repo"""
     tag_exists = script("exit(%r in tag_list('.'))" % bytearray(tag.encode()),
-                        imports=IMP, level=INFO, path=path, venv=venv)
+                        imports=IMP, path=path, venv=venv)
     if tag_exists:
         log(ERROR, ICONS["error"] +
             "tag %r exists in current branch of local `git` repo" % tag)
@@ -105,14 +79,14 @@ def tag_git(tag, msg='few', path=getcwd(), venv=None):
     log(DEBUG, ICONS[""] + "at " + path)
 
     script("print('tag:    %s')" % tag,
-           imports=IMP, level=INFO, path=path, venv=venv)
+           imports=IMP, path=path, venv=venv)
     if msg:
         script("print('message: %s')" % msg,
-               imports=IMP, level=INFO, path=path, venv=venv)
+               imports=IMP, path=path, venv=venv)
     script("print(log(max_entries=1))",
-           imports=IMP, level=INFO, path=path, venv=venv)
+           imports=IMP, path=path, venv=venv)
     return script("exit(tag_create('.', tag=%r, message=%r))" % (tag, msg),
-                  imports=IMP, level=INFO, path=path, venv=venv)
+                  imports=IMP, path=path, venv=venv)
 
 
 def build_url(url, usr='', pwd='None'):  # nosec
@@ -135,4 +109,4 @@ def push_git(remote='None', branch=BRANCH, path=getcwd(), venv=None):
     log(INFO, ICONS["push"] + "push current branch to remote `git` repo")
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
     return script("push('.', %s, %s)" % (remote, branch),
-                  imports=IMP, level=INFO, path=path, venv=venv)
+                  imports=IMP, path=path, venv=venv)
