@@ -34,7 +34,7 @@ except ImportError as e:
     Repo = porcelain
 
 BRANCH = 'master'
-IMP = "from sys import exit as e; " \
+IMP = "from sys import exit; " \
       "from dulwich.repo import Repo; " \
       "from dulwich.porcelain import " \
       "add, commit, status, tag_list, tag_create, push; "
@@ -44,7 +44,7 @@ def push(remote, branch=BRANCH):
     return
 
 
-def add_git(path=getcwd(), venv=None):
+def _add_git(path=getcwd(), venv=None):
     cwd = getcwd()
     chdir(path)
     repo = Repo(path) if exists(join(path, '.git')) else Repo.init(path)
@@ -88,30 +88,52 @@ def add_git(path=getcwd(), venv=None):
 
 
 def git_cmd(cmd):
+    return '"%s %s"' % (IMP, cmd)
+
+
+def git_exit(cmd):
+    return '"%s exit(%s)"' % (IMP, cmd)
+
+
+def git_print(cmd):
     return '"%s print(%s)"' % (IMP, cmd)
+
+
+def add_git(path=getcwd(), venv=None):
+    """add changes to local `git` repo"""
+    command(git_print("adding str(status().unstaged)"), level=INFO, path=path,
+            venv=venv)
+    if command(git_cmd("Repo('.').stage(status().unstaged)"),
+               level=DEBUG, path=path, venv=venv):
+        return 1
+
+
+def status_git(path=getcwd(), venv=None):
+    """get status of local `git` repo"""
+    command(git_print("add      : str(status().staged['add'])"), level=INFO,
+            path=path, venv=venv)
+    command(git_print("modified : str(status().staged['modified'])"),
+            level=INFO, path=path, venv=venv)
+    command(git_print("deleted  : str(status().staged['deleted'])"),
+            level=INFO, path=path, venv=venv)
+    command(git_print("unstaged : str(status().unstaged)"), level=INFO,
+            path=path, venv=venv)
 
 
 def commit_git(msg='', path=getcwd(), venv=None):
     """add and commit changes to local `git` repo"""
-    if command(git_cmd("Repo('.').stage(status().unstaged)"),
-               level=DEBUG, path=path, venv=venv):
-        return 1
-    command(git_cmd("add      : status().staged['add']"), level=INFO, path=path, venv=venv)
-    command(git_cmd("modified : status().staged['modified']"), level=INFO, path=path, venv=venv)
-    command(git_cmd("deleted  : status().staged['deleted']"), level=INFO, path=path, venv=venv)
-    command(git_cmd("unstaged : status().unstaged"), level=INFO, path=path, venv=venv)
     msg = (msg if msg else 'Commit') + EXT
     log(INFO, ICONS["commit"] + "commit changes as `%s`" % msg)
     log(DEBUG, ICONS[""] + "at " + path)
-    return command(git_cmd("commit(message=%r)" % msg),
+    return command(git_print("commit(message=%r)" % msg),
                    level=INFO, path=path, venv=venv)
 
 
 def tag_git(tag, msg='', path=getcwd(), venv=None):
     """tag current branch of local `git` repo"""
     log(INFO, ICONS["tag"] + "current tags in local branch")
-    tag_exists = command(git_cmd("e(%r in tag_list('.'))" %
-                                 bytearray(tag.encode())),
+    tag_exists = command(git_exit("%r in tag_list('.')" %
+                                  bytearray(tag.encode())),
                          level=INFO, path=path, venv=venv)
     if tag_exists:
         log(ERROR, ICONS["error"] +
