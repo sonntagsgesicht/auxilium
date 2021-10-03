@@ -26,6 +26,14 @@ else:
 
 rst_prolog = auxilium.rst_tools.rst_replace(pkg)
 
+# -- add math-dollar/mathjax config ---------------------------------------
+
+mathjax_config = {
+    'tex2jax': {
+        'inlineMath': [ ["\\(","\\)"] ],
+        'displayMath': [["\\[","\\]"] ],
+    },
+}
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.

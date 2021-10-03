@@ -1,27 +1,21 @@
 .DS_Store
 .idea/
 
+__pycache__/
+*.pyc
+
 build/
 dist/
+doc/sphinx/_build/
+
 *.egg-info
-*.pyc
 
 .bin/
 .cache/
-
-doc/sphinx/_build/
-*/__pycache__/
-
-test/working_dir/
-
 */htmlcov/
 .coverage
 coverage.xml
 
-.aux
-.freeze
-/freeze_requirements.txt
-/env
-/setenv
+.aux/
 
-*.json
+test/working_dir/

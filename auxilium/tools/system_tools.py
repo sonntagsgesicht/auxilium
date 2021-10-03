@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.8, copyright Saturday, 02 October 2021
+# Version:  0.1.9, copyright Saturday, 02 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -112,6 +112,10 @@ def python(command, level=DEBUG, path=getcwd(), venv=None,
 def module(mdl, command='', level=DEBUG, path=getcwd(), venv=None):
     mdl = getattr(mdl, '__name__', str(mdl))
     return python('-m ' + mdl + ' ' + command, level, path, venv)
+
+
+def command(cmd, level=DEBUG, path=getcwd(), venv=None):
+    return python('-c ' + cmd, level, path, venv)
 
 
 def del_tree(*paths, level=DEBUG):

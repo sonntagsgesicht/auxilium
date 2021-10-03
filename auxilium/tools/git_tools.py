@@ -16,6 +16,7 @@ from os.path import exists, join, sep
 
 from .const import ICONS
 from .setup_tools import EXT
+from .system_tools import command
 
 try:
     from dulwich import porcelain
@@ -25,24 +26,32 @@ except ImportError as e:
     log(ERROR, ICONS["error"] + dulwich_msg)
     log(ERROR, ICONS[""] + str(e))
 
+
     def porcelain(*args, **kwargs):
         log(ERROR, ICONS["error"] + dulwich_msg)
 
+
     Repo = porcelain
 
-
 BRANCH = 'master'
+IMP = "from sys import exit as e; " \
+      "from dulwich.repo import Repo; " \
+      "from dulwich.porcelain import " \
+      "add, commit, status, tag_list, tag_create, push; "
 
 
-def commit_git(msg='', path=getcwd()):
-    """add and commit changes to local `git` repo"""
+def push(remote, branch=BRANCH):
+    return
+
+
+def add_git(path=getcwd(), venv=None):
     cwd = getcwd()
     chdir(path)
     repo = Repo(path) if exists(join(path, '.git')) else Repo.init(path)
     _, files, untracked = porcelain.status(repo)
     repo.stage(files)
     repo.stage(untracked)
-    # added, ignored = porcelain.add(repo)
+    added, ignored = porcelain.add(repo)
     staged, un_staged, untracked = porcelain.status(repo, False)
     if not any(staged.values()):
         log(INFO, ICONS["missing"] + "not files found - did not commit")
@@ -74,41 +83,47 @@ def commit_git(msg='', path=getcwd()):
         log(INFO, ICONS[""] + "unstaged: %s" % p.decode())
     for p in paths_sorted(untracked):
         log(INFO, ICONS[""] + "untracked : %s" % p)
-    msg = msg if msg else 'Commit'
-    msg += EXT
-    log(INFO, ICONS["commit"] + "commit changes as `%s`" % msg)
-    log(DEBUG, ICONS[""] + "at " + path)
-    try:
-        res = porcelain.commit(repo, msg)
-        log(DEBUG, ICONS[""] + "as %s" % res.decode())
-    except Exception as e:
-        log(ERROR, ICONS['error'] + str(e))
-        chdir(cwd)
-        return 1
     chdir(cwd)
     return 0
 
 
-def tag_git(tag, msg='', path=getcwd()):
-    """tag current branch of local `git` repo"""
-    log(INFO, ICONS["tag"] + "tag current branch as %s" % tag)
+def git_cmd(cmd):
+    return '"%s print(%s)"' % (IMP, cmd)
+
+
+def commit_git(msg='', path=getcwd(), venv=None):
+    """add and commit changes to local `git` repo"""
+    if command(git_cmd("Repo('.').stage(status().unstaged)"),
+               level=DEBUG, path=path, venv=venv):
+        return 1
+    if command(git_cmd("status()"), level=INFO, path=path, venv=venv):
+        return 1
+    msg = (msg if msg else 'Commit') + EXT
+    log(INFO, ICONS["commit"] + "commit changes as `%s`" % msg)
     log(DEBUG, ICONS[""] + "at " + path)
-    tag_list = porcelain.tag_list(Repo(path))
-    if bytearray(tag.encode()) in tag_list:
+    return command(git_cmd("commit(message=%r)" % msg),
+                   level=INFO, path=path, venv=venv)
+
+
+def tag_git(tag, msg='', path=getcwd(), venv=None):
+    """tag current branch of local `git` repo"""
+    log(INFO, ICONS["tag"] + "current tags in local branch")
+    tag_exists = command(git_cmd("e(%r in tag_list('.'))" %
+                                 bytearray(tag.encode())),
+                         level=INFO, path=path, venv=venv)
+    if tag_exists:
         log(ERROR, ICONS["error"] +
             "tag %s exists in current branch of local `git` repo" % tag)
         return 1
+    log(INFO, ICONS["tag"] + "tag current branch as %s" % tag)
+    log(DEBUG, ICONS[""] + "at " + path)
     if msg:
         log(DEBUG, ICONS[""] + "msg: `%s`" % msg)
-    try:
-        porcelain.tag_create(Repo(path), tag, message=msg)
-    except Exception as e:
-        log(ERROR, ICONS['error'] + str(e))
-        return 1
-    return 0
+    return command(git_cmd("tag_create('.', tag=%r, message=%r)" %
+                           (tag, msg)), level=INFO, path=path, venv=venv)
 
 
-def build_url(url, usr='', pwd='None'):   # nosec
+def build_url(url, usr='', pwd='None'):  # nosec
     pwd = ':' + str(pwd) if pwd and pwd != 'None' else ''
     usr = str(usr) if usr else 'token-user' if pwd else ''
     remote = \
@@ -134,13 +149,15 @@ def push_git(remote='None', branch=BRANCH, path=getcwd()):
     log(INFO, ICONS["push"] + "push current branch to remote `git` repo")
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
 
-    out = Buffer()
+    cmd = IMP + "push('.', %s, %s)" % (remote, branch)
+    return command(cmd, level=INFO, path=path, venv=venv)
 
     try:
+        out = Buffer()
         porcelain.push(Repo(path), remote, branch, out, out)
+        for line in out:
+            log(INFO, ICONS[""] + line.decode().strip())
+            return 0
     except Exception as e:
         log(ERROR, ICONS['error'] + str(e))
         return 1
-    for line in out:
-        log(INFO, ICONS[""] + line.decode().strip())
-    return 0
