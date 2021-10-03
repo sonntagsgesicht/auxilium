@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.9, copyright Saturday, 02 October 2021
+# Version:  0.1.9, copyright Sunday, 03 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -96,8 +96,10 @@ def commit_git(msg='', path=getcwd(), venv=None):
     if command(git_cmd("Repo('.').stage(status().unstaged)"),
                level=DEBUG, path=path, venv=venv):
         return 1
-    if command(git_cmd("status()"), level=INFO, path=path, venv=venv):
-        return 1
+    command(git_cmd("add      : status().staged['add']"), level=INFO, path=path, venv=venv)
+    command(git_cmd("modified : status().staged['modified']"), level=INFO, path=path, venv=venv)
+    command(git_cmd("deleted  : status().staged['deleted']"), level=INFO, path=path, venv=venv)
+    command(git_cmd("unstaged : status().unstaged"), level=INFO, path=path, venv=venv)
     msg = (msg if msg else 'Commit') + EXT
     log(INFO, ICONS["commit"] + "commit changes as `%s`" % msg)
     log(DEBUG, ICONS[""] + "at " + path)
@@ -144,7 +146,7 @@ class Buffer(list):
         self.append(b)
 
 
-def push_git(remote='None', branch=BRANCH, path=getcwd()):
+def push_git(remote='None', branch=BRANCH, path=getcwd(), venv=None):
     """push current branch of local to remote `git` repo"""
     log(INFO, ICONS["push"] + "push current branch to remote `git` repo")
     log(DEBUG, ICONS[""] + "at " + clean_url(remote))
