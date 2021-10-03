@@ -15,7 +15,7 @@ from os.path import basename
 
 from ..tools.build_tools import build as _build, cleanup as _cleanup
 from ..tools.docmaintain_tools import docmaintain
-from ..tools.dulwich_tools import commit_git, tag_git, push_git, build_url
+from ..tools.dulwich_tools import commit_git, tag_git, push_git, build_url, add_git, status_git
 from ..tools.pip_tools import install
 from ..tools.pypi_tools import deploy as _deploy
 
@@ -36,10 +36,12 @@ def do(pkg=basename(getcwd()), commit=None, tag=None, header=None,
     if header:
         code = code or docmaintain(pkg, path=path)
 
-    # code = code or _build(path=path, venv=env)
-    # code = code or install(path=path, venv=env)
+    code = code or _build(path=path, venv=env)
+    code = code or install(path=path, venv=env)
     if commit:
-        code = code or commit_git(commit, path=path)
+        code = code or add_git(path=path, venv=env)
+        code = code or status_git(path=path, venv=env)
+        code = code or commit_git(commit, path=path, venv=env)
     if tag:
         code = code or tag_git(tag, path=path)
     if push:

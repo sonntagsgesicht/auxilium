@@ -14,7 +14,7 @@ from os import getcwd
 from os.path import basename
 
 from ..tools.docmaintain_tools import docmaintain
-from ..tools.dulwich_tools import commit_git
+from ..tools.dulwich_tools import commit_git, add_git, status_git
 from ..tools.pip_tools import upgrade as _upgrade, uninstall, \
     rollback, requirements as _requirements, install as _install
 
@@ -30,7 +30,9 @@ def do(pkg=basename(getcwd()), commit=None, upgrade=None,
     if header:
         code = code or docmaintain(pkg, path=path)
     if commit:
-        code = code or commit_git(commit, path=path)
+        code = code or add_git(path=path, venv=env)
+        code = code or status_git(path=path, venv=env)
+        code = code or commit_git(commit, path=path, venv=env)
     if upgrade:
         code = code or _upgrade(upgrade, path=path, venv=env)
     if install:

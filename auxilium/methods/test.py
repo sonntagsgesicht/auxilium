@@ -17,13 +17,10 @@ from logging import log, ERROR
 from ..tools.const import ICONS
 from ..tools.coverage_tools import coverage as _coverage, \
     cleanup as cleanup_coverage
-from ..tools.dulwich_tools import commit_git
+from ..tools.dulwich_tools import commit_git, add_git, status_git
 from ..tools.quality_tools import quality as _quality
 from ..tools.security_tools import security as _security
 from ..tools.test_tools import test as _test, cleanup as cleanup_test
-
-
-DID_NOT_COMMIT = 'test missing - did not commit'
 
 
 def do(pkg=basename(getcwd()), commit=None, fail_fast=None,
@@ -44,8 +41,10 @@ def do(pkg=basename(getcwd()), commit=None, fail_fast=None,
         if coverage:
             code = code or _coverage(pkg, path, min_cov=coverage,
                                      fail_fast=fail_fast, venv=env)
-        code = code or commit_git(commit)
+        code = code or add_git(path=path, venv=env)
+        code = code or status_git(path=path, venv=env)
+        code = code or commit_git(commit, path=path, venv=env)
     elif commit:
-        log(ERROR, ICONS["error"] + DID_NOT_COMMIT)
+        log(ERROR, ICONS["error"] + 'test missing - did not commit')
         code = True
     return code

@@ -15,7 +15,7 @@ from os.path import basename, join, exists
 from sys import path as sys_path
 
 from ..tools.docmaintain_tools import docmaintain
-from ..tools.dulwich_tools import commit_git
+from ..tools.dulwich_tools import commit_git, add_git, status_git
 from ..tools.pip_tools import upgrade, install, requirements, uninstall, \
     rollback
 from ..tools.setup_tools import create_project, create_finish
@@ -25,6 +25,7 @@ from ..tools.system_tools import create_venv, del_tree
 def do(name=None, slogan=None, author=None, email=None, url=None,
        commit=None, path=getcwd(), venv=None, update=None, env=None,
        cleanup=None, **kwargs):
+    env = env if env and exists(env) else None
     project_path = join(path, name) if name else path
     pkg = basename(project_path)
 
@@ -42,16 +43,12 @@ def do(name=None, slogan=None, author=None, email=None, url=None,
         chdir(project_path)
         sys_path.append(project_path)
         code = code or docmaintain(pkg, path=project_path)
-        if commit:
-            # init git repo with initial commit
-            code = code or commit_git(commit, path=project_path)
 
     chdir(project_path)
     if venv:
         # clear virtual environment folder
         del_tree(venv)
         # create virtual environment
-        env = env if env and exists(env) else None
         env = create_venv(pkg, venv_path=venv, path=project_path, venv=env)
         # run default update command
         code = code or upgrade(path=project_path, venv=env)
@@ -62,6 +59,12 @@ def do(name=None, slogan=None, author=None, email=None, url=None,
         # run default update command (without pip upgrade with .freeze)
         code = code or install(path=project_path, venv=env)
         code = code or requirements(path=project_path, venv=env)
+
+    if commit:
+        # init git repo with initial commit
+        code = code or add_git(path=project_path, venv=env)
+        code = code or status_git(path=project_path, venv=env)
+        code = code or commit_git(commit, path=project_path, venv=env)
 
     if not update:
         code = code or create_finish(pkg)
