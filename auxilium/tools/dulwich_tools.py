@@ -37,7 +37,7 @@ BRANCH = 'master'
 IMP = "from sys import exit; " \
       "from dulwich.repo import Repo; " \
       "from dulwich.porcelain import " \
-      "add, commit, status, tag_list, tag_create, push; "
+      "add, commit, status, tag_list, tag_create, push, log; "
 
 
 def push(remote, branch=BRANCH):
@@ -92,59 +92,89 @@ def git_cmd(cmd):
 
 
 def git_exit(cmd):
-    return '"%s exit(%s)"' % (IMP, cmd)
+    return git_cmd("exit(%s)" % cmd)
 
 
 def git_print(cmd):
-    return '"%s print(%s)"' % (IMP, cmd)
+    return git_cmd("print(%s)" % cmd)
+
+
+def git_echo(cmd):
+    return git_cmd("echo $(%s)") % cmd
 
 
 def add_git(path=getcwd(), venv=None):
-    """add changes to local `git` repo"""
-    command(git_print("adding str(status().unstaged)"), level=INFO, path=path,
-            venv=venv)
-    if command(git_cmd("Repo('.').stage(status().unstaged)"),
-               level=DEBUG, path=path, venv=venv):
-        return 1
+    """add files to local `git` repo"""
+    command(git_print(
+        "adding str(status().unstaged)"
+    ), level=INFO, path=path, venv=venv)
+    return command(git_exit(
+            "Repo('.').stage(status().unstaged)"
+    ), level=DEBUG, path=path, venv=venv)
 
 
 def status_git(path=getcwd(), venv=None):
     """get status of local `git` repo"""
-    command(git_print("add      : str(status().staged['add'])"), level=INFO,
-            path=path, venv=venv)
-    command(git_print("modified : str(status().staged['modified'])"),
-            level=INFO, path=path, venv=venv)
-    command(git_print("deleted  : str(status().staged['deleted'])"),
-            level=INFO, path=path, venv=venv)
-    command(git_print("unstaged : str(status().unstaged)"), level=INFO,
-            path=path, venv=venv)
+    log(INFO, ICONS["status"] + "file status in local `git` repo")
+    log(DEBUG, ICONS[""] + "at " + path)
+    command(git_print(
+        "'add       : ' + ', '.join(map(str, status().staged['add']))"
+    ),
+        level=INFO, path=path, venv=venv)
+    command(git_print(
+        "'delete    : ' + ', '.join(map(str, status().staged['delete']))"
+    ),
+        level=INFO, path=path, venv=venv)
+    command(git_print(
+        "'modify    : ' + ', '.join(map(str, status().staged['modify']))"
+    ),
+        level=INFO, path=path, venv=venv)
+    command(git_print(
+        "'unstaged  : ' + ', '.join(map(str, status().unstaged))"
+    ),
+        level=INFO, path=path, venv=venv)
+    command(git_print(
+        "'untracked : ' + ', '.join(map(str, status().untracked))"
+    ),
+        level=INFO, path=path, venv=venv)
 
 
 def commit_git(msg='', path=getcwd(), venv=None):
-    """add and commit changes to local `git` repo"""
+    """commit changes to local `git` repo"""
+    status_git(path=path, venv=venv)
     msg = (msg if msg else 'Commit') + EXT
-    log(INFO, ICONS["commit"] + "commit changes as `%s`" % msg)
+    log(INFO, ICONS["commit"] + "commit changes to local `git` repo")
     log(DEBUG, ICONS[""] + "at " + path)
-    return command(git_print("commit(message=%r)" % msg),
-                   level=INFO, path=path, venv=venv)
+    return command(git_print(
+        "'[' + (commit(message=%r)).decode()[:6] + '] ' + %r" % (msg, msg)
+    ), level=INFO, path=path, venv=venv)
 
 
-def tag_git(tag, msg='', path=getcwd(), venv=None):
+def tag_git(tag, msg='few', path=getcwd(), venv=None):
     """tag current branch of local `git` repo"""
-    log(INFO, ICONS["tag"] + "current tags in local branch")
-    tag_exists = command(git_exit("%r in tag_list('.')" %
-                                  bytearray(tag.encode())),
-                         level=INFO, path=path, venv=venv)
+    tag_exists = command(git_exit(
+        "%r in tag_list('.')" % bytearray(tag.encode())
+    ), level=INFO, path=path, venv=venv)
     if tag_exists:
         log(ERROR, ICONS["error"] +
-            "tag %s exists in current branch of local `git` repo" % tag)
+            "tag %r exists in current branch of local `git` repo" % tag)
         return 1
-    log(INFO, ICONS["tag"] + "tag current branch as %s" % tag)
+    log(INFO, ICONS["tag"] + "tagging last commit")
     log(DEBUG, ICONS[""] + "at " + path)
+
+    command(git_print(
+        "'tag:    %s'" % tag
+    ), level=INFO, path=path, venv=venv)
     if msg:
-        log(DEBUG, ICONS[""] + "msg: `%s`" % msg)
-    return command(git_cmd("tag_create('.', tag=%r, message=%r)" %
-                           (tag, msg)), level=INFO, path=path, venv=venv)
+        command(git_print(
+            "'message: %s'" % msg
+        ), level=INFO, path=path, venv=venv)
+    command(git_print(
+        "log(max_entries=1)"
+    ), level=INFO, path=path, venv=venv)
+    return command(git_cmd(
+        "tag_create('.', tag=%r, message=%r)" % (tag, msg)
+    ), level=INFO, path=path, venv=venv)
 
 
 def build_url(url, usr='', pwd='None'):  # nosec
