@@ -64,17 +64,17 @@ def status_git(path=getcwd(), venv=None):
     log(INFO, ICONS["status"] + "file status in local `git` repo")
     log(DEBUG, ICONS[""] + "at " + path)
     script(
-        "print('add       : ' + ', '.join(map(str, status().staged['add'])))",
+        "print('add       : ' + ', '.join(p.decode() for p in status().staged['add']))",
         imports=IMP, level=INFO, path=path, venv=venv)
     script(
-        "print('delete    : ' + ', '.join(map(str, status().staged['delete'])))",
+        "print('delete    : ' + ', '.join(p.decode() for p in status().staged['delete']))",
         imports=IMP, level=INFO, path=path, venv=venv)
     script(
-        "print('modify    : ' + ', '.join(map(str, status().staged['modify'])))",
+        "print('modify    : ' + ', '.join(p.decode() for p in status().staged['modify']))",
         imports=IMP, level=INFO, path=path, venv=venv)
-    script("print('unstaged  : ' + ', '.join(map(str, status().unstaged)))",
+    script("print('unstaged  : ' + ', '.join(p.decode() for p in  status().unstaged))",
            imports=IMP, level=INFO, path=path, venv=venv)
-    script("print('untracked : ' + ', '.join(map(str, status().untracked)))",
+    script("print('untracked : ' + ', '.join(p.decode() for p in  status().untracked))",
            imports=IMP, level=INFO, path=path, venv=venv)
 
 
