@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.9, copyright Saturday, 02 October 2021
+# Version:  0.1.9, copyright Sunday, 03 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -15,7 +15,7 @@ from os.path import basename
 
 from ..tools.build_tools import build as _build, cleanup as _cleanup
 from ..tools.docmaintain_tools import docmaintain
-from ..tools.git_tools import commit_git, tag_git, push_git, build_url
+from ..tools.dulwich_tools import commit_git, tag_git, push_git, build_url
 from ..tools.pip_tools import install
 from ..tools.pypi_tools import deploy as _deploy
 
