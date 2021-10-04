@@ -22,14 +22,14 @@ from dulwich.porcelain import tag_list, status
 from auxilium.tools.const import DEMO_PATH, TEST_LOG_FORMATTER, ICONS
 from auxilium.tools.system_tools import module, del_tree
 from auxilium.tools.dulwich_tools import init_git, status_git, add_git, \
-    tag_git, push_git, commit_git, pull_git, clone_git, branch_git, \
-    checkout_git
+    tag_git, push_git, pull_git, clone_git, branch_git, \
+    checkout_git, add_and_commit_git
 
 sys.path.append('..')
 
 CWD, _ = os.path.split(__file__)
 
-logging.basicConfig(level=logging.DEBUG, format=TEST_LOG_FORMATTER)
+logging.basicConfig(level=logging.INFO, format=TEST_LOG_FORMATTER)
 
 
 def auxilium(command, level=logging.INFO, path=None):
@@ -132,7 +132,6 @@ class AuxiliumMethodTests(AuxiliumUnitTests):
         self.assertReturnsNonZero(status_git, path=remote)
 
         self.assertReturnsZero(init_git, path=remote)
-        self.assertReturnsZero(status_git, path=remote)
         first_file = 'first_file'
         first_contents = 'Hello to repo!'
         with open(os.path.join(remote, first_file), 'w') as file:
@@ -142,7 +141,8 @@ class AuxiliumMethodTests(AuxiliumUnitTests):
         self.assertReturnsZero(add_git, path=remote)
         self.assertIn(first_file.encode(), status(remote).staged['add'])
 
-        self.assertReturnsZero(commit_git, 'remote_test_commit', path=remote)
+        self.assertReturnsZero(add_and_commit_git,
+                               'remote_commit', path=remote)
 
         self.assertReturnsZero(branch_git, 'other', path=remote)
         self.assertReturnsZero(checkout_git, 'other', path=remote)
@@ -153,7 +153,7 @@ class AuxiliumMethodTests(AuxiliumUnitTests):
         self.assertReturnsZero(checkout_git, 'master', path=path)
 
         self.assertReturnsZero(pull_git, remote, path=path)
-        self.assertReturnsZero(status_git, path=path)
+        self.assertReturnsZero(add_and_commit_git, 'empty_commit', path=path)
 
         with open(os.path.join(path, 'first_file'), 'r') as file:
             read_first_contents = file.read()
@@ -171,11 +171,16 @@ class AuxiliumMethodTests(AuxiliumUnitTests):
         self.assertIn(first_file.encode(), status(path).unstaged)
         self.assertIn(second_file, status(path).untracked)
 
+        self.assertReturnsZero(status_git, path=path)
+
         self.assertReturnsZero(add_git, path=path)
+
+        self.assertReturnsZero(status_git, path=path)
+
         self.assertIn(first_file.encode(), status(path).staged['modify'])
         self.assertIn(second_file.encode(), status(path).staged['add'])
 
-        self.assertFalse(commit_git('repo_test_commit', path=path))
+        self.assertReturnsZero(add_and_commit_git, 'repo_commit', path=path)
 
         tag = 'test_tag'
         self.assertReturnsZero(tag_git, tag, path=path)

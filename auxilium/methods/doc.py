@@ -15,11 +15,9 @@ from os import getcwd
 from os.path import basename
 
 from ..tools.const import ICONS
-from ..tools.dulwich_tools import commit_git
+from ..tools.dulwich_tools import add_and_commit_git
 from ..tools.sphinx_tools import api as _api, doctest as _doctest, \
     html as _html, latexpdf as _pdf, show as _show, cleanup as _cleanup
-
-DID_NOT_COMMIT = 'doctest or build missing - did not commit'
 
 
 def do(pkg=basename(getcwd()), commit=None, fail_fast=None, pdf=None,
@@ -40,9 +38,10 @@ def do(pkg=basename(getcwd()), commit=None, fail_fast=None, pdf=None,
         code = code or _pdf(fail_fast=fail_fast, path=path, venv=env)
     if commit:
         if doctest and html:
-            code = code or commit_git(commit)
+            code = code or add_and_commit_git(commit, path=path, venv=env)
         else:
-            log(ERROR, ICONS["error"] + DID_NOT_COMMIT)
+            log(ERROR, ICONS["error"] +
+                'doctest or build missing - did not commit')
             code = True
     if show:
         code = code or _show(env)

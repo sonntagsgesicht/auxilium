@@ -43,7 +43,7 @@ def branch_git(branch, path=getcwd(), venv=None):
 
 
 def checkout_git(branch, path=getcwd(), venv=None):
-    log(INFO, ICONS["checkout"] + "checkout branch from local `git` repo")
+    log(INFO, ICONS["checkout"] + "checkout %r from local `git` repo" % branch)
     return shell("git checkout %r" % branch,
                  path=path, venv=venv)
 
@@ -51,9 +51,6 @@ def checkout_git(branch, path=getcwd(), venv=None):
 def add_git(path=getcwd(), venv=None):
     """add files to local `git` repo"""
     log(INFO, ICONS["add"] + "add/stage files to local `git` repo")
-    script("print('add       : ' + "
-           "', '.join(p.decode() for p in status().unstaged))",
-           imports=IMP, path=path, venv=venv)
     code = False
     code = code or script("exit(Repo('.').stage(status().unstaged))",
                           imports=IMP, path=path, venv=venv)
@@ -62,43 +59,56 @@ def add_git(path=getcwd(), venv=None):
     return code
 
 
-def status_git(path=getcwd(), venv=None):
+def status_git(level=INFO, path=getcwd(), venv=None):
     """get status of local `git` repo"""
     log(INFO, ICONS["status"] + "file status in local `git` repo")
     code = False
     code = code or script(
         "print('add       : ' + "
         "', '.join(p.decode() for p in status().staged['add']))",
-        imports=IMP, path=path, venv=venv)
+        imports=IMP, level=level, path=path, venv=venv)
     code = code or script(
         "print('delete    : ' + "
         "', '.join(p.decode() for p in status().staged['delete']))",
-        imports=IMP, path=path, venv=venv)
+        imports=IMP, level=level, path=path, venv=venv)
     code = code or script(
         "print('modify    : ' + "
         "', '.join(p.decode() for p in status().staged['modify']))",
-        imports=IMP, path=path, venv=venv)
+        imports=IMP, level=level, path=path, venv=venv)
     code = code or script(
         "print('unstaged  : ' + "
-        "', '.join(p for p in  status().unstaged))",
-        imports=IMP, path=path, venv=venv)
+        "', '.join(p.decode() for p in  status().unstaged))",
+        imports=IMP, level=level, path=path, venv=venv)
     code = code or script(
         "print('untracked : ' + "
         "', '.join(p for p in  status().untracked))",
-        imports=IMP, path=path, venv=venv)
+        imports=IMP, level=level, path=path, venv=venv)
     return code
 
 
-def commit_git(msg='', path=getcwd(), venv=None):
+def commit_git(msg='', level=INFO, path=getcwd(), venv=None):
     """commit changes to local `git` repo"""
     msg = (msg if msg else 'Commit') + EXT
     log(INFO, ICONS["commit"] + "commit changes to local `git` repo")
-    log(DEBUG - 1, ICONS[""] + "at " + path)
     return script("print('[' + (commit(message=%r)).decode()[:6] + '] ' + %r)"
-                  % (msg, msg), imports=IMP, path=path, venv=venv)
+                  % (msg, msg), imports=IMP, level=level, path=path, venv=venv)
 
 
-def tag_git(tag, msg='few', path=getcwd(), venv=None):
+def add_and_commit_git(msg='', level=INFO, path=getcwd(), venv=None):
+    any_exists = script("exit(any(tuple(status().staged.values()) + "
+                        "(status().unstaged, status().untracked)))",
+                        imports=IMP, path=path, venv=venv)
+    if not any_exists:
+        log(INFO, ICONS["missing"] + "no changes to commit")
+        return 0
+    code = False
+    code = code or add_git(path=path, venv=venv)
+    code = code or status_git(level=level, path=path, venv=venv)
+    code = code or commit_git(msg, level=level, path=path, venv=venv)
+    return code
+
+
+def tag_git(tag, msg='few', level=INFO, path=getcwd(), venv=None):
     """tag current branch of local `git` repo"""
     tag_exists = script("exit(%r in tag_list('.'))" % bytearray(tag.encode()),
                         imports=IMP, path=path, venv=venv)
@@ -109,12 +119,12 @@ def tag_git(tag, msg='few', path=getcwd(), venv=None):
     log(INFO, ICONS["tag"] + "tagging last commit")
 
     script("print('tag:    %s')" % tag,
-           imports=IMP, path=path, venv=venv)
+           imports=IMP, level=level, path=path, venv=venv)
     if msg:
         script("print('message: %s')" % msg,
-               imports=IMP, path=path, venv=venv)
+               imports=IMP, level=level, path=path, venv=venv)
     script("print(log(max_entries=1))",
-           imports=IMP, path=path, venv=venv)
+           imports=IMP, level=level, path=path, venv=venv)
     return script("exit(tag_create('.', tag=%r, message=%r))" % (tag, msg),
                   imports=IMP, path=path, venv=venv)
 

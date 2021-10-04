@@ -29,7 +29,7 @@ def test_unittest(test_dir=TEST_PATH,
     """test code by running unittest"""
     ff = ' --failfast' if fail_fast else ''
     cmd = 'discover %s%s -v -p "*.py"' % (test_dir, ff)
-    return module('unittest', cmd, path=path, venv=venv)
+    return module('unittest', cmd, level=INFO, path=path, venv=venv)
 
 
 def test_pytest(test_dir=TEST_PATH,
