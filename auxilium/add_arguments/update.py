@@ -14,10 +14,10 @@ from argparse import ArgumentParser
 from configparser import ConfigParser
 
 
-from ..tools.dulwich_tools import commit_git
+from ..tools.docmaintain_tools import docmaintain, get_url, get_author
+from ..tools.dulwich_tools import commit_git, pull_git
 from ..tools.pip_tools import requirements, install, rollback, upgrade, \
     uninstall
-from ..tools.docmaintain_tools import docmaintain
 
 
 def add_arguments(parser=None, config=ConfigParser()):
@@ -53,6 +53,26 @@ def add_arguments(parser=None, config=ConfigParser()):
         const=None,
         default=config.get('update', 'commit', fallback='Commit'),
         help=commit_git.__doc__)
+    parser.add_argument(
+        '--pull',
+        nargs='?',
+        metavar='BRANCH',
+        const=config.get('update', 'pull', fallback='master'),
+        help=pull_git.__doc__ + ' (requires REMOTE)')
+    parser.add_argument(
+        '--remote',
+        default=config.get('build', 'remote', fallback=get_url()),
+        help='remote `git` repo')
+    parser.add_argument(
+        '--remote_usr',
+        metavar='USR',
+        default=config.get('build', 'remote_usr', fallback=get_author()),
+        help='user on remote `git` repo')
+    parser.add_argument(
+        '--remote_pwd',
+        metavar='PWD',
+        default=config.get('build', 'remote_pwd', fallback='None'),
+        help='password/token on remote `git` repo')
     ignore = ' (ignores other input)'
     parser.add_argument(
         '--cleanup',

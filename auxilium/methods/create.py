@@ -14,8 +14,9 @@ from os import getcwd, chdir
 from os.path import basename, join, exists
 from sys import path as sys_path
 
+from ..tools.const import GIT_PATH
 from ..tools.docmaintain_tools import docmaintain
-from ..tools.dulwich_tools import commit_git, add_git, status_git
+from ..tools.dulwich_tools import commit_git, add_git, status_git, init_git
 from ..tools.pip_tools import upgrade, install, requirements, uninstall, \
     rollback
 from ..tools.setup_tools import create_project, create_finish
@@ -62,6 +63,8 @@ def do(name=None, slogan=None, author=None, email=None, url=None,
 
     if commit:
         # init git repo with initial commit
+        if not exists(join(project_path, GIT_PATH)):
+            code = code or init_git(path=project_path, venv=env)
         code = code or add_git(path=project_path, venv=env)
         code = code or status_git(path=project_path, venv=env)
         code = code or commit_git(commit, path=project_path, venv=env)

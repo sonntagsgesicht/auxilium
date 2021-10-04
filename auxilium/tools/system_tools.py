@@ -56,11 +56,10 @@ def activate_venv(venv_path=VENV_PATH):
 
 def shell(command, level=DEBUG, path=getcwd(), venv=None,
           capture_output=True):
-    log(DEBUG, ICONS[""] + ">>> %s" % command)
     if venv:
         command = activate_venv(venv) + ' ' + command
-    log(DEBUG, ICONS[""] + "in %s" % path)
     log(DEBUG - 1, ICONS[""] + ">>> %s" % command)
+    log(DEBUG - 1, ICONS[""] + "in %s" % path)
     return _popen(command, level, path, capture_output)
 
 
@@ -105,20 +104,22 @@ def _run(command, level=DEBUG, path=getcwd(), capture_output=False):  # nosec
 def python(command, level=DEBUG, path=getcwd(), venv=None,
            capture_output=True):
     venv = venv if venv else PYTHON
-    return shell(venv + ' ' + command, level, path,
+    return shell(venv + ' ' + command, level=level, path=path,
                  capture_output=capture_output)
 
 
 def module(mdl, command='', level=DEBUG, path=getcwd(), venv=None):
     mdl = getattr(mdl, '__name__', str(mdl))
-    return python('-m ' + mdl + ' ' + command, level, path, venv)
+    return python('-m ' + mdl + ' ' + command,
+                  level=level, path=path, venv=venv)
 
 
 def script(cmd, imports=(), level=DEBUG, path=getcwd(), venv=None):
     if not isinstance(imports, (list, tuple)):
         imports = (imports,)
     cmd = '; '.join(tuple(imports) + (cmd,))
-    return python('-c "' + cmd + '"', level, path, venv)
+    return python('-c "' + cmd + '"',
+                  level=level, path=path, venv=venv)
 
 
 def del_tree(*paths, level=DEBUG):

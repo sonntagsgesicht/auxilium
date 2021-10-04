@@ -23,7 +23,7 @@ from ..tools.security_tools import security as _security
 from ..tools.test_tools import test as _test, cleanup as cleanup_test
 
 
-def do(pkg=basename(getcwd()), commit=None, fail_fast=None,
+def do(pkg=basename(getcwd()), testpath=None, commit=None, fail_fast=None,
        quality=None, security=None, coverage=None, cleanup=None,
        path=None, env=None, **kwargs):
     """run test process"""
@@ -33,14 +33,15 @@ def do(pkg=basename(getcwd()), commit=None, fail_fast=None,
 
     code = False
     if quality:
-        code = code or _quality(pkg, venv=env)
+        code = code or _quality(pkg, path=path, venv=env)
     if security:
-        code = code or _security(pkg, venv=env)
+        code = code or _security(pkg, path=path, venv=env)
     if path:
-        code = code or _test(path, fail_fast=fail_fast, venv=env)
+        code = code or _test(testpath,
+                             fail_fast=fail_fast, path=path, venv=env)
         if coverage:
-            code = code or _coverage(pkg, path, min_cov=coverage,
-                                     fail_fast=fail_fast, venv=env)
+            code = code or _coverage(pkg, testpath, min_cov=coverage,
+                                     fail_fast=fail_fast, path=path, venv=env)
         code = code or add_git(path=path, venv=env)
         code = code or status_git(path=path, venv=env)
         code = code or commit_git(commit, path=path, venv=env)

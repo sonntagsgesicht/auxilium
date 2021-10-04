@@ -28,6 +28,8 @@ VENV_PATH = join(AUX_PATH, 'venv')
 FREEZE_FILE = join(AUX_PATH, '.freeze')
 TEMP_REMOVE_FILE = join(AUX_PATH, '.site_packages_to_remove')
 
+GIT_PATH = '.git'
+
 if os_name == 'nt':
     VENV_TAIL = join('Scripts', PYTHON)
     VENV = join(VENV_PATH, VENV_TAIL)
@@ -54,43 +56,59 @@ VERBOSITY_LEVELS = (
 
 SUB_FORMATTER_PREFIX = '|'
 
+
 _ICONS = {
+    # basic
     'ok': '✅',
-    'inspect': '🕶',
+    'cancel': '❌',
+    # log level
     'debug': '🪲',
     'info': 'ℹ️',
-    'warn': '⛔',
+    'warn': '✋',
     'error': '🚫',
-    'demo': '🍹',
-    'build': '🏗',
-    'clean': '🧹',
-    'coverage': '📑',
-    'maintenance': '🛠',
-    'missing': '🤷',
+    # git
+    'init': '🐣',
+    'clone': '🧪',
+    'branch': '📦',
+    'checkout': '🔘',
     'add': '➕',
+    'missing': '🤷',
     'status': '🔄',
     'commit': '📌',
     'tag': '🏷',
-    'push': '📦',
-    'upgrade': '🏅',
+    'pull': '📥',
+    'push': '📤',
+    # commands
+    'python': '🐍',
+    'demo': '🍹',
+    'uninstall': '💔',
+    'clean': '🧹',
+    'finish': '🏁',
+    # create
+    'create': '🪚',
     'setup': '🧰',  # '⚙️',
     'install': '🗜',
-    'uninstall': '💔',
-    'profiling': '⏱',
-    'deploy': '🛫',
-    'python': '🐍',
+    'venv': '👻',
+    # update
+    'maintenance': '🛠',
+    'upgrade': '🏅',
+    # test
+    'test': '⛑',
     'quality': '🔍',
     'security': '🚨',
-    'create': '🪚',
-    'finish': '🏁',
+    'inspect': '🕶',
+    'coverage': '📑',
+    'profile': '⏱',
+    # doc
     'apidoc': '📌',
-    'html': '📋',
-    'latexpdf': '📖',
-    'doctest': '📝',
-    'doctest2': '🔏',
+    'html': '🌐',
+    'latexpdf': '📗',
+    'doctest': '🔏',
+    'doctest2': '📝',
     'show': '💡',
-    'venv': '👻',
-    'test': '⛑',
+    # build
+    'build': '🏗',
+    'deploy': '🛫',
 }
 
 

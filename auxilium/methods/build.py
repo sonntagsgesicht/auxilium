@@ -15,7 +15,8 @@ from os.path import basename
 
 from ..tools.build_tools import build as _build, cleanup as _cleanup
 from ..tools.docmaintain_tools import docmaintain
-from ..tools.dulwich_tools import commit_git, tag_git, push_git, build_url, add_git, status_git
+from ..tools.dulwich_tools import commit_git, tag_git, push_git, build_url, \
+    add_git, status_git
 from ..tools.pip_tools import install
 from ..tools.pypi_tools import deploy as _deploy
 
@@ -46,7 +47,7 @@ def do(pkg=basename(getcwd()), commit=None, tag=None, header=None,
         code = code or tag_git(tag, path=path)
     if push:
         remote = build_url(remote, remote_usr, remote_pwd)
-        code = code or push_git(remote=remote, path=path)
+        code = code or push_git(remote=remote, branch=push, path=path)
     if deploy:
         code = code or _deploy(pypi_usr, pypi_pwd, path=path, venv=env)
     return code

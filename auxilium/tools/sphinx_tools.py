@@ -26,55 +26,55 @@ LATEX_PATH = join(BUILD_PATH, "latex")
 INDEX_FILE = join(HTML_PATH, "intro.html")
 
 
-def api(pkg=basename(getcwd()), venv=None):
+def api(pkg=basename(getcwd()), path=getcwd(), venv=None):
     """add api entries to `sphinx` docs"""
     log(INFO, ICONS["commit"] + 'run sphinx apidoc scripts')
     if exists(API_PATH):
         rmtree(API_PATH)
     cmd = "sphinx-apidoc -o %s -f -E %s" % (API_PATH, pkg)
-    return shell(cmd, venv=venv)
+    return shell(cmd, path=path, venv=venv)
 
 
-def html(fail_fast=False, venv=None):
+def html(fail_fast=False, path=getcwd(), venv=None):
     """build html documentation (using `sphinx`)"""
     log(INFO, ICONS["html"] +
         'run sphinx html scripts (only on new or modified files)')
     ff = '' if fail_fast else " --keep-going"
     cmd = "sphinx-build -W %s -b html %s %s" % (ff, PATH, HTML_PATH)
-    return shell(cmd, venv=venv)
+    return shell(cmd, path=path, venv=venv)
 
 
-def latexpdf(fail_fast=False, venv=None):
+def latexpdf(fail_fast=False, path=getcwd(), venv=None):
     """build pdf documentation (using `sphinx` and `LaTeX`)"""
     log(INFO, ICONS["latexpdf"] +
         'run sphinx latexpdf scripts (only on new or modified files)')
     ff = '' if fail_fast else " --keep-going"
     cmd = "sphinx-build -W %s -b latexpdf %s %s" % (ff, PATH, LATEX_PATH)
-    return shell(cmd, venv=venv)
+    return shell(cmd, path=path, venv=venv)
 
 
-def doctest(fail_fast=False, venv=None):
+def doctest(fail_fast=False, path=getcwd(), venv=None):
     """run `sphinx` doctest"""
     log(INFO, ICONS["doctest"] +
         'run sphinx doctest scripts (only on new or modified files)')
     ff = '' if fail_fast else " --keep-going"
     cmd = "sphinx-build -W %s -b doctest %s %s " % (ff, PATH, BUILD_PATH)
-    return shell(cmd, venv=venv)
+    return shell(cmd, path=path, venv=venv)
 
 
-def show(venv=None):
+def show(path=getcwd(), venv=None):
     """show html documentation"""
     log(INFO, ICONS["show"] +
         'find docs at %s' % join(getcwd(), INDEX_FILE))
     if os_name == 'posix':
-        return shell("open %s" % INDEX_FILE, venv=venv)
+        return shell("open %s" % INDEX_FILE, path=path, venv=venv)
     if os_name == 'nt':
-        return shell("start %s" % INDEX_FILE, venv=venv)
+        return shell("start %s" % INDEX_FILE, path=path, venv=venv)
     return 1
 
 
-def cleanup(venv=None):
+def cleanup(path=getcwd(), venv=None):
     """remove temporary files"""
     log(INFO, ICONS["clean"] + 'clean environment')
     cmd = "sphinx-build -M clean %s %s" % (PATH, BUILD_PATH)
-    return shell(cmd, venv=venv)
+    return shell(cmd, path=path, venv=venv)

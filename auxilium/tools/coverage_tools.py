@@ -19,41 +19,42 @@ from .system_tools import module, del_tree, join
 
 
 def coverage(pkg=basename(getcwd()), test_dir=TEST_PATH,
-             min_cov='', fail_fast=False, venv=None):
+             min_cov='', fail_fast=False, path=getcwd(), venv=None):
     """check code coverage of tests"""
     log(INFO, ICONS["coverage"] + 'run test coverage scripts')
-    return coverage_coverage(pkg, test_dir, min_cov, fail_fast, venv)
+    return coverage_coverage(pkg, test_dir, min_cov,
+                             fail_fast=fail_fast, path=path, venv=venv)
 
 
 def coverage_test(test_dir=TEST_PATH,
-                  min_cov='', fail_fast=False, venv=None):
+                  min_cov='', fail_fast=False, path=getcwd(), venv=None):
     """check code coverage of tests with native test"""
     return module('test', '--coverage -D `pwd`/coverage_data %s' % test_dir,
-                  level=INFO, venv=venv)
+                  level=INFO, path=path, venv=venv)
 
 
 def coverage_pytest(test_dir=TEST_PATH,
-                    min_cov='', fail_fast=False, venv=None):
+                    min_cov='', fail_fast=False, path=getcwd(), venv=None):
     """check code coverage of tests with pytest"""
     ff = " --exitfirst" if fail_fast else ''
     mc = " --cov-fail-under=%s" % min_cov if min_cov else ''
     return module('pytest', '-q --cov %s%s%s' % (test_dir, ff, mc),
-                  level=INFO, venv=venv)
+                  level=INFO, path=path, venv=venv)
 
 
 def coverage_coverage(pkg=basename(getcwd()), test_dir=TEST_PATH,
-                      min_cov='', fail_fast=False, venv=None):
+                      min_cov='', fail_fast=False, path=getcwd(), venv=None):
     """check code coverage of tests with coverage"""
     # COVERAGE_FILE = join(AUX_PATH, '.coverage')
     ff = ' --failfast' if fail_fast else ''
     cmd = 'run --include="%s*"  --module' \
           ' unittest discover %s%s -v -p "*.py"' % (pkg, test_dir, ff)
-    exit_code = module('coverage', cmd, venv=venv)
+    exit_code = module('coverage', cmd, path=path, venv=venv)
     if exit_code:
         return exit_code
     mc = " --fail-under=%s" % min_cov if min_cov else ''
     cmd = 'report -m %s' % mc
-    return module('coverage', cmd, level=INFO, venv=venv)
+    return module('coverage', cmd, level=INFO, path=path, venv=venv)
 
 
 def cleanup(test_dir=TEST_PATH):

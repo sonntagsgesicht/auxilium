@@ -24,9 +24,10 @@ from ..tools.const import TEST_PATH
 def add_arguments(parser=None, config=ConfigParser()):
     parser = ArgumentParser() if parser is None else parser
     parser.add_argument(
-        'path',
+        'testpath',
+        metavar='TESTMATH',
         nargs='?',
-        default=config.get('test', 'path', fallback=TEST_PATH),
+        default=config.get('test', 'testpath', fallback=TEST_PATH),
         help='path to directory where test are found')
     parser.add_argument(
         '-ff', '--fail-fast',

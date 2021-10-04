@@ -42,9 +42,9 @@ def add_arguments(parser=None, config=ConfigParser()):
         help='auto tag on successful build')
     parser.add_argument(
         '--push',
-        action='store_const',
-        const=not config.getboolean('build', 'push', fallback=False),
-        default=config.getboolean('build', 'push', fallback=False),
+        metavar='BRANCH',
+        nargs='?',
+        const=config.getboolean('build', 'tag', fallback='master'),
         help=push_git.__doc__ + ' - requires REMOTE')
     parser.add_argument(
         '--remote',

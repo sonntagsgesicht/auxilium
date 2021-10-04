@@ -18,23 +18,23 @@ from .const import ICONS
 from .system_tools import module
 
 
-def quality(pkg=basename(getcwd()), venv=None):
+def quality(pkg=basename(getcwd()), path=getcwd(), venv=None):
     """evaluate quality of source code"""
     log(INFO, ICONS["quality"] + 'evaluate quality of source code')
-    return quality_flake8(pkg, venv)
+    return quality_flake8(pkg, path=path, venv=venv)
 
 
-def quality_pylint(pkg=basename(getcwd()), venv=None):
+def quality_pylint(pkg=basename(getcwd()), path=getcwd(), venv=None):
     """evaluate quality of source code with pylint"""
-    return module('pylint', pkg, venv=venv)
+    return module('pylint', pkg, path=path, venv=venv)
 
 
-def quality_flake8(pkg=basename(getcwd()), venv=None):
+def quality_flake8(pkg=basename(getcwd()), path=getcwd(), venv=None):
     """evaluate quality of source code with flake8"""
-    return module('flake8', '%s' % pkg, venv=venv)
+    return module('flake8', pkg, path=path, venv=venv)
 
 
-def quality_pep8(pkg=basename(getcwd()), venv=None):
+def quality_pep8(pkg=basename(getcwd()), path=getcwd(), venv=None):
     """evaluate quality of source code with pep8/pep257"""
     exit_status = module('pycodestyle', pkg, venv=venv)
-    return exit_status or module('pydocstyle', pkg, venv=venv)
+    return exit_status or module('pydocstyle', pkg, path=path, venv=venv)

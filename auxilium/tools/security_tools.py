@@ -18,12 +18,12 @@ from .const import ICONS
 from .system_tools import module
 
 
-def security(pkg=basename(getcwd()), venv=None):
+def security(pkg=basename(getcwd()), path=getcwd(),  venv=None):
     """evaluate security of source code"""
     log(INFO, ICONS["security"] + 'evaluate security of source code')
-    return security_bandit(pkg, venv=venv)
+    return security_bandit(pkg, path=path, venv=venv)
 
 
-def security_bandit(pkg=basename(getcwd()), venv=None):
+def security_bandit(pkg=basename(getcwd()), path=getcwd(),  venv=None):
     """run `bandit` on source code """
-    return module('bandit', '-r -q %s' % pkg, venv=venv)
+    return module('bandit', '-r -q %s' % pkg, path=path, venv=venv)

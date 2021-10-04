@@ -17,21 +17,27 @@ import os
 import sys
 import unittest
 
+from dulwich.porcelain import tag_list, status
+
 from auxilium.tools.const import DEMO_PATH, TEST_LOG_FORMATTER, ICONS
 from auxilium.tools.system_tools import module, del_tree
+from auxilium.tools.dulwich_tools import init_git, status_git, add_git, \
+    tag_git, push_git, commit_git, pull_git, clone_git, branch_git, \
+    checkout_git
 
 sys.path.append('..')
 
 CWD, _ = os.path.split(__file__)
 
-logging.basicConfig(level=logging.INFO, format=TEST_LOG_FORMATTER)
+logging.basicConfig(level=logging.DEBUG, format=TEST_LOG_FORMATTER)
 
 
 def auxilium(command, level=logging.INFO, path=None):
     return module('auxilium', command, level=level, path=path)
 
 
-class CreateRepoUnitTests(unittest.TestCase):
+class AuxiliumUnitTests(unittest.TestCase):
+
     def setUp(self):
         logging.log(logging.INFO, '')
         logging.log(logging.INFO, ICONS['test'] + 'start unittests')
@@ -41,11 +47,26 @@ class CreateRepoUnitTests(unittest.TestCase):
             os.mkdir(self.wdir)
         os.chdir(self.wdir)
 
-    def tearDown(self):
+    def _tearDown(self):
         try:
             del_tree(self.wdir)
-        except:
+        except FileExistsError:
             pass
+
+    def assertReturns(self, expected_return, function, *args, **kwargs):
+        actual_return = function(*args, **kwargs)
+        return self.assertEqual(expected_return, actual_return)
+
+    def assertReturnsZero(self, function, *args, **kwargs):
+        actual_return = function(*args, **kwargs)
+        return self.assertFalse(bool(actual_return), str(actual_return))
+
+    def assertReturnsNonZero(self, function, *args, **kwargs):
+        actual_return = function(*args, **kwargs)
+        return self.assertTrue(bool(actual_return), str(actual_return))
+
+
+class CreateRepoUnitTests(AuxiliumUnitTests):
 
     def test_auxilium_demo(self):
         path = os.path.join(self.wdir, DEMO_PATH)
@@ -88,6 +109,88 @@ class CreateRepoUnitTests(unittest.TestCase):
                                      path=path))
         self.assertEqual(0, auxilium('%s build' % self.level, path=path))
         del_tree(path)
+
+
+class AuxiliumMethodTests(AuxiliumUnitTests):
+
+    def testDulwich(self):
+
+        # init remote and repo dir
+
+        remote = os.path.join(self.wdir, 'git_remote')
+        if os.path.exists(remote):
+            del_tree(remote)
+        os.mkdir(remote)
+
+        path = os.path.join(self.wdir, 'git_test')
+        if os.path.exists(path):
+            del_tree(path)
+        os.mkdir(path)
+
+        # start at remote
+
+        self.assertReturnsNonZero(status_git, path=remote)
+
+        self.assertReturnsZero(init_git, path=remote)
+        self.assertReturnsZero(status_git, path=remote)
+        first_file = 'first_file'
+        first_contents = 'Hello to repo!'
+        with open(os.path.join(remote, first_file), 'w') as file:
+            file.write(first_contents)
+        self.assertIn(first_file, status(remote).untracked)
+
+        self.assertReturnsZero(add_git, path=remote)
+        self.assertIn(first_file.encode(), status(remote).staged['add'])
+
+        self.assertReturnsZero(commit_git, 'remote_test_commit', path=remote)
+
+        self.assertReturnsZero(branch_git, 'other', path=remote)
+        self.assertReturnsZero(checkout_git, 'other', path=remote)
+
+        # switch to repo
+
+        self.assertReturnsZero(clone_git, remote, path=path)
+        self.assertReturnsZero(checkout_git, 'master', path=path)
+
+        self.assertReturnsZero(pull_git, remote, path=path)
+        self.assertReturnsZero(status_git, path=path)
+
+        with open(os.path.join(path, 'first_file'), 'r') as file:
+            read_first_contents = file.read()
+        self.assertEqual(first_contents, read_first_contents)
+
+        append_contents = ' And hello to remote!'
+        with open(os.path.join(path, first_file), 'a') as file:
+            file.write(append_contents)
+
+        second_contents = 'Hello to remote!'
+        second_file = 'second_file'
+        with open(os.path.join(path, second_file), 'w') as file:
+            file.write(second_contents)
+
+        self.assertIn(first_file.encode(), status(path).unstaged)
+        self.assertIn(second_file, status(path).untracked)
+
+        self.assertReturnsZero(add_git, path=path)
+        self.assertIn(first_file.encode(), status(path).staged['modify'])
+        self.assertIn(second_file.encode(), status(path).staged['add'])
+
+        self.assertFalse(commit_git('repo_test_commit', path=path))
+
+        tag = 'test_tag'
+        self.assertReturnsZero(tag_git, tag, path=path)
+        self.assertIn(tag.encode(), tag_list(path))
+
+        self.assertReturnsZero(push_git, remote, path=path)
+
+        # switch back to remote
+
+        self.assertReturnsZero(checkout_git, 'master', path=remote)
+
+        with open(os.path.join(remote, first_file), 'r') as file:
+            self.assertEqual(file.read(), first_contents + append_contents)
+        with open(os.path.join(remote, second_file), 'r') as file:
+            self.assertEqual(file.read(), second_contents)
 
 
 if __name__ == "__main__":
