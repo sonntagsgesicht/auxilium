@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.9, copyright Sunday, 03 October 2021
+# Version:  0.1.10, copyright Sunday, 03 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -30,7 +30,7 @@ getLogger(__name__).addHandler(NullHandler())
 __doc__ = 'Python project for an automated test and deploy toolkit.'
 __version__ = '0.1.10'
 __dev_status__ = '4 - Beta'
-__date__ = 'Sunday, 03 October 2021'
+__date__ = 'Monday, 04 October 2021'
 __author__ = 'sonntagsgesicht'
 __email__ = __author__ + '@icloud.com'
 __url__ = 'https://github.com/' + __author__ + '/' + __name__
