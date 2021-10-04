@@ -17,6 +17,8 @@ from .const import ICONS
 from .setup_tools import EXT
 from .system_tools import script, shell
 
+
+LEVEL = DEBUG
 BRANCH = 'master'
 IMP = "from sys import exit", \
       "from dulwich.repo import Repo", \
@@ -59,9 +61,9 @@ def add_git(path=getcwd(), venv=None):
     return code
 
 
-def status_git(level=INFO, path=getcwd(), venv=None):
-    """get status of local `git` repo"""
-    log(INFO, ICONS["status"] + "file status in local `git` repo")
+def status_git(level=LEVEL, path=getcwd(), venv=None):
+    """check status of local `git` repo"""
+    log(INFO, ICONS["status"] + "check file status in local `git` repo")
     code = False
     code = code or script(
         "print('add       : ' + "
@@ -86,7 +88,7 @@ def status_git(level=INFO, path=getcwd(), venv=None):
     return code
 
 
-def commit_git(msg='', level=INFO, path=getcwd(), venv=None):
+def commit_git(msg='', level=LEVEL, path=getcwd(), venv=None):
     """commit changes to local `git` repo"""
     msg = (msg if msg else 'Commit') + EXT
     log(INFO, ICONS["commit"] + "commit changes to local `git` repo")
@@ -94,7 +96,7 @@ def commit_git(msg='', level=INFO, path=getcwd(), venv=None):
                   % (msg, msg), imports=IMP, level=level, path=path, venv=venv)
 
 
-def add_and_commit_git(msg='', level=INFO, path=getcwd(), venv=None):
+def add_and_commit_git(msg='', level=LEVEL, path=getcwd(), venv=None):
     any_exists = script("exit(any(tuple(status().staged.values()) + "
                         "(status().unstaged, status().untracked)))",
                         imports=IMP, path=path, venv=venv)
@@ -108,7 +110,7 @@ def add_and_commit_git(msg='', level=INFO, path=getcwd(), venv=None):
     return code
 
 
-def tag_git(tag, msg='few', level=INFO, path=getcwd(), venv=None):
+def tag_git(tag, msg='few', level=LEVEL, path=getcwd(), venv=None):
     """tag current branch of local `git` repo"""
     tag_exists = script("exit(%r in tag_list('.'))" % bytearray(tag.encode()),
                         imports=IMP, path=path, venv=venv)

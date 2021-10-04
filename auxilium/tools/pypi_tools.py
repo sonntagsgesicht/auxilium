@@ -10,11 +10,13 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from logging import log, INFO
+from logging import log, INFO, DEBUG
 from os import getcwd
 
 from auxilium.tools.const import ICONS
 from auxilium.tools.system_tools import module
+
+LEVEL = DEBUG
 
 
 def deploy(usr, pwd, path=getcwd(), venv=None):
@@ -24,4 +26,4 @@ def deploy(usr, pwd, path=getcwd(), venv=None):
     module('twine', 'check --strict dist/*', path=path, venv=venv)
     # push to pypi.org
     return module("twine", "upload -u %s -p %s dist/*" % (usr, pwd),
-                  path=path, venv=venv)
+                  level=LEVEL, path=path, venv=venv)

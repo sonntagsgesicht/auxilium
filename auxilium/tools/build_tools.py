@@ -10,12 +10,14 @@
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from logging import log, INFO
+from logging import log, INFO, DEBUG
 from os import getcwd
 from os.path import basename
 
 from auxilium.tools.const import ICONS
 from auxilium.tools.system_tools import python as _python, module, del_tree
+
+LEVEL = DEBUG
 
 
 def build(path=getcwd(), venv=None):
@@ -23,11 +25,11 @@ def build(path=getcwd(), venv=None):
     log(INFO, ICONS["build"] + 'build package distribution')
     code = False
     code = code or _python("setup.py build",
-                           path=path, venv=venv)
+                           level=LEVEL, path=path, venv=venv)
     code = code or _python("setup.py sdist --formats=zip",
-                           path=path, venv=venv)
+                           level=LEVEL, path=path, venv=venv)
     code = code or module("twine", "check --strict dist/*",
-                          path=path, venv=venv)
+                          level=LEVEL, path=path, venv=venv)
     return code
 
 

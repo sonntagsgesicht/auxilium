@@ -19,6 +19,7 @@ from subprocess import run, Popen, PIPE, STDOUT  # nosec
 
 from .const import PYTHON, VENV_PATH, VENV_TAIL, ICONS, SUB_FORMATTER_PREFIX
 
+LEVEL = DEBUG
 linesep = '\n'
 
 
@@ -44,26 +45,26 @@ def activate_venv(venv_path=VENV_PATH):
     # strip potential executable from venv_path
     venv_path = venv_path.replace(VENV_TAIL, '')
     if os_name == 'nt':
-        log(DEBUG, ICONS[""] + "in virtual environment at %s" % venv_path)
+        log(LEVEL-1, ICONS[""] + "in virtual environment at %s" % venv_path)
         return "%s && " % join(venv_path, 'Scripts', 'activate.bat')
     elif os_name == 'posix':
-        log(DEBUG, ICONS[""] + "in virtual environment at %s" % venv_path)
+        log(LEVEL-1, ICONS[""] + "in virtual environment at %s" % venv_path)
         return ". %s; " % join(venv_path, 'bin', 'activate')
     else:
         log(ERROR,
             "    unable to activate virtual environment for os %s" % os_name)
 
 
-def shell(command, level=DEBUG, path=getcwd(), venv=None,
+def shell(command, level=LEVEL, path=getcwd(), venv=None,
           capture_output=True):
     if venv:
         command = activate_venv(venv) + ' ' + command
-    log(DEBUG - 1, ICONS[""] + ">>> %s" % command)
-    log(DEBUG - 1, ICONS[""] + "in %s" % path)
+    log(LEVEL - 1, ICONS[""] + ">>> %s" % command)
+    log(LEVEL - 1, ICONS[""] + "in %s" % path)
     return _popen(command, level, path, capture_output)
 
 
-def _popen(command, level=DEBUG, path=getcwd(), capture_output=True):  # nosec
+def _popen(command, level=LEVEL, path=getcwd(), capture_output=True):  # nosec
     if not capture_output:
         return _run(command, level, path, capture_output)
     proc = Popen(
@@ -86,7 +87,7 @@ def _popen(command, level=DEBUG, path=getcwd(), capture_output=True):  # nosec
     return exit_status
 
 
-def _run(command, level=DEBUG, path=getcwd(), capture_output=False):  # nosec
+def _run(command, level=LEVEL, path=getcwd(), capture_output=False):  # nosec
     proc = run(command, cwd=path, shell=True,
                capture_output=capture_output, text=True)
     log_level = ERROR if proc.returncode else level
@@ -101,20 +102,20 @@ def _run(command, level=DEBUG, path=getcwd(), capture_output=False):  # nosec
     return proc.returncode
 
 
-def python(command, level=DEBUG, path=getcwd(), venv=None,
+def python(command, level=LEVEL, path=getcwd(), venv=None,
            capture_output=True):
     venv = venv if venv else PYTHON
     return shell(venv + ' ' + command, level=level, path=path,
                  capture_output=capture_output)
 
 
-def module(mdl, command='', level=DEBUG, path=getcwd(), venv=None):
+def module(mdl, command='', level=LEVEL, path=getcwd(), venv=None):
     mdl = getattr(mdl, '__name__', str(mdl))
     return python('-m ' + mdl + ' ' + command,
                   level=level, path=path, venv=venv)
 
 
-def script(cmd, imports=(), level=DEBUG, path=getcwd(), venv=None):
+def script(cmd, imports=(), level=LEVEL, path=getcwd(), venv=None):
     if not isinstance(imports, (list, tuple)):
         imports = (imports,)
     cmd = '; '.join(tuple(imports) + (cmd,))
@@ -122,7 +123,7 @@ def script(cmd, imports=(), level=DEBUG, path=getcwd(), venv=None):
                   level=level, path=path, venv=venv)
 
 
-def del_tree(*paths, level=DEBUG):
+def del_tree(*paths, level=LEVEL):
     for f in paths:
         if exists(f):
             if isdir(f):

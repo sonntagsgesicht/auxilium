@@ -18,6 +18,9 @@ from .const import TEST_PATH, ICONS
 from .system_tools import module, del_tree, join
 
 
+LEVEL = INFO
+
+
 def coverage(pkg=basename(getcwd()), test_dir=TEST_PATH,
              min_cov='', fail_fast=False, path=getcwd(), venv=None):
     """check code coverage of tests"""
@@ -30,7 +33,7 @@ def coverage_test(test_dir=TEST_PATH,
                   min_cov='', fail_fast=False, path=getcwd(), venv=None):
     """check code coverage of tests with native test"""
     return module('test', '--coverage -D `pwd`/coverage_data %s' % test_dir,
-                  level=INFO, path=path, venv=venv)
+                  level=LEVEL, path=path, venv=venv)
 
 
 def coverage_pytest(test_dir=TEST_PATH,
@@ -39,7 +42,7 @@ def coverage_pytest(test_dir=TEST_PATH,
     ff = " --exitfirst" if fail_fast else ''
     mc = " --cov-fail-under=%s" % min_cov if min_cov else ''
     return module('pytest', '-q --cov %s%s%s' % (test_dir, ff, mc),
-                  level=INFO, path=path, venv=venv)
+                  level=LEVEL, path=path, venv=venv)
 
 
 def coverage_coverage(pkg=basename(getcwd()), test_dir=TEST_PATH,
@@ -54,7 +57,7 @@ def coverage_coverage(pkg=basename(getcwd()), test_dir=TEST_PATH,
         return exit_code
     mc = " --fail-under=%s" % min_cov if min_cov else ''
     cmd = 'report -m %s' % mc
-    return module('coverage', cmd, level=INFO, path=path, venv=venv)
+    return module('coverage', cmd, level=LEVEL, path=path, venv=venv)
 
 
 def cleanup(test_dir=TEST_PATH):

@@ -22,6 +22,9 @@ from .const import LAST_M_FILE, ICONS, AUX_PATH
 from .system_tools import linesep, open
 
 
+LEVEL = DEBUG
+
+
 def get_attr(attr, pkg=basename(getcwd()), path=getcwd()):
     default = '<%s>' % attr
     try:
@@ -51,7 +54,7 @@ def set_timestamp(pkg=basename(getcwd()), path=getcwd()):
     file = join(path, pkg, '__init__.py')
     d = date.today().strftime('%A, %d %B %Y')
     a = (pkg, d, file)
-    log(DEBUG, ICONS[""] + "set %s.__date__ = %s in %s" % a)
+    log(LEVEL, ICONS[""] + "set %s.__date__ = %s in %s" % a)
     # read file lines into list
     f = open(file)
     lines = list(map(str.rstrip, f.readlines()))
@@ -96,7 +99,7 @@ def replace_headers(pkg=basename(getcwd()), last=None, path=getcwd()):
                     if last.get(file, '') == str(getmtime(file)):
                         this[file] = str(getmtime(file))
                         continue
-                    log(DEBUG, ICONS[""] + "update file header of %s" % file)
+                    log(LEVEL, ICONS[""] + "update file header of %s" % file)
 
                     # read file lines into list
                     f = open(file)
@@ -120,7 +123,7 @@ def replace_headers(pkg=basename(getcwd()), last=None, path=getcwd()):
                     else:
                         new_lines = new_header
 
-                    log(DEBUG - 1, _linesep.join(new_lines[:20]))
+                    log(LEVEL - 1, _linesep.join(new_lines[:20]))
                     f = open(file, 'w')
                     f.write(linesep.join(new_lines))
                     if new_lines[-1].strip():
