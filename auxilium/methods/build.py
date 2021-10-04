@@ -17,7 +17,6 @@ from ..tools.build_tools import build as _build, cleanup as _cleanup
 from ..tools.docmaintain_tools import docmaintain
 from ..tools.dulwich_tools import add_and_commit_git, tag_git, push_git, \
     build_url
-from ..tools.pip_tools import install, uninstall
 from ..tools.pypi_tools import deploy as _deploy
 
 DID_NOT_COMMIT = 'build missing or failed - did not commit'
