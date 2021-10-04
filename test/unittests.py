@@ -150,12 +150,15 @@ class AuxiliumMethodTests(AuxiliumUnitTests):
                                'remote_commit', path=remote)
 
         self.assertReturnsZero(branch_git, 'other', path=remote)
-        self.assertReturnsZero(checkout_git, 'other', path=remote)
+
+        if os.name == 'posix':
+            self.assertReturnsZero(checkout_git, 'other', path=remote)
 
         # switch to repo
 
         self.assertReturnsZero(clone_git, remote, path=path)
-        self.assertReturnsZero(checkout_git, 'master', path=path)
+        if os.name == 'posix':
+            self.assertReturnsZero(checkout_git, 'master', path=path)
 
         self.assertReturnsZero(pull_git, remote, path=path)
         self.assertReturnsZero(add_and_commit_git, 'empty_commit', path=path)
@@ -195,12 +198,13 @@ class AuxiliumMethodTests(AuxiliumUnitTests):
 
         # switch back to remote
 
-        self.assertReturnsZero(checkout_git, 'master', path=remote)
+        if os.name == 'posix':
+            self.assertReturnsZero(checkout_git, 'master', path=remote)
 
-        with open(os.path.join(remote, first_file), 'r') as file:
-            self.assertEqual(file.read(), first_contents + append_contents)
-        with open(os.path.join(remote, second_file), 'r') as file:
-            self.assertEqual(file.read(), second_contents)
+            with open(os.path.join(remote, first_file), 'r') as file:
+                self.assertEqual(file.read(), first_contents + append_contents)
+            with open(os.path.join(remote, second_file), 'r') as file:
+                self.assertEqual(file.read(), second_contents)
 
 
 if __name__ == "__main__":

@@ -65,6 +65,7 @@ _ICONS = {
     'debug': '🪲',
     'info': 'ℹ️',
     'warn': '✋',
+    'warning': '✋',
     'error': '🚫',
     # git
     'init': '🐣',
