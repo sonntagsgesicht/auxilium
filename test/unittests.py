@@ -31,6 +31,11 @@ CWD, _ = os.path.split(__file__)
 
 logging.basicConfig(level=logging.INFO, format=TEST_LOG_FORMATTER)
 
+# set icons set on windows machine
+if not os.name == 'posix':
+    ICONS.clear()
+    ICONS.update({'error': '!!', 'warn': '!'})
+
 
 def auxilium(command, level=logging.INFO, path=None):
     return module('auxilium', command, level=level, path=path)
