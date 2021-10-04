@@ -28,7 +28,7 @@ getLogger(__name__).addHandler(NullHandler())
 
 
 __doc__ = 'Python project for an automated test and deploy toolkit.'
-__version__ = '0.1.9'
+__version__ = '0.1.10'
 __dev_status__ = '4 - Beta'
 __date__ = 'Sunday, 03 October 2021'
 __author__ = 'sonntagsgesicht'

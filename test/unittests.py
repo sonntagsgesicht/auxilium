@@ -47,7 +47,7 @@ class AuxiliumUnitTests(unittest.TestCase):
             os.mkdir(self.wdir)
         os.chdir(self.wdir)
 
-    def _tearDown(self):
+    def tearDown(self):
         try:
             del_tree(self.wdir)
         except FileExistsError:

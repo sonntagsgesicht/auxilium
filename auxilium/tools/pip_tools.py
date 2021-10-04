@@ -45,11 +45,12 @@ def requirements(path=getcwd(), freeze_file=FREEZE_FILE, venv=None):
     return code
 
 
-def install(path=getcwd(), venv=None):
+def install(pkg='.', path=getcwd(), venv=None):
     """(re)install current project via `pip install -e .`"""
     log(INFO, ICONS["install"] + 'install project via pip install -e')
     if exists('setup.py') or exists('setup.cfg'):
-        return module('pip', "install --upgrade -e .", path=path, venv=venv)
+        return module('pip', "install --upgrade -e %s" % pkg,
+                      path=path, venv=venv)
     log(WARN, ICONS["warn"] +
         'could not install project via pip install -e '
         '(setup.py or setup.cfg not found in %s)' % path)

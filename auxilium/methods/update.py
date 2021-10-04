@@ -42,6 +42,7 @@ def do(pkg=basename(getcwd()), header=None, commit=None, pull=None,
     if upgrade:
         code = code or _upgrade(upgrade, path=path, venv=env)
     if install:
+        code = code or uninstall(pkg, path=path, venv=env)
         code = code or _install(path=path, venv=env)
     if requirements:
         code = code or _requirements(path=path, venv=env)
