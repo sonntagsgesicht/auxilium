@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.10, copyright Sunday, 03 October 2021
+# Version:  0.1.10, copyright Monday, 04 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -38,8 +38,6 @@ def do(pkg=basename(getcwd()), commit=None, tag=None, header=None,
         code = code or docmaintain(pkg, path=path)
 
     code = code or _build(path=path, venv=env)
-    code = code or uninstall(pkg, path=path, venv=env)
-    code = code or install(path=path, venv=env)
     if commit:
         code = code or add_and_commit_git(commit, path=path, venv=env)
     if tag:
