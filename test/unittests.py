@@ -50,7 +50,7 @@ class AuxiliumUnitTests(unittest.TestCase):
     def tearDown(self):
         try:
             del_tree(self.wdir)
-        except FileExistsError:
+        except PermissionError:
             pass
 
     def assertReturns(self, expected_return, function, *args, **kwargs):
