@@ -17,7 +17,7 @@ from os.path import exists, join, basename, splitext
 from shutil import move
 from zipfile import ZipFile
 
-from .const import ICONS
+from .const import ICONS, REPLACE
 from .system_tools import open
 
 EXT = ' (created by auxilium)'
@@ -43,8 +43,11 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
     url = input('Enter project url  : ') if url is None else url
     url = url or 'https://github.com/<author>/<name>'
 
-    project_path = join(path, name)
-    pkg_path = join(path, name, name)
+    pkg = name
+    for r in REPLACE:
+        pkg = pkg.replace(r, '_')
+    project_path = join(path, pkg)
+    pkg_path = join(path, pkg, pkg)
 
     # setup project infrastructure
     if exists(project_path):
@@ -74,6 +77,7 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
         c = c.replace('<author>', author)
         c = c.replace('<doc>', slogan)
         c = c.replace('<name>', name)
+        c = c.replace('<pkg>', pkg)
         c = c.replace('<date>', date.today().strftime('%A, %d %B %Y'))
 
         f = open(pth, 'w')
@@ -81,7 +85,7 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
         f.close()
         return pth
 
-    for subdir, _, files in walk(name):
+    for subdir, _, files in walk(pkg):
         for file in files:
             if splitext(file)[1] in FILE_EXT:
                 rp(join(subdir, file))
@@ -89,8 +93,8 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
     log(INFO, '')
     log(INFO, ICONS["create"] +
         'created project %s with these files:' % name)
-    log(INFO, ICONS[""] + 'in %s' % path)
-    for subdir, _, files in walk(name):
+    log(INFO, ICONS[""] + 'in %s' % project_path)
+    for subdir, _, files in walk(pkg):
         log(INFO, '')
         for file in sorted(files):
             log(INFO, ICONS[""] + '  ' + join(subdir, file))

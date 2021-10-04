@@ -7,7 +7,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-pkg = __import__('<name>')
+pkg = __import__('<pkg>')
 
 setup(
     name=pkg.__name__,

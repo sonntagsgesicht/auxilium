@@ -15,7 +15,7 @@ from os.path import basename, join, normpath
 from sys import executable
 
 PYTHON = basename(executable)
-
+REPLACE = ":()-*.#/\?'!<>" + '"'
 DEMO_PATH = "auxilium_demo"
 PROFILE_PATH = "dev.py"
 TEST_PATH = normpath('test/')
