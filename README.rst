@@ -1,11 +1,5 @@
 
-.. only:: local
-
-    .. image:: ../pix/auxilium_logo.png
-
-.. only:: not local
-
-    .. image:: https://raw.githubusercontent.com/sonntagsgesicht/auxilium/master/doc/pix/auxilium_logo.png
+.. image:: https://raw.githubusercontent.com/sonntagsgesicht/auxilium/master/doc/pix/auxilium_logo.png
 
 
 Python library *auxilium*
@@ -46,13 +40,7 @@ Code, Documentation and Tests
 
 Modern software development comes as a triple of
 
-.. only:: local
-
-    .. image:: ../pix/code-test-doc.png
-
-.. only:: not local
-
-    .. image:: https://raw.githubusercontent.com/sonntagsgesicht/auxilium/master/doc/pix/code-test-doc.png
+.. image:: https://raw.githubusercontent.com/sonntagsgesicht/auxilium/master/doc/pix/code-test-doc.png
 
 .. :alt: **code is for machines** // **tests links docs and code** // **docs are for humans**
 
