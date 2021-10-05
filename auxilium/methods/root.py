@@ -19,8 +19,9 @@ from os.path import basename, join, exists
 
 from .. import methods
 from ..tools.const import VERBOSITY_LEVELS, ICONS, DEMO_PATH
-from ..tools.system_tools import module, del_tree
+from ..tools.system_tools import module, del_tree, shell
 
+LEVEL = logging.DEBUG
 Failure = Exception
 
 
@@ -87,8 +88,14 @@ def failure_exit(exit_status, command='unknown', **kwargs):
         sys.exit(1)
 
 
+def pre_run(cmd='', level=LEVEL, path=getcwd(), venv=None):
+    if cmd:
+        logging.log(logging.INFO, ICONS["run"] + "running %r" % cmd)
+        return shell(cmd, level=level, path=path, venv=venv)
+
+
 def do(command=None, demo=None, verbosity=None, exit_status=None, env=None,
-       **kwargs):
+       pre=None, **kwargs):
 
     # check demo
     if demo:
@@ -103,6 +110,10 @@ def do(command=None, demo=None, verbosity=None, exit_status=None, env=None,
     # check project path
     if command not in ('create', 'python') and check_project_path():
         failure_exit(exit_status, command)
+
+    # check project path
+    if command not in ('create', 'python') and pre_run(pre):
+        failure_exit(exit_status, 'in pre run before ' + command)
 
     # retriev command/method
     method = getattr(methods, str(command), None)

@@ -143,9 +143,10 @@ class AuxiliumMethodTests(AuxiliumUnitTests):
             file.write(first_contents)
         self.assertIn(first_file, status(remote).untracked)
 
+        self.assertReturnsZero(add_git, path=remote)
+        self.assertIn(first_file.encode(), status(remote).staged['add'])
         self.assertReturnsZero(add_and_commit_git,
                                'remote_commit', path=remote)
-        self.assertIn(first_file.encode(), status(remote).staged['add'])
 
         self.assertReturnsZero(branch_git, 'other', path=remote)
 

@@ -13,8 +13,7 @@
 from argparse import ArgumentParser
 from configparser import ConfigParser
 
-from auxilium.tools.sphinx_tools import api, html, doctest, show, latexpdf, \
-    cleanup as cleanup_doc
+from auxilium.tools.sphinx_tools import api, doctest, show, pdf, cleanup
 
 
 def add_arguments(parser=None, config=ConfigParser()):
@@ -30,7 +29,7 @@ def add_arguments(parser=None, config=ConfigParser()):
         nargs='?',
         metavar='MSG',
         const=config.get('doc', 'commit', fallback='Commit doc build'),
-        help='auto commit on successful doc build run')
+        help='auto commit on successful doc build run (incl. doctest)')
     parser.add_argument(
         '--api',
         action='store_const',
@@ -44,17 +43,17 @@ def add_arguments(parser=None, config=ConfigParser()):
         default=config.getboolean('doc', 'doctest', fallback=True),
         help=doctest.__doc__)
     parser.add_argument(
-        '--html',
+        '--coverage',
         action='store_const',
-        const=not config.getboolean('doc', 'html', fallback=True),
-        default=config.getboolean('doc', 'html', fallback=True),
-        help=html.__doc__)
+        const=not config.getboolean('doc', 'coverage', fallback=True),
+        default=config.getboolean('doc', 'coverage', fallback=True),
+        help=doctest.__doc__)
     parser.add_argument(
         '--pdf',
         action='store_const',
         const=not config.getboolean('doc', 'pdf', fallback=False),
         default=config.getboolean('doc', 'pdf', fallback=False),
-        help=latexpdf.__doc__)
+        help=pdf.__doc__)
     parser.add_argument(
         '--show',
         action='store_const',
@@ -66,5 +65,5 @@ def add_arguments(parser=None, config=ConfigParser()):
         action='store_const',
         const=not config.getboolean('doc', 'cleanup', fallback=False),
         default=config.getboolean('doc', 'cleanup', fallback=False),
-        help=cleanup_doc.__doc__)
+        help=cleanup.__doc__)
     return parser

@@ -11,15 +11,6 @@ Subpackages
    auxilium.methods
    auxilium.tools
 
-Submodules
-----------
-
-
-.. automodule:: auxilium.rst_tools
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 

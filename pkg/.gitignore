@@ -1,3 +1,6 @@
+__pycache__/
+*.pyc
+
 .DS_Store
 .vs/
 .idea/
@@ -6,18 +9,15 @@
 build/
 dist/
 *.egg-info
-*.pyc
 
 .bin/
 .cache/
 
 doc/sphinx/_build/
-*/__pycache__/
 
 .coverage
 coverage.xml
 htmlcov/
 
-.freeze
 *.json
 *.zip

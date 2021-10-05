@@ -35,7 +35,7 @@ Submodules
    :show-inheritance:
 
 
-.. automodule:: auxilium.tools.git_tools
+.. automodule:: auxilium.tools.dulwich_tools
    :members:
    :undoc-members:
    :show-inheritance:

@@ -2,9 +2,8 @@ git+https://github.com/sonntagsgesicht/auxilium
 dulwich
 bandit
 coverage
+regtest
 flake8
-Sphinx
+sphinx
 sphinx-math-dollar
-sphinx-rtd-theme
-karma_sphinx_theme
-sphinx-nameko-theme
+# sphinx-pytype-substitution

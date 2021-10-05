@@ -1,13 +1,18 @@
 
+.. only:: local
 
-.. image:: https://raw.githubusercontent.com/sonntagsgesicht/auxilium/master/doc/pix/logo.png
+    .. image:: ../pix/auxilium_logo.png
+
+.. only:: not local
+
+    .. image:: https://raw.githubusercontent.com/sonntagsgesicht/auxilium/master/doc/pix/auxilium_logo.png
 
 
 Python library *auxilium*
 -------------------------
 
 |codeship|_ |readthedocs|_ |license|_ |github_version|_ |pip_version|_
-|py_version|_ |pypi_frequency|_ |pypi_downloads|_
+|py_version|_ |pypi_downloads|_
 
 .. |codeship| image:: https://img.shields.io/codeship/5b8cc2e0-ac1d-0137-31a2-06d5e6117547/master.svg
 .. _codeship: https://codeship.com//projects/362165
@@ -41,7 +46,13 @@ Code, Documentation and Tests
 
 Modern software development comes as a triple of
 
-.. image:: https://raw.githubusercontent.com/sonntagsgesicht/auxilium/master/doc/pix/code-test-doc.png
+.. only:: local
+
+    .. image:: ../pix/code-test-doc.png
+
+.. only:: not local
+
+    .. image:: https://raw.githubusercontent.com/sonntagsgesicht/auxilium/master/doc/pix/code-test-doc.png
 
 .. :alt: **code is for machines** // **tests links docs and code** // **docs are for humans**
 

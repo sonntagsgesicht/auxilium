@@ -13,15 +13,12 @@
 import os
 import sys
 
-sys.path.append('../..')
+# -- Import project pkg ---------------------------------------------------
 
-import auxilium
-
-if os.getcwd().find('readthedocs') < 0:
-    pkg = __import__(os.getcwd().split(os.sep)[-3])
-else:
-    pkg = __import__(__file__.split(os.sep)[-6])
-
+pos = -6 if 'readthedocs' in __file__ else -4  # hack for readthedocs.org
+pkg_path = __file__.split(os.sep)[:pos]
+sys.path.append(os.sep.join(pkg_path))
+pkg = __import__(pkg_path[-1])
 
 # -- General configuration ------------------------------------------------
 
@@ -33,10 +30,8 @@ else:
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'karma_sphinx_theme',
-    'sphinx_rtd_theme',
+    pkg.__theme__.replace('-', '_'),
     'sphinx.ext.autodoc',
-    # 'sphinx.ext.autosectionlabel',
     'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
     'sphinx.ext.todo',
@@ -113,9 +108,8 @@ add_module_names = True
 
 # -- Options for HTML output ----------------------------------------------
 
-html_theme = 'sphinx_rtd_theme'
-html_theme = 'pyramid'
-html_theme = 'karma_sphinx_theme'
+html_theme = pkg.__theme__.replace('-', '_')
+
 # html_logo = 'logo.png'
 # html_theme_options = {}
 # html_static_path = ['_static']
@@ -123,7 +117,7 @@ html_theme = 'karma_sphinx_theme'
 
 # -- Options for LaTeX output ---------------------------------------------
 
-latex_logo = 'logo.png'
+latex_logo = '../pix/logo.png'
 latex_elements = {
     'papersize': 'a4paper',
     'pointsize': '10pt',

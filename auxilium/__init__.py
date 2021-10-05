@@ -21,7 +21,6 @@ from configparser import ConfigParser
 from .add_arguments import add_parser
 from .methods.root import do
 from .tools.const import CONFIG_PATH, VERBOSITY_LEVELS, ICONS
-from . import rst_tools  # noqa: F401
 
 
 getLogger(__name__).addHandler(NullHandler())
@@ -35,12 +34,13 @@ __author__ = 'sonntagsgesicht'
 __email__ = __author__ + '@icloud.com'
 __url__ = 'https://github.com/' + __author__ + '/' + __name__
 __license__ = 'Apache License 2.0'
-__dependencies__ = 'pip', 'dulwich', 'flake8', 'bandit', 'coverage', \
-                   'sphinx', 'sphinx-rtd-theme', 'sphinx-math-dollar', \
-                   'twine', 'karma-sphinx-theme', 'sphinx-nameko-theme'
+__dependencies__ = 'pip', 'dulwich', 'regtest', 'flake8', 'bandit', \
+                   'coverage', 'twine', 'sphinx', \
+                   'sphinx-math-dollar', 'karma-sphinx-theme'
 __dependency_links__ = ()
 __data__ = ('data/pkg.zip',)
 __scripts__ = ('auxilium=auxilium:main',)
+__theme__ = 'karma-sphinx-theme'
 
 
 def main():

@@ -53,6 +53,15 @@ def add_arguments(parser=None, config=ConfigParser()):
              ' (default: non-zero')
 
     parser.add_argument(
+        '-p', '--pre',
+        metavar='SCRIPT',
+        nargs='?',
+        default=config.get('DEFAULT', 'pre', fallback=''),
+        help="pre run script, "
+             "which is executed before every command "
+             "(except 'create' and 'python')")
+
+    parser.add_argument(
         '-d', '--demo',
         metavar='NAME',
         nargs='?',

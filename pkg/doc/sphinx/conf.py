@@ -12,42 +12,28 @@
 
 import os
 import sys
-import auxilium
-
 
 sys.path.append('../..')
 
-if os.getcwd().find('readthedocs') < 0:
-    pkg = __import__(os.getcwd().split(os.sep)[-3])
-else:
-    pkg = __import__(__file__.split(os.sep)[-6])
+# -- Import project pkg ---------------------------------------------------
 
-# -- add auxilium replacement strings -------------------------------------
+pos = -6 if 'readthedocs' in __file__ else -3  # hack for readthedocs.org
+pkg_path = __file__.split(os.sep)[:pos]
+sys.path.append(os.sep.join(pkg_path))
+pkg = __import__(pkg_path[-1])
 
-rst_prolog = auxilium.rst_tools.rst_replace(pkg)
-
-# -- add math-dollar/mathjax config ---------------------------------------
-
-mathjax_config = {
-    'tex2jax': {
-        'inlineMath': [ ["\\(","\\)"] ],
-        'displayMath': [["\\[","\\]"] ],
-    },
-}
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
-#
-# needs_sphinx = '1.0'
+
+needs_sphinx = '1.8'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'karma_sphinx_theme',
     'sphinx_rtd_theme',
     'sphinx.ext.autodoc',
-    # 'sphinx.ext.autosectionlabel',
     'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
     'sphinx.ext.todo',
@@ -59,28 +45,8 @@ extensions = [
     'sphinx.ext.inheritance_diagram',
 ]
 
-autodoc_default_options = {
-    'show-inheritance': 1,
-    'members': True,  # 'var1, var2',
-    'member-order': 'bysource',
-    # 'inherited-members': False,
-    # 'special-members': '__call__',
-    'undoc-members': True,
-    # 'exclude-members': '__weakref__',
-    # 'autosummary': True,
-    'inherit_docstrings': True
-}
-numpydoc_show_class_members = True
-autoclass_content = 'both'
-# autosummary_generate = True
-
-# needed for version 1.8.5 (python 2.7)
-autodoc_default_flags = ['members', 'show-inheritance']
-autodoc_member_order = 'bysource'  # 'groupwise'
-autodoc_inherit_docstrings = True
-
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+if pkg.__theme__:
+    extensions.append(pkg.__theme__.replace('-', '_'))
 
 # The master toctree document.
 master_doc = 'index'
@@ -119,14 +85,14 @@ pygments_style = 'sphinx'
 # If true, `to_do` and `to_do_List` produce output, else they produce nothing.
 todo_include_todos = False
 
-# A boolean that decides whether module names are prepended to all object names.
+# A boolean that decides whether module names are prepended to all object
+# names.
 add_module_names = True
 
 # -- Options for HTML output ----------------------------------------------
 
-html_theme = 'sphinx_rtd_theme'
-html_theme = 'pyramid'
-html_theme = 'karma_sphinx_theme'
+if pkg.__theme__:
+    html_theme = pkg.__theme__.replace('-', '_')
 # html_logo = 'logo.png'
 # html_theme_options = {}
 # html_static_path = ['_static']
@@ -134,11 +100,11 @@ html_theme = 'karma_sphinx_theme'
 
 # -- Options for LaTeX output ---------------------------------------------
 
-latex_logo = 'logo.png'
 latex_elements = {
     'papersize': 'a4paper',
     'pointsize': '10pt',
 }
+# latex_logo = 'logo.png'
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
@@ -163,3 +129,43 @@ man_pages = [(
     [pkg.__author__],
     1)
 ]
+
+
+# -- Options for autodoc extension -----------------------------------------
+
+autodoc_default_options = {
+    'show-inheritance': 1,
+    'inherit_docstrings': True,
+    'member-order': 'bysource',
+    'members': True,  # 'var1, var2',
+    'undoc-members': True,
+    'private-members': False,
+    'inherited-members': False,
+    'imported-members': False,
+    # 'special-members': '__call__',
+    # 'exclude-members': '__weakref__',
+    # 'autosummary': True,
+    # 'ignore-module-all':
+    # 'class-doc-from':
+}
+# This value selects what content will be inserted into the main body of an
+# autoclass directive. (autodoc)
+# "class" Only the class’ docstring is inserted.
+# "init" Only the __init__ method’s docstring is inserted.
+# "both" Both the class’ and the __init__ method’s docstring are inserted.
+autoclass_content = 'both'
+
+# This value selects how the signature will be displayed for the class defined
+# by autoclass directive. (autodoc)
+# "mixed" Display the signature with the class name.
+# "separated" Display the signature as a method.
+autodoc_class_signature = "separated"
+
+# -- Config for math-dollar extension (mathjax) ----------------------------
+
+mathjax_config = {
+    'tex2jax': {
+        'inlineMath': [["\\(", "\\)"]],
+        'displayMath': [["\\[", "\\]"]],
+    },
+}

@@ -15,7 +15,7 @@ from os.path import basename, join, normpath
 from sys import executable
 
 PYTHON = basename(executable)
-REPLACE = ":()-*.#/\?'!<>" + '"'
+REPLACE = ":()-*.#/\\'?!<>" + '"'
 DEMO_PATH = "auxilium_demo"
 PROFILE_PATH = "dev.py"
 TEST_PATH = normpath('test/')
@@ -81,6 +81,7 @@ _ICONS = {
     'push': '📤',
     # commands
     'python': '🐍',
+    'run': '👟',
     'demo': '🍹',
     'uninstall': '💔',
     'clean': '🧹',
@@ -101,11 +102,12 @@ _ICONS = {
     'coverage': '📑',
     'profile': '⏱',
     # doc
-    'apidoc': '📌',
+    'apidoc': '✏️',
     'html': '🌐',
-    'latexpdf': '📗',
-    'doctest': '🔏',
-    'doctest2': '📝',
+    'single': '🪧',
+    'epub': '📕',
+    'latex': '📒',
+    'pdf': '📗',
     'show': '💡',
     # build
     'build': '🏗',
