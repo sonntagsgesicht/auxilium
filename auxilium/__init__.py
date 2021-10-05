@@ -35,7 +35,7 @@ __email__ = __author__ + '@icloud.com'
 __url__ = 'https://github.com/' + __author__ + '/' + __name__
 __license__ = 'Apache License 2.0'
 __dependencies__ = 'pip', 'dulwich', 'regtest', 'flake8', 'bandit', \
-                   'coverage', 'twine', 'sphinx', \
+                   'coverage', 'twine', 'seedir', 'sphinx', \
                    'sphinx-math-dollar', 'karma-sphinx-theme'
 __dependency_links__ = ()
 __data__ = ('data/pkg.zip',)

@@ -30,18 +30,19 @@ pkg = __import__(pkg_path[-1])
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    pkg.__theme__.replace('-', '_'),
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
-    'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages',
     'sphinx.ext.napoleon',
     'sphinx.ext.inheritance_diagram',
 ]
+
+# Extend extensions by project theme
+if pkg.__theme__ and pkg.__theme__.replace('-', '_') not in extensions:
+    extensions.append(pkg.__theme__.replace('-', '_'))
 
 autodoc_default_options = {
     'show-inheritance': 1,
@@ -108,7 +109,8 @@ add_module_names = True
 
 # -- Options for HTML output ----------------------------------------------
 
-html_theme = pkg.__theme__.replace('-', '_')
+if pkg.__theme__:
+    html_theme = pkg.__theme__.replace('-', '_')
 
 # html_logo = 'logo.png'
 # html_theme_options = {}

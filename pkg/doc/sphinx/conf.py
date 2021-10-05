@@ -36,16 +36,15 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
-    'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages',
     'sphinx.ext.napoleon',
     'sphinx.ext.inheritance_diagram',
 ]
 
-if pkg.__theme__:
+# Extend extensions by project theme
+if pkg.__theme__ and pkg.__theme__.replace('-', '_') not in extensions:
     extensions.append(pkg.__theme__.replace('-', '_'))
 
 # The master toctree document.

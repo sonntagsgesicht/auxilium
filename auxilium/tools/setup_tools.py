@@ -12,10 +12,12 @@
 
 from datetime import date
 from logging import log, INFO
-from os import getcwd, sep, walk, makedirs
+from os import getcwd, sep, walk, makedirs, linesep
 from os.path import exists, join, basename, splitext
 from shutil import move
 from zipfile import ZipFile
+
+from seedir import seedir
 
 from .const import ICONS, REPLACE
 from .system_tools import open
@@ -94,10 +96,15 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
     log(INFO, ICONS["create"] +
         'created project %s with these files:' % name)
     log(INFO, ICONS[""] + 'in %s' % project_path)
-    for subdir, _, files in walk(pkg):
-        log(INFO, '')
-        for file in sorted(files):
-            log(INFO, ICONS[""] + '  ' + join(subdir, file))
+    log(INFO, '')
+    lines = seedir(pkg,
+                   first='files',
+                   sort=True,
+                   indent=2,
+                   anystart='• ',
+                   printout=False).split(linesep)
+    for line in lines:
+        log(INFO, ICONS[""] + '  ' + line)
     log(INFO, '')
     return project_path
 
