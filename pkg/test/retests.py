@@ -15,13 +15,19 @@ from os import getcwd
 from os.path import basename
 from regtest import RegressionTestCase
 
-
 pkg = __import__(basename(getcwd()))
 
 
-class FirstRegTests(RegressionTestCase):
-    def setUp(self):
-        pass
+# first run will build reference values (stored in files)
+# second run will test against those reference values
+# to update reference values simply remove the according files
 
-    def test_sample(self):
-        self.assertAlmostRegressiveEqual(1, pkg.Line(0, 1).y(x=1))
+class FirstRegTests(RegressionTestCase):
+
+    def test_sample_almost_equal(self):
+        for i in range(-10, 100):
+            self.assertAlmostRegressiveEqual(pkg.Line(0, 1).y(x=0.5 * i))
+
+    def test_sample_equal(self):
+        for i in range(-10, 100):
+            self.assertAlmostRegressiveEqual(0 < pkg.Line(0, 1).y(x=0.5 * i))
