@@ -12,7 +12,7 @@
 
 
 from os import getcwd
-from os.path import basename
+from os.path import basename, split
 from regtest import RegressionTestCase
 
 pkg = __import__(basename(getcwd()))
@@ -23,6 +23,11 @@ pkg = __import__(basename(getcwd()))
 # to update reference values simply remove the according files
 
 class FirstRegTests(RegressionTestCase):
+
+    def setUp(self):
+        folder, file = split(__file__)
+        self.setFolderName(folder)
+        super(FirstRegTests, self).setUp()
 
     def test_sample_almost_equal(self):
         for i in range(-10, 100):
