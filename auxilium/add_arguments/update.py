@@ -49,8 +49,8 @@ def add_arguments(parser=None, config=ConfigParser()):
     parser.add_argument(
         '--status',
         action='store_const',
-        const=not config.getboolean('update', 'status', fallback=True),
-        default=config.getboolean('update', 'status', fallback=True),
+        const=not config.getboolean('update', 'status', fallback=False),
+        default=config.getboolean('update', 'status', fallback=False),
         help=status_git.__doc__)
     parser.add_argument(
         '--commit',
