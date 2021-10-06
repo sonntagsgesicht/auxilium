@@ -33,9 +33,8 @@ def do(pkg=basename(getcwd()), header=None, status=None, commit=None,
         code = code or docmaintain(pkg, path=path)
     if not exists(join(path, GIT_PATH)):
         code = code or init_git(path=path, venv=env)
-    if status or commit:
-        code = code or add_git(path=path, venv=env)
     if status:
+        code = code or add_git(path=path, venv=env)
         code = code or status_git(path=path, venv=env)
     if commit:
         code = code or add_and_commit_git(commit, path=path, venv=env)
