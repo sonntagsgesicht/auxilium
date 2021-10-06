@@ -102,7 +102,7 @@ def has_status_git(path=getcwd(), venv=None):
 
 
 def has_staged_git(path=getcwd(), venv=None):
-    return script("exit(any(tuple(status().staged.values()))))",
+    return script("exit(any(tuple(status().staged.values())))",
                   imports=IMP, path=path, venv=venv)
 
 
