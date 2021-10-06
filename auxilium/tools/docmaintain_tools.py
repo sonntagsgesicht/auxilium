@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.10, copyright Monday, 04 October 2021
+# Version:  0.1.10, copyright Wednesday, 06 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -54,7 +54,6 @@ def set_timestamp(pkg=basename(getcwd()), path=getcwd()):
     file = join(path, pkg, '__init__.py')
     d = date.today().strftime('%A, %d %B %Y')
     a = (pkg, d, file)
-    log(LEVEL, ICONS[""] + "set %s.__date__ = %s in %s" % a)
     # read file lines into list
     f = open(file)
     lines = list(map(str.rstrip, f.readlines()))
@@ -62,13 +61,17 @@ def set_timestamp(pkg=basename(getcwd()), path=getcwd()):
     # make replacement
     for i, line in enumerate(lines):
         if line.startswith('__date__ = '):
-            lines[i] = "__date__ = '" + d + "'"
             break
-    # write file
-    f = open(file, 'w')
-    f.write(linesep.join(lines))
-    f.write(linesep)  # last empty line
-    f.close()
+    old_line = lines[i]
+    new_line = "__date__ = '" + d + "'"
+    if old_line != new_line:
+        log(LEVEL, ICONS[""] + "update %s.__date__ = %s in %s" % a)
+        lines[i] = new_line
+        # write file
+        f = open(file, 'w')
+        f.write(linesep.join(lines))
+        f.write(linesep)  # last empty line
+        f.close()
     return
 
 
