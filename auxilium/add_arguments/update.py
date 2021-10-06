@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.10, copyright Monday, 04 October 2021
+# Version:  0.1.10, copyright Wednesday, 06 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -15,7 +15,7 @@ from configparser import ConfigParser
 
 
 from ..tools.docmaintain_tools import docmaintain, get_url, get_author
-from ..tools.dulwich_tools import commit_git, pull_git
+from ..tools.dulwich_tools import commit_git, pull_git, status_git
 from ..tools.pip_tools import requirements, install, rollback, upgrade, \
     uninstall
 
@@ -46,6 +46,12 @@ def add_arguments(parser=None, config=ConfigParser()):
         const=not config.getboolean('update', 'header', fallback=True),
         default=config.getboolean('update', 'header', fallback=True),
         help=docmaintain.__doc__)
+    parser.add_argument(
+        '--status',
+        action='store_const',
+        const=not config.getboolean('update', 'status', fallback=True),
+        default=config.getboolean('update', 'status', fallback=True),
+        help=status_git.__doc__)
     parser.add_argument(
         '--commit',
         nargs='?',

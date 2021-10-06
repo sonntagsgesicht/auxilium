@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.10, copyright Monday, 04 October 2021
+# Version:  0.1.10, copyright Wednesday, 06 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -16,7 +16,6 @@ from os import getcwd
 from .const import ICONS
 from .setup_tools import EXT
 from .system_tools import script, shell
-
 
 LEVEL = DEBUG
 BRANCH = 'master'
@@ -61,7 +60,7 @@ def add_git(path=getcwd(), venv=None):
     return code
 
 
-def status_git(level=LEVEL, path=getcwd(), venv=None):
+def status_git(level=INFO, path=getcwd(), venv=None):
     """check status of local `git` repo"""
     log(INFO, ICONS["status"] + "check file status in local `git` repo")
     code = False
@@ -96,16 +95,29 @@ def commit_git(msg='', level=LEVEL, path=getcwd(), venv=None):
                   % (msg, msg), imports=IMP, level=level, path=path, venv=venv)
 
 
+def has_status_git(path=getcwd(), venv=None):
+    return script("exit(any(tuple(status().staged.values()) + "
+                  "(status().unstaged, status().untracked)))",
+                  imports=IMP, path=path, venv=venv)
+
+
+def has_staged_git(path=getcwd(), venv=None):
+    return script("exit(any(tuple(status().staged.values()))))",
+                  imports=IMP, path=path, venv=venv)
+
+
+def has_unstaged_git(path=getcwd(), venv=None):
+    return script("exit(any((status().unstaged, status().untracked)))",
+                  imports=IMP, path=path, venv=venv)
+
+
 def add_and_commit_git(msg='', level=LEVEL, path=getcwd(), venv=None):
-    any_exists = script("exit(any(tuple(status().staged.values()) + "
-                        "(status().unstaged, status().untracked)))",
-                        imports=IMP, path=path, venv=venv)
-    if not any_exists:
-        log(INFO, ICONS["missing"] + "no changes to commit")
-        return 0
     code = False
-    code = code or add_git(path=path, venv=venv)
-    code = code or status_git(level=level, path=path, venv=venv)
+    if has_unstaged_git(path=path, venv=venv):
+        code = code or add_git(path=path, venv=venv)
+    if not has_staged_git(path=path, venv=venv):
+        log(INFO, ICONS["missing"] + "no changes to commit")
+        return code
     code = code or commit_git(msg, level=level, path=path, venv=venv)
     return code
 
