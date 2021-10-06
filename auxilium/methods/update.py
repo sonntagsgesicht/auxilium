@@ -15,7 +15,7 @@ from os.path import basename, exists, join
 
 from ..tools.const import GIT_PATH
 from ..tools.docmaintain_tools import docmaintain
-from ..tools.dulwich_tools import commit_git, pull_git, build_url, \
+from ..tools.dulwich_tools import add_and_commit_git, pull_git, build_url, \
     init_git, status_git, add_git
 from ..tools.pip_tools import upgrade as _upgrade, uninstall, \
     rollback, requirements as _requirements, install as _install
@@ -38,7 +38,7 @@ def do(pkg=basename(getcwd()), header=None, status=None, commit=None,
     if status:
         code = code or status_git(path=path, venv=env)
     if commit:
-        code = code or commit_git(commit, path=path, venv=env)
+        code = code or add_and_commit_git(commit, path=path, venv=env)
     if pull:
         remote = build_url(remote, remote_usr, remote_pwd)
         code = code or pull_git(
