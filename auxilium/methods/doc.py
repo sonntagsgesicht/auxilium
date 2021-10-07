@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.10, copyright Monday, 04 October 2021
+# Version:  0.1.10, copyright Wednesday, 06 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -25,7 +25,7 @@ def do(pkg=basename(getcwd()), commit=None, fail_fast=None, pdf=None,
        api=None, doctest=None, show=None, cleanup=None, coverage=None,
        path=None, env=None, **kwargs):
     if cleanup:
-        return _cleanup(env)
+        return _cleanup(venv=env)
 
     code = False
     if api:
@@ -36,6 +36,8 @@ def do(pkg=basename(getcwd()), commit=None, fail_fast=None, pdf=None,
     if coverage:
         code = code or _coverage(fail_fast=fail_fast, path=path, venv=env)
     code = code or html(fail_fast=fail_fast, path=path, venv=env)
+    if show:
+        code = code or _show(env)
     code = code or single(fail_fast=fail_fast, path=path, venv=env)
     code = code or epub(fail_fast=fail_fast, path=path, venv=env)
     code = code or latex(fail_fast=fail_fast, path=path, venv=env)
@@ -48,6 +50,4 @@ def do(pkg=basename(getcwd()), commit=None, fail_fast=None, pdf=None,
             log(WARN, ICONS["warn"] +
                 'doctest or build missing - did not commit')
             code = True
-    if show:
-        code = code or _show(env)
     return code

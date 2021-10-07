@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.10, copyright Monday, 04 October 2021
+# Version:  0.1.10, copyright Wednesday, 06 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -24,7 +24,7 @@ def add_parser(config=ConfigParser()):
     # ===========================
 
     epilog = """
-    if (default: True) a given flag turns its value to False. \
+    if (default: True) a given flag turns its value to False.
     default behavior may depend on current path and project.
     set default behavior in `~/%s` and `./%s`."
     """ % (CONFIG_PATH, CONFIG_PATH)

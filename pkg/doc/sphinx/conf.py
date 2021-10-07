@@ -17,7 +17,7 @@ sys.path.append('../..')
 
 # -- Import project pkg ---------------------------------------------------
 
-pos = -6 if 'readthedocs' in __file__ else -3  # hack for readthedocs.org
+pos = -5 if 'readthedocs' in __file__ else -3  # hack for readthedocs.org
 pkg_path = __file__.split(os.sep)[:pos]
 sys.path.append(os.sep.join(pkg_path))
 pkg = __import__(pkg_path[-1])
@@ -32,7 +32,7 @@ needs_sphinx = '1.8'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx_rtd_theme',
+    'sphinx_math_dollar',
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
@@ -162,7 +162,7 @@ autodoc_class_signature = "separated"
 
 # -- Config for math-dollar extension (mathjax) ----------------------------
 
-mathjax_config = {
+mathjax3_config = {
     'tex2jax': {
         'inlineMath': [["\\(", "\\)"]],
         'displayMath': [["\\[", "\\]"]],
