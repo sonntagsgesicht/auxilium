@@ -1,0 +1,15 @@
+usage: auxilium python [-h] [-c cmd | -m mod | -f file | -] [arg ...]
+
+invokes python in virtual environment
+
+optional arguments:
+  -h, --help  show this help message and exit
+  -c cmd      program passed in as string (terminates option list)
+  -m mod      run library module as a script (terminates option list)
+  -f file     program read from script file
+  -           program read from stdin (default; interactive mode if a tty)
+              (default value if flagged: True)
+
+  arg         arguments passed to program in sys.argv[1:]
+
+Call python interpreter of virtual environment (Note: only some standard optional arguments are implemented)

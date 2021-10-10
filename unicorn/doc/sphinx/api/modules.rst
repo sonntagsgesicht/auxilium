@@ -1,7 +1,7 @@
-auxilium
-========
+unicorn
+=======
 
 .. toctree::
    :maxdepth: 4
 
-   auxilium
+   unicorn

@@ -5,13 +5,13 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.10, copyright Tuesday, 05 October 2021
+# Version:  0.2.1, copyright Sunday, 10 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
 
 from datetime import date
-from logging import log, INFO
+from logging import log, INFO, DEBUG
 from os import getcwd, sep, walk, makedirs
 from os.path import exists, join, basename, splitext
 from shutil import move
@@ -35,12 +35,12 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
         log(INFO, 'Please enter project details.')
         log(INFO, '')
 
-    name = input('Enter project name  : ') if name is None else name
-    slogan = input('Enter project slogan: ') if slogan is None else slogan
+    name = input('Enter project name   : ') if name is None else name
+    slogan = input('Enter project slogan : ') if slogan is None else slogan
     slogan += EXT
-    author = input('Enter author name   : ') if author is None else author
-    email = input('Enter project email : ') if email is None else email
-    url = input('Enter project url  : ') if url is None else url
+    author = input('Enter author name    : ') if author is None else author
+    email = input('Enter project email  : ') if email is None else email
+    url = input('Enter project url    : ') if url is None else url
     url = url or 'https://github.com/<author>/<name>'
 
     pkg = name
@@ -91,11 +91,8 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
                 rp(join(subdir, file))
 
     log(INFO, '')
-    log(INFO, ICONS["create"] +
-        'created project %s with these files:' % name)
-    log(INFO, ICONS[""] + 'in %s' % project_path)
-    log(INFO, '')
-    log(INFO, ICONS[""] + 'in %s' % path)
+    log(INFO, ICONS["create"] + 'created project %s with files')
+    log(DEBUG, ICONS[""] + '  in %s' % (path + sep))
     for subdir, _, files in walk(name):
         log(INFO, '')
         for file in sorted(files):

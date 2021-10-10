@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.10, copyright Wednesday, 06 October 2021
+# Version:  0.2.1, copyright Sunday, 10 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -164,8 +164,8 @@ def push_git(remote='None', branch=BRANCH, path=getcwd(), venv=None):
     """push to given branch of remote `git` repo"""
     log(INFO, ICONS["push"] + "push to %r to remote `git` repo" % branch)
     log(DEBUG, ICONS[""] + clean_url(remote))
-    return script("push('.', %r, %r)" % (remote, branch),
-                  imports=IMP, path=path, venv=venv)
+    # return script("push('.', %r, %r)" % (remote, branch),
+    #               imports=IMP, path=path, venv=venv)
 
 
 def fetch_git(remote='None', path=getcwd(), venv=None):
