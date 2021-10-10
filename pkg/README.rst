@@ -13,7 +13,7 @@ To import the project simply type
 
 .. code-block:: python
 
-    >>> import <name>
+    >>> import <pkg>
 
 after installation.
 
@@ -31,4 +31,5 @@ The latest stable version can always be installed or updated via pip:
 License
 -------
 
-Code and documentation are available according to the license (see LICENSE file in repository).
+Code and documentation are available according to the license
+(see LICENSE file in repository).

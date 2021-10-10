@@ -32,6 +32,7 @@ needs_sphinx = '1.8'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx_pytype_substitution',
     'sphinx_math_dollar',
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
@@ -168,3 +169,11 @@ mathjax3_config = {
         'displayMath': [["\\[", "\\]"]],
     },
 }
+
+# -- Config for pytype_substitution extension ------------------------------
+
+pytype_substitutions = pkg,  # package, module or class to reference to
+pytype_buildins = False  # not implemented in v0.1
+pytype_short_ref = True  # drop module from reference (if it does not conflict)
+pytype_match_pattern = ''  # regex to filter entities to ref to
+pytype_exclude_pattern = ''  # regex to exclude entities to ref to

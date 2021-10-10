@@ -29,7 +29,7 @@ __theme__ = ''
 class Line(object):
     r""" This a example class (by auxilium)
 
-    The Line objects implements a straight line,
+    The |Line| objects implements a straight line,
     i.e. a function $y = f(x)$ with
 
     $$  f(x) = a + b \cdot x  $$

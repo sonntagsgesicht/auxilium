@@ -2,7 +2,7 @@
 
 .. doctest::
 
-    >>> import <name>
+    >>> import <pkg>
 
 
 Write your tutorial here...

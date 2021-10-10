@@ -7,4 +7,4 @@ flake8
 sphinx
 sphinx-math-dollar
 sphinx-rtd-theme
-# sphinx-pytype-substitution
+sphinx-pytype-substitution

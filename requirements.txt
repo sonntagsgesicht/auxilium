@@ -12,5 +12,4 @@ Sphinx
 sphinx-math-dollar
 sphinx-rtd-theme
 karma-sphinx-theme
-sphinx-nameko-theme
-# sphinx-pytype-substitution
+sphinx-pytype-substitution
