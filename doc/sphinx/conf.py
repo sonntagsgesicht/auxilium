@@ -17,11 +17,11 @@ import sys
 
 pos = -5 if 'readthedocs' in __file__ else -3  # hack for readthedocs.org
 pkg_path = __file__.split(os.sep)[:pos]
-for path in (('..', '..'), pkg_path):
+for path in (('..', '..'), pkg_path, pkg_path[:-1]):
     if path not in sys.path:
         if 'readthedocs' in __file__:
-            print('add to sys.path', path[:-1])
-        sys.path.append(os.sep.join(path[:-1]))
+            print('add to sys.path', path)
+        sys.path.append(os.sep.join(path))
 pkg = __import__(pkg_path[-1])
 
 # -- General configuration ------------------------------------------------

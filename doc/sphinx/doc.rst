@@ -16,7 +16,6 @@ CLI Documentation
 .. program-output:: python3 -c 'import auxilium, sys; print("auxilium %s from .../site-packages/auxilium (%s)" % (auxilium.__version__, sys.executable))'
 
 
-
 :code:`auxilium create` and options
 -----------------------------------
 
