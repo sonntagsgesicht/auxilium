@@ -43,12 +43,13 @@ def add_parser(config=ConfigParser()):
 
     # === create ===
     _help = "creates a new project, repo and virtual environment"
-    description = _help + """ \
-    with project file structure from templates which has already set-up
-     `venv` virtual python environment to run and test projects isolated
-     `git` source code repository for tracking source exit_status changes
-     `unittest` suite of tests to ensure the project works as intended
-      already-to-use documentation structure build for `sphinx`
+    description = """
+    creates a new project, repo and virtual environment
+      with project file structure from templates which sets up
+    a `venv` virtual python environment to run and test projects isolated,
+    a `git` source code repository for tracking source exit_status changes,
+    a `unittest` suite of tests to ensure the project works as intended and
+    a already-to-use documentation structure made to be build with `sphinx`.
     """
 
     sub_parser.add_parser(
