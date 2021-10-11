@@ -11,8 +11,9 @@ CLI Documentation
 main commands and options
 -------------------------
 
-.. code-block:: bash
+.. code-block:: console
 
+    $ auxilium -h
     usage: auxilium [-h] [-v] [-V] [-e [PATH]] [-x] [-p [SCRIPT]] [-d [NAME]]
                     {create,update,test,doc,build,python} ...
 
@@ -56,11 +57,21 @@ main commands and options
         set default behavior in `~/.aux/config` and `./.aux/config`."
 
 
+.. .. image:: ../pix/auxilium_cli.jpg
+
+.. code-block:: console
+
+    $ auxilium --version
+
+    auxilium 0.2.1 from /usr/local/lib/python3.9/site-packages/auxilium (python3.9)
+
 
 create command and its options
 ------------------------------
 
-.. code-block:: bash
+.. code-block:: console
+
+    $ auxilium create -h
 
     usage: auxilium create [-h] [--name NAME] [--slogan SLOGAN] [--author AUTHOR]
                            [--email EMAIL] [--url URL] [--venv [PATH]] [--update]
@@ -94,11 +105,81 @@ create command and its options
         set default behavior in `~/.aux/config` and `./.aux/config`."
 
 
+.. .. image:: ../pix/auxilium_cli_create.jpg
+
+.. code-block:: console
+
+    $ auxilium create
+
+     Please enter project details.
+
+    Enter project name   : unicorn
+    Enter project slogan : Always be a unicorn.
+    Enter author name    : dreamer
+    Enter project email  : unicorn@home
+    Enter project url    : https://www.dreamer.home/unicorn
+
+      🪚 created project %s with files
+
+           unicorn/.gitignore
+           unicorn/CHANGES.rst
+           unicorn/HOWTO.rst
+           unicorn/LICENSE
+           unicorn/MANIFEST.in
+           unicorn/README.rst
+           unicorn/requirements.txt
+           unicorn/setup.py
+           unicorn/upgrade_requirements.txt
+
+           unicorn/test/regtests.py
+           unicorn/test/unittests.py
+
+           unicorn/.aux/config
+
+
+           unicorn/doc/sphinx/conf.py
+           unicorn/doc/sphinx/doc.rst
+           unicorn/doc/sphinx/index.rst
+           unicorn/doc/sphinx/intro.rst
+           unicorn/doc/sphinx/logo.png
+           unicorn/doc/sphinx/releases.rst
+           unicorn/doc/sphinx/tutorial.rst
+
+           unicorn/unicorn/__init__.py
+
+      🛠 run header maintenance
+      👻 create virtual environment
+      🏅 upgrade `pip`
+      🗜 install project via pip install -e
+      🧰 setup environment requirements
+      🐣 init local `git` repo
+      ➕ add/stage files to local `git` repo
+      📌 commit changes to local `git` repo
+      🏁 project setup finished
+
+     Consider a first full run via:
+
+       > cd unicorn
+       > auxilium test
+       > auxilium doc --api
+       > auxilium build
+       > auxilium doc --show
+
+      ✅ finished in 90.295s
+
+Now don't forget
+
+.. code-block:: console
+
+    $ cd unicorn
+
 
 update command and its options
 ------------------------------
 
-.. code-block:: bash
+.. code-block:: console
+
+    $ auxilium update -h
 
     usage: auxilium update [-h] [--upgrade [PKG]] [--install] [--requirements]
                            [--header] [--status] [--commit [MSG]]
@@ -134,11 +215,27 @@ update command and its options
         set default behavior in `~/.aux/config` and `./.aux/config`."
 
 
+.. .. image:: ../pix/auxilium_cli_update.jpg
+
+.. code-block:: console
+
+    $ auxilium update --install --upgrade='regtest' --requirements
+
+      🛠 run header maintenance
+      🤷 no changes to commit
+      🏅 upgrade `regtest`
+      💔 uninstall project via pip uninstall
+      🗜 install project via pip install -e
+      🧰 setup environment requirements
+      ✅ finished in 21.259s
+
 
 test command and its options
 ----------------------------
 
-.. code-block:: bash
+.. code-block:: console
+
+    $ auxilium test -h
 
     usage: auxilium test [-h] [-ff] [--commit [MSG]] [--coverage [MIN]]
                          [--quality] [--security] [--cleanup]
@@ -165,12 +262,40 @@ test command and its options
         set default behavior in `~/.aux/config` and `./.aux/config`."
 
 
+.. .. image:: ../pix/auxilium_cli_test.jpg
+
+.. code-block:: console
+
+    $ auxilium test
+
+      🔍 evaluate quality of source code
+      🚨 evaluate security of source code
+      ⛑ run test scripts
+         | test_sample_almost_equal (regtests.FirstRegTests) ... ok
+         | test_sample_equal (regtests.FirstRegTests) ... ok
+         | test_pkg_name (unittests.FirstUnitTests) ... ok
+         | test_sample (unittests.FirstUnitTests) ... ok
+         |
+         | ----------------------------------------------------------------------
+         | Ran 4 tests in 1.254s
+         |
+         | OK
+      📑 run test coverage scripts
+         | Name                  Stmts   Miss  Cover   Missing
+         | ---------------------------------------------------
+         | unicorn/__init__.py      29      3    90%   68, 73, 85
+         | ---------------------------------------------------
+         | TOTAL                    29      3    90%
+      ✅ finished in 7.790s
+
+
 
 documentation (doc) command and its options
 -------------------------------------------
 
-.. code-block:: bash
+.. code-block:: console
 
+    $ auxilium doc -h
     usage: auxilium doc [-h] [-ff] [--commit [MSG]] [--api] [--doctest]
                         [--coverage] [--pdf] [--show] [--cleanup]
 
@@ -194,11 +319,32 @@ documentation (doc) command and its options
         set default behavior in `~/.aux/config` and `./.aux/config`."
 
 
+.. .. image:: ../pix/auxilium_cli_doc.jpg
+
+.. code-block:: console
+
+    $ auxilium doc --api
+
+      🧹 clean environment
+      📌 run apidoc scripts
+      ⛑ run doctest scripts
+      📑 run coverage scripts
+         | Undocumented Python objects
+         | ===========================
+         |
+      🌐 build html documentation
+      🪧 build single-html documentation
+      📕 build epub documentation
+      📒 build latex documentation
+      ✅ finished in 11.544s
+
 
 build command and its options
 -----------------------------
 
-.. code-block:: bash
+.. code-block:: console
+
+    $ auxilium build -h
 
     usage: auxilium build [-h] [--header] [--commit [MSG]] [--tag [TAG]]
                           [--push [BRANCH]] [--remote REMOTE] [--remote_usr USR]
@@ -234,10 +380,29 @@ build command and its options
 
 
 
+.. .. image:: ../pix/auxilium_cli_build.jpg
+
+.. code-block:: console
+
+    $ auxilium build --commit='inital commit' --push --deploy
+
+      🧹 cleanup build
+      🛠 run header maintenance
+      🏗 build package distribution
+      ➕ add/stage files to local `git` repo
+      📌 commit changes to local `git` repo
+      📤 push to 'master' to remote `git` repo
+      🛫 deploy release on `pypi.org`
+      ✅ finished in 6.276s
+
+
+
 python command and its options
 ------------------------------
 
-.. code-block:: bash
+.. code-block:: console
+
+    # auxilium python -h
 
     usage: auxilium python [-h] [-c cmd | -m mod | -f file | -] [arg ...]
 
@@ -254,3 +419,18 @@ python command and its options
       arg         arguments passed to program in sys.argv[1:]
 
     Call python interpreter of virtual environment (Note: only some standard optional arguments are implemented)
+
+
+.. .. image:: ../pix/auxilium_cli_python.jpg
+
+.. code-block:: console
+
+    $ auxilium python
+
+      🐍 ...
+
+    Python 3.9.6 (default, Jun 29 2021, 05:25:02)
+    [Clang 12.0.5 (clang-1205.0.22.9)] on darwin
+    Type "help", "copyright", "credits" or "license" for more information.
+    >>>
+

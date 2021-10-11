@@ -91,7 +91,8 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
                 rp(join(subdir, file))
 
     log(INFO, '')
-    log(INFO, ICONS["create"] + 'created project %s with files')
+    log(INFO, ICONS["create"] +
+        'created project %s with files' % name)
     log(DEBUG, ICONS[""] + '  in %s' % (path + sep))
     for subdir, _, files in walk(name):
         log(INFO, '')

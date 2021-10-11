@@ -164,8 +164,8 @@ def push_git(remote='None', branch=BRANCH, path=getcwd(), venv=None):
     """push to given branch of remote `git` repo"""
     log(INFO, ICONS["push"] + "push to %r to remote `git` repo" % branch)
     log(DEBUG, ICONS[""] + clean_url(remote))
-    # return script("push('.', %r, %r)" % (remote, branch),
-    #               imports=IMP, path=path, venv=venv)
+    return script("push('.', %r, %r)" % (remote, branch),
+                  imports=IMP, path=path, venv=venv)
 
 
 def fetch_git(remote='None', path=getcwd(), venv=None):

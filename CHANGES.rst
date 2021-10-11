@@ -1,6 +1,14 @@
 
 These changes are listed in decreasing version number order.
 
+Release 2.0.2
+-------------
+
+Release date was |today|
+
+* added more documentation
+
+
 Release 2.0.1
 -------------
 

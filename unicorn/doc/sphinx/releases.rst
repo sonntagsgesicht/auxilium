@@ -1,6 +1,0 @@
-
---------
-Releases
---------
-
-.. include:: ..//..//CHANGES.rst

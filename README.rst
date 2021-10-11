@@ -42,44 +42,46 @@ Modern software development comes as a triple of
 
 .. image:: https://raw.githubusercontent.com/sonntagsgesicht/auxilium/master/doc/pix/code-test-doc.png
 
-.. :alt: **code is for machines** // **tests links docs and code** // **docs are for humans**
+.. .. :alt: **code is for machines** // **tests links docs and code** // **docs are for humans**
 
-   * The **code** is the actual software program or library which can executed or invoked.
 
-   * The **documentation** should give an introducing the idea and mission, guide how to use it, describe functionality and features.
 
-   * Finally, intensive **tests** increases the confidence that the documented functionality is correctly implemented.
+* The **code** is the actual software program or library which can executed or invoked.
+
+* The **documentation** should give an introducing the idea and mission, guide how to use it, describe functionality and features.
+
+* Finally, intensive **tests** increases the confidence that the documented functionality is correctly implemented.
 
 
 To support this **auxilium** is designed to build, to auto-doc, to test and to deploy
 small to medium size Python projects in **3 simple steps**.
 
-   1. copy your **source code** into a boilerplate project structure
+1. copy your **source code** into a boilerplate project structure
 
-   2. write useful **documentation** in your python source code doc strings
+2. write useful **documentation** in your python source code doc strings
 
-   3. add as many as possible **test cases** in a designated test directory structure
+3. add as many as possible **test cases** in a designated test directory structure
 
 Once setup up, **auxilium** provides - out of the box - tools
 to build a ci/cd (continuous integration/continuous deployment) framework with
 
-   * conventions on how the project is structured, i.e. where to find source, test and doc files
+* conventions on how the project is structured, i.e. where to find source, test and doc files
 
-   * provides useful template structure of files which can be easy modified and extended
+* provides useful template structure of files which can be easy modified and extended
 
-   * keeps always a single source of truth for project information (like version number)
+* keeps always a single source of truth for project information (like version number)
 
-   * sets up a clear and straight structure of the project as well as the corresponding documentation
+* sets up a clear and straight structure of the project as well as the corresponding documentation
 
-   * minimises the places to edit, e.g. for the documentation there are by default only thre files to edit
+* minimises the places to edit, e.g. for the documentation there are by default only thre files to edit
 
-   * comes with a shell script to trigger plenty test and analysis routines incl. drafting releases on github.com and distribute on pypi.org
+* comes with a shell script to trigger plenty test and analysis routines incl. drafting releases on github.com and distribute on pypi.org
 
-   * uses standard community tools like *unittest*, *pylint*, *coverage*, *sphinx* and more
+* uses standard community tools like *unittest*, *pylint*, *coverage*, *sphinx* and more
 
-   * no detailed configurations of any tools are needed, so you can focus completely on coding your project
+* no detailed configurations of any tools are needed, so you can focus completely on coding your project
 
-   * demo of how to use the framework and various services to build true *ci/cd*; a full automated test and deploy pineline.
+* demo of how to use the framework and various services to build true *ci/cd*; a full automated test and deploy pineline.
 
 Moreover, we recommend to use *pyenv* and *virtualenv* to test different python installations, too.
 

@@ -25,5 +25,5 @@ def deploy(usr, pwd, path=getcwd(), venv=None):
     # check dist
     module('twine', 'check --strict dist/*', path=path, venv=venv)
     # push to pypi.org
-    # return module("twine", "upload -u %s -p %s dist/*" % (usr, pwd),
-    #              level=LEVEL, path=path, venv=venv)
+    return module("twine", "upload -u %s -p %s dist/*" % (usr, pwd),
+                 level=LEVEL, path=path, venv=venv)
