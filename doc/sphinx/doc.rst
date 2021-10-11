@@ -7,8 +7,8 @@ CLI Documentation
     :glob:
 
 
-main commands and options
--------------------------
+:code:`auxilium` and options
+----------------------------
 
 
 .. command-output:: auxilium -h
@@ -17,8 +17,8 @@ main commands and options
 
 
 
-create command and its options
-------------------------------
+:code:`auxilium create` and options
+-----------------------------------
 
 .. command-output:: auxilium create -h
 
@@ -89,15 +89,15 @@ Now don't forget
     $ cd unicorn
 
 
-update command and its options
-------------------------------
+:code:`auxilium update` and options
+-----------------------------------
 
 .. command-output:: auxilium update -h
 
 
 
-test command and its options
-----------------------------
+:code:`auxilium test` and options
+---------------------------------
 
 .. command-output:: auxilium test -h
 
@@ -127,8 +127,8 @@ test command and its options
       ✅ finished in 7.790s
 
 
-documentation (doc) command and its options
--------------------------------------------
+:code:`auxilium doc` and options
+--------------------------------
 
 .. command-output:: auxilium doc -h
 
@@ -150,8 +150,8 @@ documentation (doc) command and its options
       ✅ finished in 11.544s
 
 
-build command and its options
------------------------------
+:code:`auxilium build` and options
+----------------------------------
 
 .. command-output:: auxilium build -h
 
@@ -170,8 +170,8 @@ build command and its options
 
 
 
-python command and its options
-------------------------------
+:code:`auxilium python` and options
+-----------------------------------
 
 .. command-output:: auxilium python -h
 

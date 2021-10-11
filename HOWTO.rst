@@ -25,25 +25,7 @@ On top level we have the following files
 
       .gitignore
 
-Which serve for
 
-   * **LICENSE** is the license how to use, change or distribute the project.
-
-   * **CHANGES.rst** will contain the whole change and release history
-
-   * **HOWTO.rst** gives a intro how to use your project. This will show up in your documentation as tutorial.
-
-   * **README.rst** is this page which show up on repository homepage at first. Moreover, this will show up in your documentation as introduction.
-
-   * **requirements.txt** are additional python packages, which are required for development and/or testing
-
-   * **upgrade_requirements.txt** are additional python packages (same as *requirements.txt*), which have to be upgraded, i.e. installed by :code:`pip` with the *--upgrade* option. Usually used for dev repos.
-
-   * **setup.py** configs the installation procedure with pip and the meta keywords of your project on pypi.org. Most of the entries are found in the project **__init__.py** file.
-
-   * **MANIFEST.in** configs the files which will be part of the final distribution.
-
-   * **.gitignore** configs git which files and folder to ignore
 
 The folder structure will look like
 
@@ -62,8 +44,12 @@ Note that project root dir and python source dir must have the same name.
 :code:`.aux/config`.
 
 
-Doctests
---------
+README.rst
+----------
+
+Avoid :code:`.. doctest::` *rst*-directive and :code:`|something|`
+links in README.rst. This would fail with `setuptools` to serve
+as `long_description` for `pypi.org <https://pypi.org>`_.
 
 
 auxilium cli

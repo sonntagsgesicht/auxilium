@@ -1,10 +1,6 @@
 
 .. image:: https://raw.githubusercontent.com/sonntagsgesicht/auxilium/master/doc/pix/auxilium_logo.png
 
-
-Python library *auxilium*
--------------------------
-
 |codeship|_ |readthedocs|_ |license|_ |github_version|_ |pip_version|_
 |py_version|_ |pypi_downloads|_
 
@@ -46,62 +42,127 @@ Modern software development comes as a triple of
 
 
 
-* The **code** is the actual software program or library which can executed or invoked.
+* The **code** is the actual software program or library which can executed or
+  invoked.
 
-* The **documentation** should give an introducing the idea and mission, guide how to use it, describe functionality and features.
+* The **documentation** should give an introducing the idea and mission,
+  guide how to use it, describe functionality and features.
 
-* Finally, intensive **tests** increases the confidence that the documented functionality is correctly implemented.
+* Finally, intensive **tests** increases the confidence that the documented
+  functionality is correctly implemented.
 
 
-To support this **auxilium** is designed to build, to auto-doc, to test and to deploy
-small to medium size Python projects in **3 simple steps**.
+To support this **auxilium** is designed to build, to auto-doc, to test and
+to deploy small to medium size Python projects in **3 simple steps**.
 
 1. copy your **source code** into a boilerplate project structure
 
 2. write useful **documentation** in your python source code doc strings
 
-3. add as many as possible **test cases** in a designated test directory structure
+3. add as many as possible **test cases**
+   in a designated test directory structure
 
-Once setup up, **auxilium** provides - out of the box - tools
-to build a ci/cd (continuous integration/continuous deployment) framework with
 
-* conventions on how the project is structured, i.e. where to find source, test and doc files
+What's in the box?
+------------------
 
-* provides useful template structure of files which can be easy modified and extended
+Once setup up, **auxilium** serves as a development and integration
+workflow manager. It provides tools to run a ci/cd
+(continuous integration/continuous deployment) framework with state-of-art
+development and integration tools like
 
-* keeps always a single source of truth for project information (like version number)
+* source code management with `git <https://git-scm.com>`_
 
-* sets up a clear and straight structure of the project as well as the corresponding documentation
+* python environment virtualization with
+  `venv <https://docs.python.org/3/tutorial/venv.html>`_
 
-* minimises the places to edit, e.g. by default there are only three documentation files to edit
+* integrated dependency management with `pip <https://pip.pypa.io>`_
 
-* comes with a shell script to trigger plenty test and analysis routines incl. drafting pushing on git remotes and distribute on pypi.org
+* source code quality and style validation with
+  `flake8 <https://flake8.pycqa.org>`_
 
-* uses standard community tools like *unittest*, *flake8*, *coverage*, *sphinx* and more
+* source code security checks with `bandit <https://bandit.readthedocs.io>`_
 
-* no detailed configurations of any tools are needed, so you can focus completely on coding your project
+* automated software testing with
+  `unittest <https://docs.python.org/3/library/unittest.html>`_
+  and `regtest <https://regtest.readthedocs.io>`_
 
-* demo of how to use the framework and various services to build true *ci/cd*; a full automated test and deploy pipeline for the rest of us.
+* test coverage measurement with `coverage <http://coverage.readthedocs.io>`_
 
-* creates and uses *venv* virtual environment to test on clean python installation
+* automated documentation generation with `sphinx <https://sphinx-doc.org>`_
 
-Moreover, we recommend to use *pyenv* and *virtualenv* to test different python installations, too.
+* documentation templates base on
+  `restructuredtext <https://docutils.sourceforge.io/rst.html>`_
+  markup language
+
+* designed to work even at online sites like
+  `PyPi.com <https://pypi.org>`_ and `GitHub <https://github.com>`_
+
+* standard python distribution packaging with
+  `build <https://pypa-build.readthedocs.io/en/stable/index.html>`_
+  and `twine <https://twine.readthedocs.io/en/latest/>`_
+
+* remote `git` repo management for
+  `BitBucket <https://bitbucket.com>`_,
+  `GitHub <https://github.com>`_,
+  `GitLab <https://gitlab.com>`_
+
+* single command software release deployment to `PyPi <https://pypi.org>`_
+  the Python Package Index database
+
+
+How does it work?
+-----------------
+
+* conventions on how the project is structured,
+  i.e. where to find source, test and doc files
+
+* provides useful template structure of files
+  which can be easy modified and extended
+
+* keeps always a single source of truth
+  for project information (like version number)
+
+* sets up a clear and straight structure of the project
+  as well as the corresponding documentation
+
+* minimises the places to edit,
+  by default there are only three documentation files to be edited
+
+* comes with a shell script to trigger plenty test and analysis routines
+  incl. drafting pushing on git remotes and distribute on pypi.org
+
+* uses standard community tools
+  like *unittest*, *flake8*, *coverage*, *sphinx* and more
+
+* no detailed configurations of any tools are needed,
+  so you can focus completely on coding your project
+
+* demo of how to use the framework and various services to build true *ci/cd*;
+  a full automated test and deploy pipeline for the rest of us.
+
+* creates and uses *venv* virtual environment to test
+  on clean python installation
+
+Moreover, we recommend to use *pyenv* and *virtualenv*
+to test different python installations, too.
 
 
 Quick Start a Project
 ---------------------
 
-Once installed simply invoke :code:`auxilium create` and enter a few project details.
+Once installed simply invoke :code:`auxilium create`
+and enter a few project details.
 
-The whole project structure will be created. Full functioning incl. documentation generation, testing, etc..
+The whole project structure will be created.
+Full functioning incl. documentation generation, testing, etc..
 
 
 .. code-block:: bash
 
     $ auxilium create
 
-    *** create new project ***
-    Please enter project details.
+     Please enter project details.
 
     Enter project name   : unicorn
     Enter project slogan : Always be a unicorn.
@@ -138,8 +199,9 @@ The whole project structure will be created. Full functioning incl. documentatio
 Default Structure of a Project
 ------------------------------
 
-The top level of the directory structure consists of three sub-dirs for source, doc and test files
-and some more or less standard project files. Assume the project is called *unicorn*.
+The top level of the directory structure consists of three sub-dirs for source,
+doc and test files and some more or less standard project files.
+Assume the project is called *unicorn*.
 
 .. code-block:: bash
 
@@ -165,17 +227,62 @@ and some more or less standard project files. Assume the project is called *unic
 
       .gitignore (configuration file - files and folder which git should ignore)
 
-More on the project file structure can be found in the
-`tutorial <https://auxilium.readthedocs.io/en/latest/tutorial.html>`_.
+On top level there ate the following files
 
-The actual python source files can be structured as you like inside
+* **LICENSE** is the license how to use, change or distribute the project.
+
+* **CHANGES.rst** will contain the whole change and release history
+
+* **HOWTO.rst** gives a intro how to use your project.
+  This will show up in your documentation as tutorial.
+
+* **README.rst** is this page which
+  shows up on repository homepage at first.
+  Moreover, this will show up in your documentation as introduction, too.
+
+* **requirements.txt** are additional python packages,
+  which are required for development and/or testing
+
+* **upgrade_requirements.txt** are additional python packages
+  (same as *requirements.txt*), which have to be upgraded,
+  i.e. installed by :code:`pip` with the *--upgrade* option.
+  Usually used for dev repos.
+
+* **setup.py** configs the installation procedure with pip
+  and the meta keywords of your project on pypi.org.
+  Most of the entries are found in the project **__init__.py** file.
+
+* **MANIFEST.in** configs the files
+  which will be part of the final distribution.
+
+* **.gitignore** configs git which files and folder to ignore
+
+and subdirectories
+
+* **.aux/venv** which contains the virtual python environment
+
+* **unicorn/** as the actual python source directory
+  (place to put the python scripts)
+
+* **doc/sphinx/** file read by sphinx to build documentation sites
+  which can be extended, e.g. by :code:`auxilium doc --api`,
+  but also manually.
+
+* **test/** to contain all test scripts and data
+  (by default there will be two:
+  :code:`unittests.py` and :code:`regtests.py`)
+
+
+More on the project file structure can be found in the
+`documentation <https://auxilium.readthedocs.io/en/latest/doc.html>`_.
+
+As the actual python source files can be structured as you like inside
 
 .. code-block:: bash
 
     unicorn/unicorn/
 
-Only few information on your project are required
-and they have to be found in
+only few information on your project are required and should be found in
 
 .. code-block:: bash
 
@@ -221,11 +328,15 @@ See here how :code:`unicorn/unicorn/__init__.py` looks like.
    __scripts__ = ()
    __theme__ = ''
 
+Once setup up, update file headers of all new and modified files
+and adding them to the project source code repository simply by
+:code:`auxilium update`.
+
 
 Automated Documentation Generation
 ----------------------------------
 
-The documentation is generated by `sphinx <https://www.sphinx-doc.org>`_
+The documentation is generated by sphinx_
 and the main documentation files is located at
 
 .. code-block:: bash
@@ -255,23 +366,20 @@ The project has a configuration (*conf.py*) to build *html* and *latex* resp.
 And **auxilium** will run and check *code-blocks* of code examples
 of your documentation during doc build (*doctest*).
 
-Avoid :code:`.. doctest::` *rst*-directive and :code:`|something|`
-links in README.rst. This would fail with `setuptools` to serve
-as `long_description` for `pypi.org <https://pypi.org>`_.
+All this is executed by just one command :code:`auxilium doc`.
 
 Since only **doc.rst** will not refer to a top level doc file of the project
 it is generated from the source code.
-So here the work starts to write good python doc strings.
+So here the work starts to write good python doc strings
+in your source code files.
 
 But if a more *sphinx* specific file reps. documentation is preferred.
 May be in order to provide detailed insights into the project:
 Simply delete :code:`api/*` (if existing) and replace the contents
 of **doc.rst**.
 
-More on documentation can be found in the
-`tutorial <https://auxilium.readthedocs.io/en/latest/tutorial.html>`_
-or in the
-`cli documentation <https://auxilium.readthedocs.io/en/latest/doc.html>`_.
+More on documentation can be found in the documentation_.
+
 
 Automated Test and Test Coverage Framework
 ------------------------------------------
@@ -282,11 +390,10 @@ which searches by default for files
 containing :code:`unittest.TestCase` classes and process them.
 
 Same for measuring the test coverage
-using `coverage <https://github.com/nedbat/coveragepy>`_
+using coverage_
 source code security and quality
-using `bandit <https://github.com/PyCQA/bandit>`_
-and `flake8 <https://gitlab.com/pycqa/flake8>`_.
-
+using bandit_
+and flake8_.
 
 .. code-block:: bash
 
@@ -294,10 +401,9 @@ and `flake8 <https://gitlab.com/pycqa/flake8>`_.
 
       /test/unittests (unittest files)
 
-More on testing can be found in the
-`tutorial <https://auxilium.readthedocs.io/en/latest/tutorial.html>`_
-or in the
-`cli documentation <https://auxilium.readthedocs.io/en/latest/doc.html>`_.
+Run all tests and checks with :code:`auxilium test`.
+
+More on testing can be found in the documentation_.
 
 
 Automated Build and Deployment Framework
@@ -309,16 +415,14 @@ it is ready for deployment.
 
 The default deployment platform is `PyPi.org <https://pypi.org>`_.
 Before deploying a distribution package is build.
-Moreover, it may the time to commit, tag and push the project state to
+Moreover, it's time to update (*push* to) the project state to
 a git remote repo like on
-`GitHub.com <github.com>`_,
-`GitLab.com <gitlab.com>`_ or
-`BitBucket.com <bitbucket.com>`_.
+GitHub_, GitLab_ anf BitBucket_
 
-More on build and deployment can be found in the
-`tutorial <https://auxilium.readthedocs.io/en/latest/tutorial.html>`_
-or in the
-`cli documentation <https://auxilium.readthedocs.io/en/latest/doc.html>`_.
+Invoke this with :code:`auxilium build`.
+To *push* and *deploy* add options :code:`--push` and :code:`--deploy`.
+
+More on build and deployment can be found in the documentation_.
 
 
 Installation
@@ -356,6 +460,7 @@ License
 
 .. __: https://github.com/sonntagsgesicht/auxilium/raw/master/LICENSE
 
-Code and documentation are available according to the Apache Software License (see LICENSE__).
+Code and documentation are available according
+to the Apache Software License (see LICENSE__).
 
 
