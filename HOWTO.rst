@@ -1,6 +1,10 @@
 
 .. currentmodule:: auxilium
 
+
+.. auxilium create --name=unicorn --slogan='Always be a unicorn' --author='sonntagsgesicht' --email='sonntagsgesicht@icloud.com' --url='https://github.com/sonntagsgesicht/unicorn'
+
+
 auxilium cli
 ============
 

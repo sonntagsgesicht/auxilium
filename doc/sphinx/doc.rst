@@ -7,7 +7,6 @@ CLI Documentation
     :glob:
 
 
-
 main commands and options
 -------------------------
 

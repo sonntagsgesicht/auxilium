@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.1.10, copyright Monday, 04 October 2021
+# Version:  0.2.1, copyright Monday, 11 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -18,7 +18,8 @@ from os import getcwd
 from os.path import basename, join, exists
 
 from .. import methods
-from ..tools.const import VERBOSITY_LEVELS, ICONS, DEMO_PATH
+from ..tools.const import VERBOSITY_LEVELS, ICONS, DEMO_PATH, \
+    SUB_FORMATTER_PREFIX
 from ..tools.system_tools import module, del_tree, shell
 
 LEVEL = logging.DEBUG
@@ -34,29 +35,47 @@ def init_logging(verbosity=None, **kwargs):
 def check_env(env=None, **kwargs):
     if env and not exists(env):
         msg = ICONS["warn"] + \
-          'did not find a virtual environment at %s. ' % env
+              'did not find a virtual environment at %s. ' % env
         logging.log(logging.WARN, msg)
         msg = ICONS[""] + \
-            'consider creating one with ' \
-            '`auxilium create --update` ' \
-            'or use `auxilium -e command [options]`'
+              'consider creating one with ' \
+              '`auxilium create --update` ' \
+              'or use `auxilium -e command [options]`'
         logging.log(logging.WARN, msg)
         return True
 
 
 def start_demo(demo=DEMO_PATH, verbosity=0, exit_status=0, env=None, **kwargs):
     logging.log(logging.INFO, ICONS["demo"] + 'relax, just starting a demo')
-    del_tree(demo)
+    if exists(demo):
+        yn = input(" " + ICONS["warn"] +
+                   "demo path exists. "
+                   "unicum will remove and overwrite existing files. "
+                   "continue? [y/n] ")
+        if yn.lower() in ('y', 'yes'):
+            del_tree(demo)
+        else:
+            return True
     v = '-' + 'v' * verbosity if verbosity else ''
     z = '-' + 'x' * exit_status if exit_status else ''
     e = '-e=' + env if env else ''
+    if demo == 'unicorn':
+        slogan = 'Always be a unicorn.'
+        author = 'dreamer'
+        email = 'dreamer@home'
+        url = 'www.dreamer.home/unicorn'
+    else:
+        slogan = "a demo by auxilium"
+        author = "auxilium"
+        email = "sonntagsgesicht@icould.com"
+        url = "https://github.com/sonntagsgesicht/auxilium"
     cmd = (' %s %s %s create '
-           '--name=%s '
-           '--slogan="a demo by auxilium" '
-           '--author=auxilium '
-           '--email="sonntagsgesicht@icould.com" '
-           '--url="https://github.com/sonntagsgesicht/auxilium"') % \
-          (v, z, e, demo)
+           '--name="%s" '
+           '--slogan="%s" '
+           '--author="%s" '
+           '--email="%s" '
+           '--url="%s"') % \
+          (v, z, e, demo, slogan, author, email, url)
     return module('auxilium', cmd, level=logging.INFO)
 
 
@@ -71,8 +90,8 @@ def check_project_path(pkg=basename(getcwd()), path=getcwd(), **kwargs):
     msg = ICONS["warn"] + 'no maintainable project found at %s ' % path
     logging.log(logging.WARN, msg)
     msg = ICONS[""] + \
-        'consider creating one with `auxilium create` ' \
-        '(or did you mean `auxilium python`?)'
+          'consider creating one with `auxilium create` ' \
+          '(or did you mean `auxilium python`?)'
     logging.log(logging.WARN, msg)
     return True
 
@@ -96,11 +115,10 @@ def pre_run(cmd='', level=LEVEL, path=getcwd(), venv=None):
 
 def do(command=None, demo=None, verbosity=None, exit_status=None, env=None,
        pre=None, **kwargs):
-
     # check demo
     if demo:
         if start_demo(demo, verbosity, exit_status, env):
-            failure_exit(exit_status, command)
+            failure_exit(exit_status, 'demo')
         sys.exit()
 
     # check virtual environment
@@ -115,7 +133,7 @@ def do(command=None, demo=None, verbosity=None, exit_status=None, env=None,
     if command not in ('create', 'python') and pre_run(pre):
         failure_exit(exit_status, 'in pre run before ' + command)
 
-    # retriev command/method
+    # retrieve command/method
     method = getattr(methods, str(command), None)
 
     # track execution timing

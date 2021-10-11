@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.2.1, copyright Sunday, 10 October 2021
+# Version:  0.2.1, copyright Monday, 11 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -30,18 +30,32 @@ def create_project(name=None, slogan=None, author=None, email=None, url=None,
                    pkg_zip_file=PKG_ZIP_FILE, path=getcwd()):
     """create a new project"""
 
-    if not any((name, slogan, author, email)):
-        log(INFO, '')
-        log(INFO, 'Please enter project details.')
-        log(INFO, '')
+    log(INFO, '')
+    log(INFO, 'Please enter project details.')
+    log(INFO, '')
 
-    name = input('Enter project name   : ') if name is None else name
-    slogan = input('Enter project slogan : ') if slogan is None else slogan
-    slogan += EXT
-    author = input('Enter author name    : ') if author is None else author
-    email = input('Enter project email  : ') if email is None else email
-    url = input('Enter project url    : ') if url is None else url
+    if name:
+        log(INFO, 'Enter project name   : ' + str(name))
+    else:
+        name = input('Enter project name   : ')
+    if slogan:
+        log(INFO, 'Enter project slogan : ' + str(slogan))
+    else:
+        slogan = input('Enter project slogan : ')
+    if author:
+        log(INFO, 'Enter project author : ' + str(author))
+    else:
+        author = input('Enter project author : ')
+    if email:
+        log(INFO, 'Enter project email  : ' + str(email))
+    else:
+        email = input('Enter project email  : ')
+    if url:
+        log(INFO, 'Enter project url    : ' + str(url))
+    else:
+        url = input('Enter project url    : ')
     url = url or 'https://github.com/<author>/<name>'
+    slogan += EXT
 
     pkg = name
     for r in REPLACE:

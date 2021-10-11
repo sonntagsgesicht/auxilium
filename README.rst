@@ -73,15 +73,17 @@ to build a ci/cd (continuous integration/continuous deployment) framework with
 
 * sets up a clear and straight structure of the project as well as the corresponding documentation
 
-* minimises the places to edit, e.g. for the documentation there are by default only thre files to edit
+* minimises the places to edit, e.g. by default there are only three documentation files to edit
 
-* comes with a shell script to trigger plenty test and analysis routines incl. drafting releases on github.com and distribute on pypi.org
+* comes with a shell script to trigger plenty test and analysis routines incl. drafting pushing on git remotes and distribute on pypi.org
 
-* uses standard community tools like *unittest*, *pylint*, *coverage*, *sphinx* and more
+* uses standard community tools like *unittest*, *flake8*, *coverage*, *sphinx* and more
 
 * no detailed configurations of any tools are needed, so you can focus completely on coding your project
 
-* demo of how to use the framework and various services to build true *ci/cd*; a full automated test and deploy pineline.
+* demo of how to use the framework and various services to build true *ci/cd*; a full automated test and deploy pipeline for the rest of us.
+
+* creates and uses *venv* virtual environment to test on clean python installation
 
 Moreover, we recommend to use *pyenv* and *virtualenv* to test different python installations, too.
 
@@ -101,11 +103,11 @@ The whole project structure will be created. Full functioning incl. documentatio
     *** create new project ***
     Please enter project details.
 
-    Enter project name  : unicorn
-    Enter project slogan: Always be a unicorn.
-    Enter author name   : dreamer
-    Enter author email  : dreamer@home
-    Enter project url   : www.dreamer.home/unicorn
+    Enter project name   : unicorn
+    Enter project slogan : Always be a unicorn.
+    Enter project author : dreamer
+    Enter project email  : dreamer@home
+    Enter project url    : www.dreamer.home/unicorn
 
     Created project unicorn with these files:
 
@@ -130,7 +132,6 @@ The whole project structure will be created. Full functioning incl. documentatio
       unicorn/test/unittests.py
 
       unicorn/unicorn/__init__.py
-
 
 
 
