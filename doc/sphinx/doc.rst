@@ -155,7 +155,7 @@ Now don't forget
 
 .. command-output:: auxilium build -h
 
-.. code-block::
+.. code-block:: console
 
     $ auxilium build --commit='inital commit' --push --deploy
 

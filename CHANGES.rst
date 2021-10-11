@@ -1,7 +1,7 @@
 
 These changes are listed in decreasing version number order.
 
-Release 2.0.2
+Release 0.2.2
 -------------
 
 Release date was |today|
@@ -9,7 +9,7 @@ Release date was |today|
 * added more documentation
 
 
-Release 2.0.1
+Release 0.2.1
 -------------
 
 Release date was Oct 10, 2021
@@ -17,7 +17,7 @@ Release date was Oct 10, 2021
 * added automated sphinx reference generation with `sphinx_pytype_substitution <https://sphinx_pytype_substitution.readthedocs.io/en/latest/intro.html>`_
 
 
-Release 2.0
+Release 0.2
 -----------
 
 Release date was Oct 7, 2021

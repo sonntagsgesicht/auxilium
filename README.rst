@@ -274,9 +274,6 @@ and subdirectories
   :code:`unittests.py` and :code:`regtests.py`)
 
 
-More on the project file structure can be found in the
-`documentation <https://auxilium.readthedocs.io/en/latest/doc.html>`_.
-
 As the actual python source files can be structured as you like inside
 
 .. code-block:: bash
@@ -379,7 +376,8 @@ May be in order to provide detailed insights into the project:
 Simply delete :code:`api/*` (if existing) and replace the contents
 of **doc.rst**.
 
-More on documentation can be found in the documentation_.
+More on documentation can be found in the
+`documentation <https://auxilium.readthedocs.io/en/latest/doc.html>`_.
 
 
 Automated Test and Test Coverage Framework
