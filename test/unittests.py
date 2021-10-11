@@ -86,8 +86,9 @@ class CreateRepoUnitTests(AuxiliumUnitTests):
                                      path=path))
         self.assertEqual(0, auxilium('%s build' % self.level, path=path))
 
-        self.assertEqual(0, auxilium('%s build --tag' % self.level, path=path))
-        self.assertNotEqual(0, auxilium('%s build --tag' % self.level,
+        self.assertEqual(0, auxilium('%s build --commit --tag' % self.level,
+                                     path=path))
+        self.assertNotEqual(0, auxilium('%s build --commit --tag' % self.level,
                                         path=path))
         self.assertNotEqual(0, auxilium('%s test --fail-fast --coverage=99'
                                         % self.level, path=path))

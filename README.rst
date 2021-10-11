@@ -195,7 +195,6 @@ Full functioning incl. documentation generation, testing, etc..
       unicorn/unicorn/__init__.py
 
 
-
 Default Structure of a Project
 ------------------------------
 
@@ -263,6 +262,8 @@ and subdirectories
 
 * **unicorn/** as the actual python source directory
   (place to put the python scripts)
+  **Note, project root dir and python source dir must have the same name!**
+
 
 * **doc/sphinx/** file read by sphinx to build documentation sites
   which can be extended, e.g. by :code:`auxilium doc --api`,

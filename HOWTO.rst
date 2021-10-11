@@ -1,56 +1,7 @@
 
 .. currentmodule:: auxilium
 
-
-File structure
---------------
-
-On top level we have the following files
-
-.. code-block:: bash
-
-   /auxilium (project root dir)
-
-      LICENSE
-
-      CHANGES.rst
-      HOWTO.rst
-      README.rst
-
-      requirements.txt
-      upgrade_requirements.txt
-
-      setup.py
-      MANIFEST.in
-
-      .gitignore
-
-
-
-The folder structure will look like
-
-.. code-block:: bash
-
-   /unicorn (project root dir)
-
-      /.aux/venv (virtual python environment)
-
-      /unicorn (python source files)
-      /doc/sphinx (sphinx files)
-      /test/unittests (unittest files)
-
-Note that project root dir and python source dir must have the same name.
-:code:`.aux/` might contain further files used by *auxilium* like
-:code:`.aux/config`.
-
-
-README.rst
-----------
-
-Avoid :code:`.. doctest::` *rst*-directive and :code:`|something|`
-links in README.rst. This would fail with `setuptools` to serve
-as `long_description` for `pypi.org <https://pypi.org>`_.
-
+under construction..
 
 auxilium cli
 ============
@@ -65,6 +16,7 @@ auxilium create
 * auxilium create --update (usage in ci/existing projects)
 * use of venv activate/deactivate resp. :code:`auxilium python`
 * default location .aux/venv
+
 
 auxilium update
 ---------------
@@ -92,6 +44,9 @@ auxilium doc
 * doctest
 * coverage
 * html/epub/latex (readthedocs)
+* Avoid :code:`.. doctest::` *rst*-directive and :code:`|something|`
+  links in README.rst. This would fail with `setuptools` to serve
+  as `long_description` for `pypi.org <https://pypi.org>`_.
 
 auxilium build
 --------------
