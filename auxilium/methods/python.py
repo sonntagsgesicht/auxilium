@@ -12,7 +12,7 @@
 
 from logging import INFO, log
 
-from ..tools.const import ICONS
+from ..tools.const import ICONS, PYTHON
 from ..tools.system_tools import python as _python
 
 
@@ -28,5 +28,7 @@ def do(c='', m='', f='', stdin='', arg=(), env=None, **kwargs):
         cmd = '-'
     if arg:
         cmd += ' ' + ' '.join(arg)
-    log(INFO, ICONS["python"] + '...')
+    print(env)
+    venv = env if env else PYTHON
+    log(INFO, ICONS["python"] + 'running %s' % venv)
     return _python(cmd, level=INFO, venv=env, capture_output=False)

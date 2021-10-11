@@ -18,8 +18,7 @@ from os import getcwd
 from os.path import basename, join, exists
 
 from .. import methods
-from ..tools.const import VERBOSITY_LEVELS, ICONS, DEMO_PATH, \
-    SUB_FORMATTER_PREFIX
+from ..tools.const import VERBOSITY_LEVELS, ICONS, DEMO_PATH
 from ..tools.system_tools import module, del_tree, shell
 
 LEVEL = logging.DEBUG
@@ -38,9 +37,9 @@ def check_env(env=None, **kwargs):
               'did not find a virtual environment at %s. ' % env
         logging.log(logging.WARN, msg)
         msg = ICONS[""] + \
-              'consider creating one with ' \
-              '`auxilium create --update` ' \
-              'or use `auxilium -e command [options]`'
+            'consider creating one with ' \
+            '`auxilium create --update` ' \
+            'or use `auxilium -e command [options]`'
         logging.log(logging.WARN, msg)
         return True
 
@@ -90,8 +89,8 @@ def check_project_path(pkg=basename(getcwd()), path=getcwd(), **kwargs):
     msg = ICONS["warn"] + 'no maintainable project found at %s ' % path
     logging.log(logging.WARN, msg)
     msg = ICONS[""] + \
-          'consider creating one with `auxilium create` ' \
-          '(or did you mean `auxilium python`?)'
+        'consider creating one with `auxilium create` ' \
+        '(or did you mean `auxilium python`?)'
     logging.log(logging.WARN, msg)
     return True
 
@@ -140,7 +139,7 @@ def do(command=None, demo=None, verbosity=None, exit_status=None, env=None,
     start = datetime.now()
 
     # invoke command/method
-    if method(**kwargs):
+    if method(env=env, **kwargs):
         failure_exit(exit_status, command)
 
     # track execution timing

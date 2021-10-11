@@ -179,7 +179,7 @@ python command and its options
 
     $ auxilium python
 
-      🐍 ...
+      🐍 running .aux/venv/bin/python3
 
     Python 3.9.6 (default, Jun 29 2021, 05:25:02)
     [Clang 12.0.5 (clang-1205.0.22.9)] on darwin
