@@ -39,13 +39,13 @@ def add_arguments(parser=None, config=ConfigParser()):
         '--tag',
         nargs='?',
         const=config.getboolean('build', 'tag', fallback=ver),
-        help='auto tag on successful build')
+        help='auto tag on successful build - requires --commit')
     parser.add_argument(
         '--push',
         metavar='BRANCH',
         nargs='?',
         const=config.getboolean('build', 'tag', fallback='master'),
-        help=push_git.__doc__ + ' - requires REMOTE')
+        help=push_git.__doc__ + ' - requires --commit and REMOTE')
     parser.add_argument(
         '--remote',
         default=config.get('build', 'remote', fallback=get_url()),
