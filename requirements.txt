@@ -13,3 +13,4 @@ sphinx-math-dollar
 sphinx-rtd-theme
 karma-sphinx-theme
 sphinx-pytype-substitution
+sphinx-execute-code

@@ -10,6 +10,12 @@ CLI Documentation
 main commands and options
 -------------------------
 
+
+.. doctest::
+
+    import os; os.system("auxilium -h")
+
+
 .. code-block:: console
 
     $ auxilium -h
