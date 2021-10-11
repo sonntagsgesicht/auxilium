@@ -2,7 +2,68 @@
 .. currentmodule:: auxilium
 
 
-.. auxilium create --name=unicorn --slogan='Always be a unicorn' --author='sonntagsgesicht' --email='sonntagsgesicht@icloud.com' --url='https://github.com/sonntagsgesicht/unicorn'
+File structure
+--------------
+
+On top level we have the following files
+
+.. code-block:: bash
+
+   /auxilium (project root dir)
+
+      LICENSE
+
+      CHANGES.rst
+      HOWTO.rst
+      README.rst
+
+      requirements.txt
+      upgrade_requirements.txt
+
+      setup.py
+      MANIFEST.in
+
+      .gitignore
+
+Which serve for
+
+   * **LICENSE** is the license how to use, change or distribute the project.
+
+   * **CHANGES.rst** will contain the whole change and release history
+
+   * **HOWTO.rst** gives a intro how to use your project. This will show up in your documentation as tutorial.
+
+   * **README.rst** is this page which show up on repository homepage at first. Moreover, this will show up in your documentation as introduction.
+
+   * **requirements.txt** are additional python packages, which are required for development and/or testing
+
+   * **upgrade_requirements.txt** are additional python packages (same as *requirements.txt*), which have to be upgraded, i.e. installed by :code:`pip` with the *--upgrade* option. Usually used for dev repos.
+
+   * **setup.py** configs the installation procedure with pip and the meta keywords of your project on pypi.org. Most of the entries are found in the project **__init__.py** file.
+
+   * **MANIFEST.in** configs the files which will be part of the final distribution.
+
+   * **.gitignore** configs git which files and folder to ignore
+
+The folder structure will look like
+
+.. code-block:: bash
+
+   /unicorn (project root dir)
+
+      /.aux/venv (virtual python environment)
+
+      /unicorn (python source files)
+      /doc/sphinx (sphinx files)
+      /test/unittests (unittest files)
+
+Note that project root dir and python source dir must have the same name.
+:code:`.aux/` might contain further files used by *auxilium* like
+:code:`.aux/config`.
+
+
+Doctests
+--------
 
 
 auxilium cli
