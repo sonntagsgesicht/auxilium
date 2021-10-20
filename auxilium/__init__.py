@@ -25,21 +25,36 @@ from .tools.const import CONFIG_PATH, VERBOSITY_LEVELS, ICONS
 getLogger(__name__).addHandler(NullHandler())
 
 __doc__ = 'Python project for an automated test and deploy toolkit.'
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 __dev_status__ = '4 - Beta'
-__date__ = 'Monday, 11 October 2021'
+__date__ = 'Wednesday, 20 October 2021'
 __author__ = 'sonntagsgesicht'
 __email__ = __author__ + '@icloud.com'
 __url__ = 'https://github.com/' + __author__ + '/' + __name__
 __license__ = 'Apache License 2.0'
 __dependencies__ = 'pip', 'dulwich', 'regtest', 'flake8', 'bandit', \
                    'coverage', 'twine', 'sphinx', 'sphinx-rtd-theme', \
-                   'sphinx-math-dollar', 'karma-sphinx-theme'
+                   'sphinx-math-dollar', 'karma-sphinx-theme', 'darglint', \
+                   'black', 'sphinx-pytype-substitution'
+
 __dependency_links__ = ()
 __data__ = ('data/pkg.zip',)
 __scripts__ = ('auxilium=auxilium:main',)
 __theme__ = 'karma-sphinx-theme'
 
+
+''' todo
+https://python-poetry.org
+
+$ poetry run black
+$ poetry run isort . --profile black
+$ poetry run flake8 .
+$ poetry run bandit .
+$ poetry run safety check
+
+https://github.com/pyenv/pyenv
+
+'''
 
 def main():
     # init config and argument parser
