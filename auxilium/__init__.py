@@ -42,7 +42,6 @@ __data__ = ('data/pkg.zip',)
 __scripts__ = ('auxilium=auxilium:main',)
 __theme__ = 'karma-sphinx-theme'
 
-
 ''' todo
 https://python-poetry.org
 
@@ -55,6 +54,7 @@ $ poetry run safety check
 https://github.com/pyenv/pyenv
 
 '''
+
 
 def main():
     # init config and argument parser
