@@ -25,7 +25,7 @@ from .tools.const import CONFIG_PATH, VERBOSITY_LEVELS, ICONS
 getLogger(__name__).addHandler(NullHandler())
 
 __doc__ = 'Python project for an automated test and deploy toolkit.'
-__version__ = '0.2.2'
+__version__ = '0.2.3'
 __dev_status__ = '4 - Beta'
 __date__ = 'Wednesday, 20 October 2021'
 __author__ = 'sonntagsgesicht'
