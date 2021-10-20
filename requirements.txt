@@ -2,7 +2,7 @@ git+https://github.com/sonntagsgesicht/auxilium
 bandit
 black
 coverage
-darglint
+# darglint
 dulwich
 flake8
 isort
