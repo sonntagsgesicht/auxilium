@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.2.1, copyright Monday, 11 October 2021
+# Version:  0.2.4, copyright Wednesday, 20 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -24,7 +24,7 @@ LEVEL = INFO
 def test(test_dir=TEST_PATH, fail_fast=False, path=getcwd(), venv=None):
     """test code by running tests"""
     log(INFO, ICONS["test"] + 'run test scripts')
-    return test_unittest(test_dir, fail_fast=fail_fast, venv=venv)
+    return test_unittest(test_dir, fail_fast=fail_fast, path=path, venv=venv)
 
 
 def test_unittest(test_dir=TEST_PATH,

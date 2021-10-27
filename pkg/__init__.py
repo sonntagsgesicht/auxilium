@@ -32,7 +32,7 @@ class Line(object):
     The |Line| objects implements a straight line,
     i.e. a function $y = f(x)$ with
 
-    $$  f(x) = a + b \cdot x  $$
+    $$  f(x) = a + b \\cdot x  $$
 
     where $a$ and $b$ are numbers.
 

@@ -25,6 +25,9 @@ from auxilium.tools.dulwich_tools import init_git, status_git, add_git, \
     tag_git, push_git, pull_git, clone_git, branch_git, \
     checkout_git, add_and_commit_git
 
+from auxilium import auxilium as aux
+
+
 sys.path.append('..')
 
 CWD, _ = os.path.split(__file__)
@@ -95,7 +98,7 @@ class CreateRepoUnitTests(AuxiliumUnitTests):
 
         del_tree(path)
 
-    def test_unicorn(self):
+    def _test_unicorn(self):
         name, doc, author = 'unicorn', 'Always be a unicorn.', 'dreamer'
         email, url = '<name>@home', 'https://<author>.home/<name>'
         inputs = name, doc, author, email, url
@@ -114,6 +117,31 @@ class CreateRepoUnitTests(AuxiliumUnitTests):
         self.assertEqual(0, auxilium('%s doc --fail-fast --api' % self.level,
                                      path=path))
         self.assertEqual(0, auxilium('%s build' % self.level, path=path))
+        del_tree(path)
+
+
+class AuxiliumPythonUnitTests(AuxiliumUnitTests):
+
+    def test_unicorn(self):
+        name, doc, author = 'unicorn', 'Always be a unicorn.', 'dreamer'
+        name, doc, author = 'unicorn', 'Always_be_a_unicorn.', 'dreamer'
+        email, url = '<name>@home', 'https://<author>.home/<name>'
+        inputs = name, doc, author, email, url
+
+        self.level = '-v'
+        path = os.path.join(self.wdir, name)
+        del_tree(path)
+        cwd = os.getcwd()
+        os.chdir(self.wdir)
+        args = ' --name=%s --slogan="%s"' \
+               ' --author=%s --email=%s --url=%s' % inputs
+        self.assertEqual(None, aux('%s create %s' % (self.level, args)))
+        os.chdir(path)
+        self.assertEqual(None, aux('%s update' % self.level))
+        self.assertEqual(None, aux('%s test --fail-fast' % self.level))
+        self.assertEqual(None, aux('%s doc --fail-fast --api' % self.level))
+        self.assertEqual(None, aux('%s build' % self.level))
+        os.chdir(cwd)
         del_tree(path)
 
 

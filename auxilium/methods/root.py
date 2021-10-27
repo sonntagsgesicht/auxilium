@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.2.1, copyright Monday, 11 October 2021
+# Version:  0.2.4, copyright Wednesday, 20 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -98,7 +98,9 @@ def check_project_path(pkg=basename(getcwd()), path=getcwd(), **kwargs):
 def failure_exit(exit_status, command='unknown', **kwargs):
     msg = 'non-zero exit status (failure in `%s`)' % command
     logging.log(logging.ERROR, ICONS['error'] + msg)
-    if exit_status > 2:
+    if exit_status < 0:
+        return not None
+    elif exit_status > 2:
         raise Failure(msg)
     elif exit_status == 1:
         sys.exit(0)
@@ -113,24 +115,25 @@ def pre_run(cmd='', level=LEVEL, path=getcwd(), venv=None):
 
 
 def do(command=None, demo=None, verbosity=None, exit_status=None, env=None,
-       pre=None, **kwargs):
+       pre=None, pkg=None, path=None, **kwargs):
+    exit = int if exit_status < 0 else sys.exit
     # check demo
     if demo:
         if start_demo(demo, verbosity, exit_status, env):
-            failure_exit(exit_status, 'demo')
-        sys.exit()
+            return failure_exit(exit_status, 'demo')
+        exit()
 
     # check virtual environment
     if command not in ('create',) and check_env(env):
-        failure_exit(exit_status, command)
+        return failure_exit(exit_status, command)
 
     # check project path
-    if command not in ('create', 'python') and check_project_path():
-        failure_exit(exit_status, command)
+    if command not in ('create', 'python') and check_project_path(pkg, path):
+        return failure_exit(exit_status, command)
 
     # check project path
     if command not in ('create', 'python') and pre_run(pre):
-        failure_exit(exit_status, 'in pre run before ' + command)
+        return failure_exit(exit_status, 'in pre run before ' + command)
 
     # retrieve command/method
     method = getattr(methods, str(command), None)
@@ -139,12 +142,12 @@ def do(command=None, demo=None, verbosity=None, exit_status=None, env=None,
     start = datetime.now()
 
     # invoke command/method
-    if method(env=env, **kwargs):
-        failure_exit(exit_status, command)
+    if method(env=env, pkg=pkg, path=path, **kwargs):
+        return failure_exit(exit_status, command)
 
     # track execution timing
     exec_time = (datetime.now() - start)
 
     logging.log(logging.INFO, ICONS['OK'] +
                 'finished in %0.3fs' % exec_time.total_seconds())
-    sys.exit()
+    exit()
