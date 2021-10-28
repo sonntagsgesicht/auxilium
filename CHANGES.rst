@@ -1,10 +1,25 @@
 
 These changes are listed in decreasing version number order.
 
+Release |version|
+-----------------
+
+Release date was |today|
+
+* auxilium is now available as python function
+
+.. code-block:: python
+
+    >>> from auxilium import auxilium
+    >>> auxilium("<your command>")
+
+* bugfix if a project venv is created inside a project
+
+
 Release 0.2.2
 -------------
 
-Release date was |today|
+Release date was Wednesday, 20 October 2021
 
 * added more documentation
 

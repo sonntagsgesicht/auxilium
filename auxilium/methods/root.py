@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.2.4, copyright Wednesday, 20 October 2021
+# Version:  0.2.5, copyright Thursday, 28 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -126,6 +126,9 @@ def do(command=None, demo=None, verbosity=None, exit_status=None, env=None,
     # check virtual environment
     if command not in ('create',) and check_env(env):
         return failure_exit(exit_status, command)
+    # if command in ('create',) and not check_env(env):
+    #     env = ''
+    #     # return failure_exit(exit_status, command)
 
     # check project path
     if command not in ('create', 'python') and check_project_path(pkg, path):

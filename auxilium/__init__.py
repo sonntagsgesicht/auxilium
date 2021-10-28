@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.2.4, copyright Wednesday, 20 October 2021
+# Version:  0.2.5, copyright Thursday, 28 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -14,6 +14,7 @@ from logging import log, basicConfig, getLogger, NullHandler
 from os import getcwd, name as os_name
 from os.path import basename, split, join
 from pathlib import Path
+from re import findall
 from sys import exit, executable
 
 from configparser import ConfigParser
@@ -25,7 +26,7 @@ from .tools.const import CONFIG_PATH, VERBOSITY_LEVELS, ICONS
 getLogger(__name__).addHandler(NullHandler())
 
 __doc__ = 'Python project for an automated test and deploy toolkit.'
-__version__ = '0.2.4'
+__version__ = '0.2.5'
 __dev_status__ = '4 - Beta'
 __date__ = 'Thursday, 28 October 2021'
 __author__ = 'sonntagsgesicht'
@@ -45,13 +46,10 @@ __theme__ = 'karma-sphinx-theme'
 ''' todo
 https://python-poetry.org
 
-$ poetry run black
-$ poetry run isort . --profile black
-$ poetry run flake8 .
-$ poetry run bandit .
-$ poetry run safety check
-
-'darglint', black'
+'black' python code linter incl. correction
+'isort . --profile black' sorts imports
+'darglint' rst doc linter
+'poetry run safety check'
 
 https://github.com/pyenv/pyenv
 
@@ -75,8 +73,14 @@ def auxilium(args=None):
         kwargs = vars(parser.parse_args())
         sys_exit = exit
     else:
-        # re.findall(r'(?:[^\s,"]|"(?:\\.|[^"])*")+', args)
-        kwargs = vars(parser.parse_args(a for a in args.split(' ') if a))
+        # find text identifier " or ' (what ever comes first)
+        if 0 <= args.find('"') < args.find("'"):
+            args = findall(r'(?:[^\s,"]|"(?:\\.|[^"])*")+', args)
+            args = tuple(a.replace('"', '') for a in args)
+        else:
+            args = findall(r"(?:[^\s,']|'(?:\\.|[^'])*')+", args)
+            args = tuple(a.replace("'", "") for a in args)
+        kwargs = vars(parser.parse_args(a for a in args if a))
         kwargs['exit_status'] = -1
         sys_exit = int
 

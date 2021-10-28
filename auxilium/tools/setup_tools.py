@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.2.4, copyright Wednesday, 20 October 2021
+# Version:  0.2.5, copyright Thursday, 28 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -124,6 +124,7 @@ def create_finish(name=basename(getcwd())):
     log(INFO, '  > cd %s' % name)
     log(INFO, '  > auxilium test')
     log(INFO, '  > auxilium doc --api')
+    log(INFO, '  > auxilium update --commit="Added api doc"')
     log(INFO, '  > auxilium build')
     log(INFO, '  > auxilium doc --show')
     log(INFO, '')

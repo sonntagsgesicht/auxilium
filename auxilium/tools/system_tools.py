@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.2.4, copyright Wednesday, 20 October 2021
+# Version:  0.2.5, copyright Thursday, 28 October 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -34,6 +34,8 @@ def create_venv(pkg=basename(getcwd()),
     """create virtual python environment"""
     # strip potential executable from venv_path
     venv_path = venv_path.replace(VENV_TAIL, '')
+    if venv.startswith(venv_path):
+        venv = None
     log(INFO, ICONS["venv"] + "create virtual environment")
     module('venv', "--clear --prompt %s %s" % (pkg, venv_path),
            path=path, venv=venv)

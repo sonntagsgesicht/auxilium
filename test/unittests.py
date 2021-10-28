@@ -124,7 +124,6 @@ class AuxiliumPythonUnitTests(AuxiliumUnitTests):
 
     def test_unicorn(self):
         name, doc, author = 'unicorn', 'Always be a unicorn.', 'dreamer'
-        name, doc, author = 'unicorn', 'Always_be_a_unicorn.', 'dreamer'
         email, url = '<name>@home', 'https://<author>.home/<name>'
         inputs = name, doc, author, email, url
 
