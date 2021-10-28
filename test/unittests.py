@@ -134,7 +134,8 @@ class AuxiliumPythonUnitTests(AuxiliumUnitTests):
         os.chdir(self.wdir)
         args = ' --name=%s --slogan="%s"' \
                ' --author=%s --email=%s --url=%s' % inputs
-        self.assertEqual(None, aux('%s create %s' % (self.level, args)))
+        cmd = '%s create %s' % (self.level, args)
+        self.assertEqual(None, aux(cmd))
         os.chdir(path)
         self.assertEqual(None, aux('%s update' % self.level))
         self.assertEqual(None, aux('%s test --fail-fast' % self.level))

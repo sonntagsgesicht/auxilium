@@ -74,7 +74,8 @@ def auxilium(args=None):
         sys_exit = exit
     else:
         # find text identifier " or ' (what ever comes first)
-        if 0 <= args.find('"') < args.find("'"):
+        if args.find("'") < 0 <= args.find('"') or \
+                0 <= args.find('"') < args.find("'"):
             args = findall(r'(?:[^\s,"]|"(?:\\.|[^"])*")+', args)
             args = tuple(a.replace('"', '') for a in args)
         else:

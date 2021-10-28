@@ -34,7 +34,7 @@ def create_venv(pkg=basename(getcwd()),
     """create virtual python environment"""
     # strip potential executable from venv_path
     venv_path = venv_path.replace(VENV_TAIL, '')
-    if venv.startswith(venv_path):
+    if venv and venv.startswith(venv_path):
         venv = None
     log(INFO, ICONS["venv"] + "create virtual environment")
     module('venv', "--clear --prompt %s %s" % (pkg, venv_path),
