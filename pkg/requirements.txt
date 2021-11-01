@@ -1,10 +1,1 @@
-git+https://github.com/sonntagsgesicht/auxilium
-dulwich
-bandit
-coverage
-regtest
-flake8
-sphinx
-sphinx-math-dollar
-sphinx-rtd-theme
-sphinx-pytype-substitution
+auxilium
