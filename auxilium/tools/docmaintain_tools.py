@@ -101,6 +101,9 @@ def replace_headers(pkg=basename(getcwd()), last=None, path=getcwd()):
                     file = join(subdir, file)
                     if last.get(file, '') == str(getmtime(file)):
                         this[file] = str(getmtime(file))
+                        log(LEVEL-1,
+                            ICONS[""] +
+                            "no file header update required for %s" % file)
                         continue
                     log(LEVEL, ICONS[""] + "update file header of %s" % file)
 
