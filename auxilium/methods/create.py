@@ -59,8 +59,8 @@ def do(name=None, slogan=None, author=None, email=None, url=None,
             path=project_path, freeze_file='', venv=env)
     else:
         # run default update command (without pip upgrade with .freeze)
-        code = code or install(path=project_path, venv=env)
         code = code or requirements(path=project_path, venv=env)
+        code = code or install(path=project_path, venv=env)
 
     if commit:
         # init git repo with initial commit
