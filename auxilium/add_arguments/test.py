@@ -25,7 +25,7 @@ def add_arguments(parser=None, config=ConfigParser()):
     parser = ArgumentParser() if parser is None else parser
     parser.add_argument(
         'testpath',
-        metavar='TESTMATH',
+        metavar='TESTPATH',
         nargs='?',
         default=config.get('test', 'testpath', fallback=TEST_PATH),
         help='path to directory where test are found')
