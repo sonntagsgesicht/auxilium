@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.2.4, copyright Wednesday, 20 October 2021
+# Version:  0.2.7, copyright Monday, 01 November 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -113,6 +113,7 @@ def has_unstaged_git(path=getcwd(), venv=None):
 
 def add_and_commit_git(msg='', level=LEVEL, path=getcwd(), venv=None):
     code = False
+    # todo: check .gitignore
     if has_unstaged_git(path=path, venv=venv):
         code = code or add_git(path=path, venv=venv)
     if not has_staged_git(path=path, venv=venv):

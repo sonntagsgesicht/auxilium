@@ -3,6 +3,20 @@
 
 under construction..
 
+todo
+====
+
+* make clear _venv_ is just for testing and aux workflow ops and not for dev
+* workflow to add requirement in existing project
+    1. requirements.txt
+    2. __dependencies__
+    3. pip install
+    4. import pkg
+* migrate project to other location (zip and unzip)
+* ui frontend via `auxilium app`
+* add CONTRIBUTE.rst for auxilium
+
+
 auxilium cli
 ============
 

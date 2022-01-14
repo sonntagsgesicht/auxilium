@@ -25,6 +25,9 @@ __theme__ = ''
 # this is just an example to demonstrate the auxilium workflow
 # it can be removed safely
 
+# in order to import a member from a subpackage or submodule
+# use relative import `from .subpackage import SomeThing`
+
 
 class Line(object):
     r""" This a example class (by auxilium)

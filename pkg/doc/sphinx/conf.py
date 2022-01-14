@@ -141,7 +141,7 @@ autodoc_default_options = {
     'undoc-members': True,
     'private-members': False,
     'inherited-members': False,
-    'imported-members': False,
+    # 'imported-members': False,
     # 'special-members': '__call__',
     # 'exclude-members': '__weakref__',
     # 'autosummary': True,
@@ -153,13 +153,13 @@ autodoc_default_options = {
 # "class" Only the class’ docstring is inserted.
 # "init" Only the __init__ method’s docstring is inserted.
 # "both" Both the class’ and the __init__ method’s docstring are inserted.
-autoclass_content = 'both'
+autoclass_content = 'init'
 
 # This value selects how the signature will be displayed for the class defined
 # by autoclass directive. (autodoc)
 # "mixed" Display the signature with the class name.
 # "separated" Display the signature as a method.
-autodoc_class_signature = "separated"
+autodoc_class_signature = "mixed"
 
 # -- Config for math-dollar extension (mathjax) ----------------------------
 

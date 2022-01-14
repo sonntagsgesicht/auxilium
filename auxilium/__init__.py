@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.2.6, copyright Thursday, 28 October 2021
+# Version:  0.2.7, copyright Monday, 01 November 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -26,9 +26,9 @@ from .tools.const import CONFIG_PATH, VERBOSITY_LEVELS, ICONS
 getLogger(__name__).addHandler(NullHandler())
 
 __doc__ = 'Python project for an automated test and deploy toolkit.'
-__version__ = '0.2.6'
+__version__ = '0.2.7'
 __dev_status__ = '4 - Beta'
-__date__ = 'Monday, 01 November 2021'
+__date__ = 'Friday, 14 January 2022'
 __author__ = 'sonntagsgesicht'
 __email__ = __author__ + '@icloud.com'
 __url__ = 'https://github.com/' + __author__ + '/' + __name__
@@ -44,14 +44,17 @@ __scripts__ = ('auxilium=auxilium:auxilium',)
 __theme__ = 'karma-sphinx-theme'
 
 ''' todo
-https://python-poetry.org
+
+auxilium create --clone url
+auxilium build --archive
 
 'black' python code linter incl. correction
 'isort . --profile black' sorts imports
 'darglint' rst doc linter
-'poetry run safety check'
-
-https://github.com/pyenv/pyenv
+'poetry' run safety check dependency management
+'Cookiecutter' project templates
+'pipenv'
+'pyscaffold' project generator for bootstrapping high quality Python packages
 
 '''
 

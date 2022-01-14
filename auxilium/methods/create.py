@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.2.5, copyright Thursday, 28 October 2021
+# Version:  0.2.7, copyright Monday, 01 November 2021
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -54,9 +54,9 @@ def do(name=None, slogan=None, author=None, email=None, url=None,
         env = create_venv(pkg, venv_path=venv, path=project_path, venv=env)
         # run default update command
         code = code or upgrade(path=project_path, venv=env)
-        code = code or install(path=project_path, venv=env)
         code = code or requirements(
             path=project_path, freeze_file='', venv=env)
+        code = code or install(path=project_path, venv=env)
     else:
         # run default update command (without pip upgrade with .freeze)
         code = code or requirements(path=project_path, venv=env)
