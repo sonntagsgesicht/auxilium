@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.2.4, copyright Wednesday, 20 October 2021
+# Version:  0.2.8, copyright Friday, 14 January 2022
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -48,7 +48,7 @@ def requirements(path=getcwd(), freeze_file=FREEZE_FILE, venv=None):
 def install(pkg='.', path=getcwd(), venv=None):
     """(re)install current project via `pip install -e .`"""
     log(INFO, ICONS["install"] + 'install project via pip install -e')
-    if exists('setup.py') or exists('setup.cfg'):
+    if exists(join(path, 'setup.py')) or exists(join(path, 'setup.cfg')):
         return module('pip', "install --upgrade -e %s" % pkg,
                       path=path, venv=venv)
     log(WARN, ICONS["warn"] +

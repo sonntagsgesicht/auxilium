@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.2.7, copyright Monday, 01 November 2021
+# Version:  0.2.8, copyright Friday, 14 January 2022
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -26,9 +26,9 @@ from .tools.const import CONFIG_PATH, VERBOSITY_LEVELS, ICONS
 getLogger(__name__).addHandler(NullHandler())
 
 __doc__ = 'Python project for an automated test and deploy toolkit.'
-__version__ = '0.2.7'
+__version__ = '0.2.8'
 __dev_status__ = '4 - Beta'
-__date__ = 'Friday, 14 January 2022'
+__date__ = 'Saturday, 15 January 2022'
 __author__ = 'sonntagsgesicht'
 __email__ = __author__ + '@icloud.com'
 __url__ = 'https://github.com/' + __author__ + '/' + __name__
@@ -46,7 +46,7 @@ __theme__ = 'karma-sphinx-theme'
 ''' todo
 
 auxilium create --clone url
-auxilium build --archive
+auxilium build --archive as zip -r Derivate.zip Derivate -x "*/.*"
 
 'black' python code linter incl. correction
 'isort . --profile black' sorts imports

@@ -5,7 +5,7 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.2.4, copyright Wednesday, 20 October 2021
+# Version:  0.2.8, copyright Friday, 14 January 2022
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
@@ -13,6 +13,7 @@
 from argparse import ArgumentParser
 from configparser import ConfigParser
 
+from auxilium.tools.archive_tools import archive
 from auxilium.tools.dulwich_tools import push_git
 from auxilium.tools.build_tools import cleanup as cleanup_build
 from auxilium.tools.docmaintain_tools import docmaintain, \
@@ -60,6 +61,12 @@ def add_arguments(parser=None, config=ConfigParser()):
         metavar='PWD',
         default=config.get('build', 'remote_pwd', fallback='None'),
         help='password/token on remote `git` repo')
+    parser.add_argument(
+        '--archive',
+        action='store_const',
+        const=not config.getboolean('deployment', 'archive', fallback=False),
+        default=config.getboolean('deployment', 'archive', fallback=False),
+        help=archive.__doc__)
     parser.add_argument(
         '--deploy',
         action='store_const',

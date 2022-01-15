@@ -5,18 +5,18 @@
 # Python project for an automated test and deploy toolkit.
 #
 # Author:   sonntagsgesicht
-# Version:  0.2.7, copyright Monday, 01 November 2021
+# Version:  0.2.8, copyright Friday, 14 January 2022
 # Website:  https://github.com/sonntagsgesicht/auxilium
 # License:  Apache License 2.0 (see LICENSE file)
 
 
-from os import getcwd, chdir
-from os.path import basename, join, exists
+from os import getcwd, chdir, mkdir
+from os.path import basename, join, exists, splitext
 from sys import path as sys_path
 
 from ..tools.const import GIT_PATH
 from ..tools.docmaintain_tools import docmaintain
-from ..tools.dulwich_tools import add_and_commit_git, init_git
+from ..tools.dulwich_tools import add_and_commit_git, init_git, clone_git
 from ..tools.pip_tools import upgrade, install, requirements, uninstall, \
     rollback
 from ..tools.setup_tools import create_project, create_finish
@@ -24,8 +24,8 @@ from ..tools.system_tools import create_venv, del_tree
 
 
 def do(name=None, slogan=None, author=None, email=None, url=None,
-       commit=None, path=getcwd(), venv=None, update=None, env=None,
-       cleanup=None, **kwargs):
+       commit=None, path=getcwd(), venv=None, update=None, clone=None,
+       env=None, cleanup=None, **kwargs):
     env = env if env and exists(env) else None
     project_path = join(path, name) if name else path
     pkg = basename(project_path)
@@ -34,7 +34,7 @@ def do(name=None, slogan=None, author=None, email=None, url=None,
         return uninstall(pkg, venv=env) or rollback(path=path, venv=env)
 
     code = False
-    if not update:
+    if not update and not clone:
         # creat project
         project_path = \
             create_project(name, slogan, author, email, url, path=path)
@@ -44,9 +44,13 @@ def do(name=None, slogan=None, author=None, email=None, url=None,
         chdir(project_path)
         sys_path.append(project_path)
         code = code or docmaintain(pkg, path=project_path)
+    elif clone:
+        name, _ = splitext(basename(clone))
+        project_path = join(path, name) if name else path
+        mkdir(project_path)
+        code = code or clone_git(clone, path=project_path, venv=env)
+        pkg = name
 
-    #
-    # chdir(project_path)
     if venv:
         # clear virtual environment folder
         del_tree(venv)
